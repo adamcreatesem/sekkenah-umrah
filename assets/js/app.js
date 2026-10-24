@@ -23,7 +23,6 @@ const findTrip = (id) => ALL_TRIPS.find((x) => x.id === id);
 const state = {
   lang: 'en',
   filter: 'all',
-  tourFilter: 'all',
   city: 'makkah',
   openPackage: null,
   trip: { hotels: [] },
@@ -53,6 +52,10 @@ function setLang(lang, { announce = true } = {}) {
     const key = el.dataset.brand;
     el.textContent = key === 'address' || key === 'name' || key === 'legal' ? tx(BRAND[key]) : el.textContent;
   });
+  // The glyph is the language the button will switch *to*, so it has to follow the
+  // current language rather than sitting on the Arabic letter in both directions.
+  const glyph = $('#langGlyph');
+  if (glyph) glyph.textContent = ar ? 'E' : 'ع';
   document.title = t('meta.title');
   $('meta[name="description"]').setAttribute('content', t('meta.desc'));
 
@@ -192,24 +195,11 @@ function renderHotels() {
   observe($('#hotelGrid'));
 }
 
-const TOUR_KINDS = ['all', 'lakes', 'heritage', 'wildlife', 'culture', 'day', 'expedition'];
-
 function renderTours() {
   const grid = $('#tourGrid');
   if (!grid) return;
-  const list = state.tourFilter === 'all' ? TOURS : TOURS.filter((p) => p.kind === state.tourFilter);
-  grid.innerHTML = list.map(tourCard).join('');
-  const empty = $('#tourEmpty');
-  if (empty) empty.hidden = list.length > 0;
+  grid.innerHTML = TOURS.map(tourCard).join('');
   observe(grid);
-}
-
-function renderTourFilters() {
-  const el = $('#tourFilters');
-  if (!el) return;
-  el.innerHTML = TOUR_KINDS.map((k) => `
-    <button class="chip${state.tourFilter === k ? ' is-on' : ''}" type="button"
-      aria-pressed="${state.tourFilter === k}" data-tour-filter="${k}">${t('tours.' + k)}</button>`).join('');
 }
 
 function renderStays() {
@@ -258,7 +248,6 @@ function renderMonths() {
 function renderAll() {
   renderFilters();
   renderJourneys();
-  renderTourFilters();
   renderTours();
   renderHotels();
   renderStays();
@@ -774,14 +763,6 @@ function bind() {
     state.filter = b.dataset.filter;
     renderFilters();
     renderJourneys();
-  });
-
-  $('#tourFilters').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-tour-filter]');
-    if (!b) return;
-    state.tourFilter = b.dataset.tourFilter;
-    renderTourFilters();
-    renderTours();
   });
 
   $('#hotelTabs').addEventListener('click', (e) => {

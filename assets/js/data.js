@@ -192,7 +192,6 @@ export const TOURS = [
     id: 'tour-rift-lakes',
     name: { en: 'Rift Valley Lakes', ar: 'بحيرات الوادي المتصدّع' },
     tag: { en: 'Lakes & resorts', ar: 'بحيرات ومنتجعات' },
-    kind: 'lakes',
     type: 'tour', days: 3, nights: 2, price: 420, seats: 12, depart: '2026-11-13',
     image: 'assets/img/tour-rift-lakes.jpg',
     blurb: {
@@ -216,7 +215,6 @@ export const TOURS = [
     id: 'tour-hawassa',
     name: { en: 'Hawassa & Wondo Genet', ar: 'هواسا وووندو جينيت' },
     tag: { en: 'Lakes & resorts', ar: 'بحيرات ومنتجعات' },
-    kind: 'lakes',
     type: 'tour', days: 2, nights: 1, price: 340, seats: 14, depart: '2026-11-21',
     image: 'assets/img/tour-hawassa.jpg',
     blurb: {
@@ -239,7 +237,6 @@ export const TOURS = [
     id: 'tour-bishoftu',
     name: { en: 'Bishoftu Crater Lakes', ar: 'بحيرات بيشوفتو الفوهية' },
     tag: { en: 'Day trip', ar: 'رحلة يوم' },
-    kind: 'day',
     type: 'tour', days: 1, nights: 0, price: 120, seats: 8, depart: '2026-11-08',
     image: 'assets/img/tour-bishoftu.jpg',
     blurb: {
@@ -260,7 +257,6 @@ export const TOURS = [
     id: 'tour-arba-minch',
     name: { en: 'Arba Minch & Nech Sar', ar: 'أربا منش ونيش سار' },
     tag: { en: 'Lakes & wildlife', ar: 'بحيرات وحياة برية' },
-    kind: 'wildlife',
     type: 'tour', days: 3, nights: 2, price: 560, seats: 10, depart: '2026-11-27',
     image: 'assets/img/tour-arba-minch.jpg',
     blurb: {
@@ -284,7 +280,6 @@ export const TOURS = [
     id: 'tour-wonchi',
     name: { en: 'Wonchi Crater Lake', ar: 'بحيرة ونتشي الفوهية' },
     tag: { en: 'Lakes & resorts', ar: 'بحيرات ومنتجعات' },
-    kind: 'lakes',
     type: 'tour', days: 2, nights: 1, price: 290, seats: 10, depart: '2026-11-15',
     image: 'assets/img/tour-wonchi.jpg',
     blurb: {
@@ -307,7 +302,6 @@ export const TOURS = [
     id: 'tour-omo',
     name: { en: 'Omo Valley', ar: 'وادي أومو' },
     tag: { en: 'Culture', ar: 'ثقافة' },
-    kind: 'culture',
     type: 'tour', days: 5, nights: 4, price: 980, seats: 6, depart: '2026-12-04',
     image: 'assets/img/tour-omo.jpg',
     blurb: {
@@ -333,7 +327,6 @@ export const TOURS = [
     id: 'tour-harar',
     name: { en: 'Harar', ar: 'هرر' },
     tag: { en: 'Culture', ar: 'ثقافة' },
-    kind: 'culture',
     type: 'tour', days: 2, nights: 1, price: 360, seats: 12, depart: '2026-11-14',
     image: 'assets/img/tour-harar.jpg',
     blurb: {
@@ -356,7 +349,6 @@ export const TOURS = [
     id: 'tour-sof-omar',
     name: { en: 'Sof Omar Caves', ar: 'كهوف سوف عمر' },
     tag: { en: 'Caves & pilgrimage', ar: 'كهوف وزيارة' },
-    kind: 'heritage',
     type: 'tour', days: 2, nights: 1, price: 390, seats: 8, depart: '2026-12-11',
     image: 'assets/img/tour-sof-omar.jpg',
     blurb: {
@@ -378,7 +370,6 @@ export const TOURS = [
     id: 'tour-lalibela',
     name: { en: 'Lalibela', ar: 'لاليبيلا' },
     tag: { en: 'Heritage', ar: 'تراث' },
-    kind: 'heritage',
     type: 'tour', days: 3, nights: 2, price: 520, seats: 12, depart: '2026-11-14',
     image: 'assets/img/tour-lalibela.jpg',
     blurb: {
@@ -401,7 +392,6 @@ export const TOURS = [
     id: 'tour-simien',
     name: { en: 'Simien Mountains', ar: 'جبال سِميِن' },
     tag: { en: 'Trekking', ar: 'مشي جبلي' },
-    kind: 'wildlife',
     type: 'tour', days: 4, nights: 3, price: 690, seats: 10, depart: '2026-11-27',
     image: 'assets/img/tour-simien.jpg',
     blurb: {
@@ -425,7 +415,6 @@ export const TOURS = [
     id: 'tour-bale',
     name: { en: 'Bale Mountains', ar: 'جبال بالي' },
     tag: { en: 'Wildlife', ar: 'حياة برية' },
-    kind: 'wildlife',
     type: 'tour', days: 3, nights: 2, price: 480, seats: 12, depart: '2026-12-04',
     image: 'assets/img/tour-bale.jpg',
     blurb: {
@@ -448,7 +437,6 @@ export const TOURS = [
     id: 'tour-danakil',
     name: { en: 'Danakil Depression', ar: 'منخفض الدناكل' },
     tag: { en: 'Expedition', ar: 'رحلة استكشافية' },
-    kind: 'expedition',
     type: 'tour', days: 4, nights: 3, price: 820, seats: 8, depart: '2026-12-11',
     image: 'assets/img/tour-danakil.jpg',
     blurb: {
@@ -472,7 +460,6 @@ export const TOURS = [
     id: 'tour-gondar',
     name: { en: 'Gondar & Lake Tana', ar: 'غوندار وبحيرة تانا' },
     tag: { en: 'History', ar: 'تاريخ' },
-    kind: 'heritage',
     type: 'tour', days: 3, nights: 2, price: 560, seats: 14, depart: '2026-11-20',
     image: 'assets/img/tour-gondar.jpg',
     blurb: {
@@ -495,7 +482,6 @@ export const TOURS = [
     id: 'tour-axum',
     name: { en: 'Axum', ar: 'أكسوم' },
     tag: { en: 'Short break', ar: 'إقامة قصيرة' },
-    kind: 'heritage',
     type: 'tour', days: 2, nights: 1, price: 380, seats: 16, depart: '2026-11-07',
     image: 'assets/img/tour-axum.jpg',
     blurb: {

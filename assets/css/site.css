@@ -201,7 +201,7 @@ html[lang='ar'] .nav__links { letter-spacing: 0; text-transform: none; font-size
 }
 .lang:hover { opacity: 1; background: rgba(255, 255, 255, 0.08); }
 .head.is-scrolled .lang:hover { background: rgba(12, 19, 16, 0.05); }
-.lang__glyph { font-family: 'Reem Kufi', serif; font-size: 0.95rem; line-height: 1; }
+.lang__glyph { font-family: 'Reem Kufi', 'Instrument Sans', system-ui, serif; font-size: 0.95rem; line-height: 1; }
 .lang__label { font-size: 0.72rem; }
 html[lang='ar'] .lang__label { font-size: 0.78rem; }
 .nav__cta { padding: 11px 20px; font-size: 0.66rem; }

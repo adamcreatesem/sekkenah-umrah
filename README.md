@@ -19,8 +19,8 @@ screenshots.
 |---|---|
 | Hero + search | Journey type / month / traveller count, filters the grid and scrolls to it |
 | Umrah | Six rounds, filter chips, live seat counts, detail drawer |
-| Ethiopia tours | Fourteen guided tours from Addis — Rift Valley lakes (Ziway, Langano, Hawassa), Bishoftu crater lakes, Wonchi, Arba Minch and Nech Sar, Bale and Sof Omar, Omo Valley, Harar, plus Lalibela, Simien, Danakil, Gondar and Axum. Filter chips by kind, own itineraries, bookable through the same wizard |
-| Lakes & resorts | Eight Ethiopian lodges by the water — Langano, Hawassa, Bishoftu, Arba Minch, Bahir Dar, Wonchi and the Harenna forest — per-room rate, add-to-trip |
+| Ethiopia tours | One grid of fourteen guided tours from Addis — Rift Valley lakes and resorts (Ziway, Langano, Hawassa), Bishoftu crater lakes, Wonchi, Arba Minch and Nech Sar, Bale and Sof Omar, Omo Valley, Harar, plus Lalibela, Simien, Danakil, Gondar and Axum. Own itineraries, bookable through the same wizard. The lakes and resorts are part of this list, not a section of their own |
+| Lodges by the water | Inside the tours section: eight Ethiopian lodges — Langano, Hawassa, Bishoftu, Arba Minch, Bahir Dar, Wonchi and the Harenna forest — per-room rate, add-to-trip |
 | Cars & drivers | Airport transfer, day car, 4×4 and minibus with rates, reserved over WhatsApp with the route and date |
 | Detail drawer | Includes, generated day-by-day (13 days for the 11-night round), departure, price note |
 | How it works | Six-step path from enquiry to return |
@@ -33,7 +33,9 @@ screenshots.
 **Language toggle** is in the header, in the footer, and available as `?lang=ar`
 (an explicit parameter wins over the stored preference). The choice persists in
 `localStorage`; the document swaps `lang` and `dir` and every string, including the
-data-driven cards, is re-rendered — there is no half-translated state.
+data-driven cards, is re-rendered — there is no half-translated state. The header button
+names the language it switches *to*, so it reads `ع العربية` on the English page and
+`E English` on the Arabic one.
 
 **Booking model.** `assets/js/data.js` holds packages; price is
 `base × (adults + 0.7 × children + 0.12 × infants) × room factor`, plus extras, plus any
@@ -101,9 +103,8 @@ Everything below is a placeholder. Nothing here was published by the client.
 
 ## Checks run
 
-Chromium (headless, CDP): 14 tours and 7 tour filter chips, 8 Makkah/Madinah hotels,
-8 Ethiopian stays, 4 car cards, 6 journeys, 8 services, 7 FAQs, 0 console errors,
-0 broken images. Filtering, the Wonchi drawer, the booking wizard (listing every tour),
-adding a stay to the trip, and the Arabic switch (RTL, 14 tours still rendered, translated
-stays and cars headings) were all exercised against both the local server and the live
-GitHub Pages URL.
+Chromium (headless, CDP): 14 tours in one grid, 8 Makkah/Madinah hotels, 8 Ethiopian
+lodges inside the tours section, 4 car cards, 6 journeys, 8 services, 7 FAQs, 0 console
+errors, 0 broken images. The Rift Valley Lakes drawer, the booking wizard (listing every
+tour), adding a lodge to the trip, and the Arabic switch (RTL, 14 tours still rendered,
+glyph flipping to `E`) were all exercised against the local server.
