@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- ring, open at the bottom where the ribbons leave the badge -->
+  <path d="M32 7a23 23 0 1 0 0 46" stroke="#c9a45c" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M32 7a23 23 0 0 1 0 46" stroke="#c9a45c" stroke-width="1.1" stroke-linecap="round" opacity=".55"/>
+  <circle cx="32" cy="30" r="19.5" stroke="#f4efe4" stroke-width=".6" opacity=".45"/>
+
+  <!-- crescent above the arch -->
+  <path d="M36.6 16.2a4.6 4.6 0 1 0 0 8.4 5.6 5.6 0 1 1 0-8.4Z" fill="#c9a45c"/>
+
+  <!-- mihrab -->
+  <path d="M23.4 52V38.2c0-4.4 3-7.6 8.6-11.4 5.6 3.8 8.6 7 8.6 11.4V52Z" fill="#0c1310" stroke="#f4efe4" stroke-width="1.3"/>
+  <!-- mosque inside -->
+  <path d="M27.6 44.6a4.4 4.4 0 0 1 8.8 0v7.2h-8.8Z" fill="#c9a45c"/>
+  <rect x="25.1" y="34.4" width="1.7" height="17.4" rx=".85" fill="#c9a45c"/>
+  <path d="M26 34.4a.85.85 0 0 1 1.7 0Z" fill="#c9a45c"/>
+  <path d="M29.6 51.8v-4.2a1.7 1.7 0 0 1 3.4 0v4.2" fill="#0c1310"/>
+  <rect x="37.3" y="41" width="1.2" height="10.8" rx=".6" fill="#c9a45c"/>
+
+  <!-- ribbons -->
+  <path d="M8.4 45.6c5.2 3.4 9.6 4.6 15 4.9" stroke="#c9a45c" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M55.6 45.6c-5.2 3.4-9.6 4.6-15 4.9" stroke="#c9a45c" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
