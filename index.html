@@ -62,6 +62,7 @@
       <nav class="nav__links" aria-label="Primary">
         <a href="#journeys" data-i18n="nav.journeys">Umrah</a>
         <a href="#tours" data-i18n="nav.tours">Ethiopia tours</a>
+        <a href="#stays" data-i18n="nav.stays">Lakes &amp; resorts</a>
         <a href="#hotels" data-i18n="nav.hotels">Hotels</a>
         <a href="#services" data-i18n="nav.services">Services</a>
         <a href="#about" data-i18n="nav.about">About</a>
@@ -83,6 +84,7 @@
     <div class="mobile" id="mobileMenu" hidden>
       <a href="#journeys" data-i18n="nav.journeys">Umrah</a>
       <a href="#tours" data-i18n="nav.tours">Ethiopia tours</a>
+      <a href="#stays" data-i18n="nav.stays">Lakes &amp; resorts</a>
       <a href="#hotels" data-i18n="nav.hotels">Hotels</a>
       <a href="#services" data-i18n="nav.services">Services</a>
       <a href="#about" data-i18n="nav.about">About</a>
@@ -229,11 +231,26 @@
         <div>
           <p class="eyebrow reveal" data-i18n="tours.kicker">In Ethiopia</p>
           <h2 class="h2 reveal" data-i18n="tours.title">Tours at home</h2>
-          <p class="lede reveal" data-i18n="tours.sub">Before you fly out, or for the family who cannot travel far: guided tours from Addis, with a car, a driver and a guide who knows the road.</p>
+          <p class="lede reveal" data-i18n="tours.sub">Lakes and resorts, the Rift Valley, the south and the old north — guided from Addis, with a car, a driver and a guide who knows the road.</p>
         </div>
         <a class="btn btn--line reveal" href="#contact" data-i18n="tours.cta">Plan a tour</a>
       </div>
+      <div class="filters tour-filters" id="tourFilters" role="group" aria-label="Filter tours"></div>
       <div class="grid grid--tours" id="tourGrid"></div>
+      <p class="empty" id="tourEmpty" hidden data-i18n="tours.empty">No tours in this filter.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────── stays ─────────────────────────────── -->
+  <section class="sec stays" id="stays">
+    <div class="shell">
+      <div class="sec__head">
+        <p class="eyebrow reveal" data-i18n="stays.kicker">Lakes &amp; resorts</p>
+        <h2 class="h2 reveal" data-i18n="stays.title">Lodges by the water</h2>
+        <p class="lede reveal" data-i18n="stays.sub">Rooms outside Addis: the Rift Valley lakes, the crater at Wonchi, the Harenna forest and Lake Tana. Book a bed on its own, or build it into a tour.</p>
+      </div>
+      <div class="grid grid--hotels" id="stayGrid"></div>
+      <p class="foot-note" data-i18n="stays.note">Rates are per room per night, indicative, and confirmed at booking.</p>
     </div>
   </section>
 
@@ -246,6 +263,18 @@
         <p class="lede reveal" data-i18n="services.sub">Take the whole round, or only the piece you need.</p>
       </div>
       <div class="grid grid--services" id="serviceGrid"></div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────── cars ─────────────────────────────── -->
+  <section class="sec cars" id="cars">
+    <div class="shell">
+      <div class="sec__head">
+        <p class="eyebrow reveal" data-i18n="cars.kicker">On the road</p>
+        <h2 class="h2 reveal" data-i18n="cars.title">Cars &amp; drivers</h2>
+        <p class="lede reveal" data-i18n="cars.sub">A car for the airport, a driver for the day, or a 4×4 for the Rift Valley and the south. Fuel and driver included, the route agreed before you pay.</p>
+      </div>
+      <div class="grid grid--services" id="carGrid"></div>
     </div>
   </section>
 
@@ -375,6 +404,7 @@
       <h4 data-i18n="footer.explore">Explore</h4>
       <a href="#journeys" data-i18n="nav.journeys">Umrah</a>
       <a href="#tours" data-i18n="nav.tours">Ethiopia tours</a>
+      <a href="#stays" data-i18n="nav.stays">Lakes &amp; resorts</a>
       <a href="#hotels" data-i18n="nav.hotels">Hotels</a>
       <a href="#services" data-i18n="nav.services">Services</a>
       <a href="#about" data-i18n="nav.about">About</a>

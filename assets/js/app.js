@@ -6,7 +6,7 @@
  * visitor confirms - a half-finished booking should not survive a reload as if it were
  * a reservation.
  */
-import { BRAND, JOURNEYS, TOURS, ALL_TRIPS, HOTELS, SERVICES, STEPS, FAQS, EXTRAS, ROOM_TYPES } from './data.js';
+import { BRAND, JOURNEYS, TOURS, ALL_TRIPS, HOTELS, STAYS, ALL_HOTELS, CARS, SERVICES, STEPS, FAQS, EXTRAS, ROOM_TYPES } from './data.js';
 import { STR, MONTHS } from './i18n.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -23,6 +23,7 @@ const findTrip = (id) => ALL_TRIPS.find((x) => x.id === id);
 const state = {
   lang: 'en',
   filter: 'all',
+  tourFilter: 'all',
   city: 'makkah',
   openPackage: null,
   trip: { hotels: [] },
@@ -110,13 +111,26 @@ function tourCard(p) {
   </article>`;
 }
 
+function carCard(c) {
+  return `
+  <article class="service">
+    <span class="service__icon">${ICONS[c.icon] || ICONS.car}</span>
+    <h3 class="h3">${esc(tx(c.title))}</h3>
+    <p>${esc(tx(c.body))}</p>
+    <div class="service__foot">
+      <span class="service__price"><b>${usd(c.price)}</b><small>${esc(tx(c.unit))}</small></span>
+      <button class="btn btn--line btn--sm" type="button" data-book-car="${c.id}">${t('cars.reserve')}</button>
+    </div>
+  </article>`;
+}
+
 function hotelCard(h) {
   const added = state.trip.hotels.includes(h.id);
   return `
   <article class="hotel">
     <div class="hotel__media">
       <img src="${h.image}" alt="${esc(tx(h.name))}" loading="lazy" decoding="async" width="1100" height="1375">
-      <span class="hotel__dist">${h.meters} m ${t('hotels.toHaram')}</span>
+      <span class="hotel__dist">${h.meters ? `${h.meters} m ${t('hotels.toHaram')}` : esc(tx(h.area))}</span>
     </div>
     <div class="hotel__body">
       <div class="hotel__stars" aria-label="${h.stars} ${t('hotels.stars')}">${'★'.repeat(h.stars)}<span>${'★'.repeat(5 - h.stars)}</span></div>
@@ -178,11 +192,37 @@ function renderHotels() {
   observe($('#hotelGrid'));
 }
 
+const TOUR_KINDS = ['all', 'lakes', 'heritage', 'wildlife', 'culture', 'day', 'expedition'];
+
 function renderTours() {
   const grid = $('#tourGrid');
   if (!grid) return;
-  grid.innerHTML = TOURS.map(tourCard).join('');
+  const list = state.tourFilter === 'all' ? TOURS : TOURS.filter((p) => p.kind === state.tourFilter);
+  grid.innerHTML = list.map(tourCard).join('');
+  const empty = $('#tourEmpty');
+  if (empty) empty.hidden = list.length > 0;
   observe(grid);
+}
+
+function renderTourFilters() {
+  const el = $('#tourFilters');
+  if (!el) return;
+  el.innerHTML = TOUR_KINDS.map((k) => `
+    <button class="chip${state.tourFilter === k ? ' is-on' : ''}" type="button"
+      aria-pressed="${state.tourFilter === k}" data-tour-filter="${k}">${t('tours.' + k)}</button>`).join('');
+}
+
+function renderStays() {
+  const grid = $('#stayGrid');
+  if (!grid) return;
+  grid.innerHTML = STAYS.map(hotelCard).join('');
+  observe(grid);
+}
+
+function renderCars() {
+  const grid = $('#carGrid');
+  if (!grid) return;
+  grid.innerHTML = CARS.map(carCard).join('');
 }
 
 function renderSteps() {
@@ -218,8 +258,11 @@ function renderMonths() {
 function renderAll() {
   renderFilters();
   renderJourneys();
+  renderTourFilters();
   renderTours();
   renderHotels();
+  renderStays();
+  renderCars();
   renderSteps();
   renderServices();
   renderFaq();
@@ -372,7 +415,7 @@ function quote(d = state.draft) {
   const extras = EXTRAS.filter((e) => d.extras.includes(e.id))
     .reduce((n, e) => n + e.price * (e.unit === 'person' ? d.adults + d.children : 1), 0);
   const hotels = state.trip.hotels
-    .map((id) => HOTELS.find((h) => h.id === id))
+    .map((id) => ALL_HOTELS.find((h) => h.id === id))
     .filter(Boolean)
     .reduce((n, h) => n + h.price * Math.max(nights, 1) * Math.max(d.rooms, 1), 0);
   const total = base + extras + hotels;
@@ -626,6 +669,7 @@ function waMessage(b) {
   L.push(`${t('book.rooms')}: ${b.rooms} × ${tx((ROOM_TYPES.find((r) => r.id === b.roomType) || {}).label)}`);
   if (b.travellers.length) L.push(`${t('book.travellers')}: ` + b.travellers.map((x) => x.name).filter(Boolean).join(', '));
   if (b.extras.length) L.push(`${t('book.extras')}: ` + b.extras.map((id) => tx((EXTRAS.find((e) => e.id === id) || {}).name)).join(', '));
+  if (b.hotels && b.hotels.length) L.push(`${t('hotels.title')}: ` + b.hotels.map((id) => tx((ALL_HOTELS.find((h) => h.id === id) || {}).name)).filter(Boolean).join(', '));
   L.push(`${t('book.total')}: ${usd(b.quote.total)} (~ETB ${etb(b.quote.total)})`);
   L.push(`${t('book.deposit')}: ${usd(b.quote.deposit)}`);
   return L.join('\n');
@@ -732,6 +776,14 @@ function bind() {
     renderJourneys();
   });
 
+  $('#tourFilters').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-tour-filter]');
+    if (!b) return;
+    state.tourFilter = b.dataset.tourFilter;
+    renderTourFilters();
+    renderTours();
+  });
+
   $('#hotelTabs').addEventListener('click', (e) => {
     const b = e.target.closest('[data-city]');
     if (!b) return;
@@ -749,7 +801,15 @@ function bind() {
       const i = state.trip.hotels.indexOf(id);
       if (i >= 0) state.trip.hotels.splice(i, 1); else state.trip.hotels.push(id);
       renderHotels();
+      renderStays();
       toast(i >= 0 ? (isAr() ? 'أُزيل من الرحلة' : 'Removed from trip') : t('hotels.added'));
+      return;
+    }
+
+    const bookCar = e.target.closest('[data-book-car]');
+    if (bookCar) {
+      const c = CARS.find((x) => x.id === bookCar.dataset.bookCar);
+      if (c) window.open(waHref(`${t('cars.waIntro')}\n${tx(c.title)} — ${usd(c.price)} ${tx(c.unit)}`), '_blank', 'noopener');
       return;
     }
 

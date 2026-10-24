@@ -423,6 +423,14 @@ html[lang='ar'] .hotel__name { font-size: 1.05rem; line-height: 1.4; }
 /* ───────────────────────────── Ethiopia tours ───────────────────────────── */
 .tours { background: #f2ece0; }
 .card--tour .card__media { aspect-ratio: 4 / 3; }
+.tour-filters { margin-block-end: 26px; }
+
+/* ───────────────────────────── stays & cars ───────────────────────────── */
+.stays { background: linear-gradient(180deg, #f2ece0, var(--paper) 40%); }
+.service__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-block-start: 16px; }
+.service__price { display: flex; align-items: baseline; gap: 6px; color: var(--ink); }
+.service__price b { font-family: var(--f-display); font-weight: 400; font-size: 1.1rem; }
+.service__price small { font-size: 0.68rem; letter-spacing: 0.04em; color: var(--muted); }
 
 /* ───────────────────────────── services ───────────────────────────── */
 .services { background: var(--paper); }
