@@ -547,7 +547,7 @@ function renderStep() {
         </div>
         ${state.trip.hotels.length ? `<h3 class="drawer__h">${t('hotels.title')}</h3>
         <ul class="ticks">${state.trip.hotels.map((id) => {
-          const h = HOTELS.find((x) => x.id === id);
+          const h = ALL_HOTELS.find((x) => x.id === id);
           return h ? `<li>${esc(tx(h.name))} — ${usd(h.price)}/${t('hotels.night')}</li>` : '';
         }).join('')}</ul>` : ''}
       </div>`;
