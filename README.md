@@ -16,9 +16,9 @@ the URL was already in use; renaming it would break the shared link.
 | Hero + search | Region / month / traveller count, filters the tour grid and scrolls to it |
 | Why | One quote, guides who know the road, rates before you commit |
 | Tours | Fourteen routes, region chips with counts, duration and level on every card |
-| Detail drawer | Region and level, price, seats, what is included, the written day-by-day, next departure, best months |
+| Route drawer | Region and level, price, seats, the story of the road, what is included, the written day-by-day, how you get there, next departure, best months, two photographs |
 | How it works | Six steps from "tell us the dates" to "back in Addis" |
-| Lodges | Eight places on the water and in the forest, per-room rate, add-to-trip |
+| Lodges | Ten places on the water, in the crater and in the forest. Every card opens its own drawer — story, distance, rate, photographs — with **Add to trip** and **Book this room** |
 | Cars & drivers | Airport transfer, day car, 4×4 and minibus with rates, reserved over WhatsApp |
 | Services | Routes, domestic flights, cars, lodges, permits, guides, groups, on-trip support |
 | Booking | Four steps → reference number → printable summary → WhatsApp handoff |
@@ -29,11 +29,19 @@ the URL was already in use; renaming it would break the shared link.
 season filter, an explicit itinerary, and bilingual copy. Region chips are generated from
 `REGIONS`, so an empty region still reads as a place.
 
-**Booking model.** A route is a private departure, priced per person:
-`price × (adults + 0.6 × children + 0.1 × infants)`, plus extras, plus lodge nights
-(`rate × route nights × rooms`). Deposit is 30%. Confirmation stores the request in
-`localStorage` (`sekkenah.bookings.v1`), issues an `SKN-XXXXXX` reference, renders a
-printable summary, and builds a pre-filled WhatsApp message with every field.
+**Booking model.** Two ways in, one four-step wizard:
+
+- A **route** is a private departure, priced per person:
+  `price × (adults + 0.6 × children + 0.1 × infants)`, plus extras, plus any lodge nights
+  (`rate × route nights × rooms`).
+- A **room on its own** is priced per room per night: `rate × nights × rooms`, plus airport
+  transfers and insurance. The step labels change to Stay / Guests, and guests need a name
+  rather than a passport.
+
+Deposit is 30% either way. Confirmation stores the request in `localStorage`
+(`sekkenah.bookings.v1`), issues an `SKN-XXXXXX` reference, renders a printable summary, and
+builds a pre-filled WhatsApp message with every field — "Ethiopia tour request" or
+"Lodge booking request".
 
 **Language.** Header, footer and `?lang=ar` all switch. The button glyph follows the
 language it switches *to* (`ع` on English, `E` on Arabic). Layout is written with logical
@@ -50,7 +58,7 @@ assets/css/site.css   the design system
 assets/js/data.js     tours, lodges, cars, services, steps, FAQs, extras
 assets/js/i18n.js     interface strings, EN + AR
 assets/js/app.js      rendering, filters, drawer, booking wizard
-assets/img/           route, lodge and editorial photography
+assets/img/           route, lodge, gallery and editorial photography
 PHOTO-CREDITS.json    the same attribution as data
 serve.mjs             local preview (node serve.mjs 8910)
 ```
@@ -72,11 +80,16 @@ draft figure.
 
 ## Checks run
 
-Chromium (headless, CDP), against the local server and the live GitHub Pages URL: 14 tours,
-5 region chips with counts, 8 lodges, 4 cars, 8 services, 6 steps, 7 FAQs, every image
-loading, 0 console errors, no "Makkah / Madinah / Umrah / Hajj / Haram" string anywhere on
-the page. Region filtering, month and party-size search (including the empty state), the
-Rift Valley Lakes drawer, the wizard through to the `SKN` reference, adding a lodge and
-seeing it priced in the review, and the Arabic switch (RTL, glyph `E`, translated headings,
-chips, levels and card metadata) were all exercised. Layout measured at 390 / 768 / 1440 px
-in both languages: no horizontal overflow, 1 / 2 / 3 tour columns, 4 lodge columns.
+Chromium (headless, CDP), 58 checks against the local server and the live GitHub Pages URL:
+14 tours, 5 region chips with counts, 10 lodges, 4 cars, 8 services, 6 steps, 7 FAQs, every
+image loading, 0 console errors, no "Makkah / Madinah / Umrah / Hajj / Haram" string
+anywhere on the page. Region filtering, month and party-size search (including the empty
+state), the Rift Valley Lakes drawer (story, access note, two gallery frames), the wizard
+through to the `SKN` reference, adding a lodge and seeing it priced in the review, the
+lodge drawer, and a **room-only booking** with no route attached (`$100 × 3 nights`,
+Stay / Guests / Extras / Review, lodge wording on the WhatsApp handoff) were all exercised.
+The Arabic switch (RTL, glyph `E`, translated headings, chips, levels and card metadata)
+is covered too. Layout measured at 390 / 768 / 1440 px in both languages: no horizontal
+overflow, 1 / 2 / 3 tour columns, 4 lodge columns.
+
+Photography: 62 frames, all Wikimedia Commons, all credited on `credits.html`.

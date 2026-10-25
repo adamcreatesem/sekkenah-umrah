@@ -398,7 +398,12 @@ html[lang='ar'] .price small { letter-spacing: 0; text-transform: none; }
 .lodges { background: linear-gradient(180deg, var(--paper), #f2ece0 40%, var(--paper)); }
 
 .stay { display: flex; flex-direction: column; }
-.stay__media { position: relative; overflow: hidden; aspect-ratio: 3 / 4; background: var(--sand); }
+.stay__media {
+  display: block; inline-size: 100%; padding: 0; border: 0; text-align: start;
+  position: relative; overflow: hidden; aspect-ratio: 3 / 4; background: var(--sand); cursor: pointer;
+}
+.stay__open { font: inherit; color: inherit; text-align: start; padding: 0; transition: color 240ms var(--ease); }
+.stay__open:hover { color: var(--brass); }
 .stay__media img { inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform 1200ms var(--ease); }
 .stay:hover .stay__media img { transform: scale(1.05); }
 .stay__area {
@@ -574,6 +579,17 @@ html[lang='ar'] .itin__d { letter-spacing: 0; text-transform: none; font-size: 0
 .drawer__facts dt { color: var(--muted); }
 .drawer__note { font-size: 0.74rem; color: var(--muted); margin-block: 16px 0; }
 .drawer__cta { inline-size: 100%; margin-block-start: 22px; }
+.drawer__p { font-size: 0.94rem; color: var(--ink-3); margin-block-end: 12px; }
+.drawer__actions { display: grid; gap: 10px; margin-block-start: 22px; }
+.drawer__actions .drawer__cta { margin-block-start: 0; }
+.drawer__actions .is-added { background: var(--ink); color: var(--bone); border-color: var(--ink); }
+
+/* Gallery frames in the drawer: two per row, fixed 3:2 so a dozen photographers' crops
+   do not turn the panel into a scrapbook page. */
+.gal { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-block-start: 22px; }
+.gal__fig { aspect-ratio: 3 / 2; overflow: hidden; background: var(--sand); margin: 0; }
+.gal__fig img { inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform 900ms var(--ease); }
+.gal__fig:hover img { transform: scale(1.04); }
 
 .x { inline-size: 34px; block-size: 34px; display: inline-grid; place-items: center; border-radius: 50%; transition: background 240ms; }
 .x:hover { background: rgba(12, 19, 16, 0.06); }

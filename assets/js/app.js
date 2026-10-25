@@ -25,6 +25,7 @@ const state = {
   lang: 'en',
   region: 'all',
   openTour: null,
+  openStay: null,
   trip: { stays: [] },
   draft: null,
   step: 0,
@@ -94,14 +95,14 @@ function tourCard(p) {
 function stayCard(s) {
   const added = state.trip.stays.includes(s.id);
   return `
-  <article class="stay">
-    <div class="stay__media">
-      <img src="${s.image}" alt="${esc(tx(s.name))}" loading="lazy" decoding="async" width="1100" height="1375">
+  <article class="stay" data-stay="${s.id}">
+    <button class="stay__media" type="button" data-open-stay="${s.id}" aria-label="${esc(t('stays.view'))}: ${esc(tx(s.name))}">
+      <img src="${s.image}" alt="" loading="lazy" decoding="async" width="1100" height="1375">
       <span class="stay__area">${esc(tx(s.area))}</span>
-    </div>
+    </button>
     <div class="stay__body">
       <div class="stay__stars" aria-label="${s.stars} ${t('stays.stars')}">${'★'.repeat(s.stars)}<span>${'★'.repeat(5 - s.stars)}</span></div>
-      <h3 class="stay__name">${esc(tx(s.name))}</h3>
+      <h3 class="stay__name"><button class="stay__open" type="button" data-open-stay="${s.id}">${esc(tx(s.name))}</button></h3>
       <p class="stay__note">${esc(tx(s.note))}</p>
       <div class="stay__foot">
         <span class="price"><b>${usd(s.price)}</b><small>/${t('stays.night')}</small></span>
@@ -235,6 +236,7 @@ function renderAll() {
   renderRegions();
   $('#year').textContent = new Date().getFullYear();
   if (state.openTour) openTourDrawer(state.openTour, { keepFocus: true });
+  if (state.openStay) openStayDrawer(state.openStay, { keepFocus: true });
   if (!$('#modal').hidden) renderStep();
 }
 
@@ -314,6 +316,9 @@ function openTourDrawer(id, { keepFocus = false } = {}) {
     </div>
     <p class="drawer__blurb">${esc(tx(p.blurb))}</p>
 
+    <h3 class="drawer__h">${t('tours.story')}</h3>
+    ${paragraphs(p.story)}
+
     <h3 class="drawer__h">${t('pkg.included')}</h3>
     <ul class="ticks">${p.includes.map((i) => `<li>${esc(tx(i))}</li>`).join('')}</ul>
 
@@ -325,7 +330,10 @@ function openTourDrawer(id, { keepFocus = false } = {}) {
       <div><dt>${t('pkg.depart')}</dt><dd>${fmtDate(p.depart)}</dd></div>
       <div><dt>${t('tours.best')}</dt><dd>${bestMonths(p)}</dd></div>
       <div><dt>${t('search.region')}</dt><dd>${esc(tx(region?.label))}</dd></div>
+      <div><dt>${t('tours.getting')}</dt><dd>${esc(tx(p.getting))}</dd></div>
     </dl>
+
+    ${galleryBlock(p.gallery)}
     <p class="drawer__note">${t('pkg.private')} · ${t('pkg.priceNote')}</p>
     <button class="btn btn--solid drawer__cta" type="button" data-book-from="${p.id}">${t('pkg.choose')}</button>
   `;
@@ -335,6 +343,66 @@ function openTourDrawer(id, { keepFocus = false } = {}) {
   document.body.classList.add('is-locked');
   requestAnimationFrame(() => $('#drawer').classList.add('is-on'));
   $('#drawer .x').focus();
+}
+
+/* A lodge gets the same treatment as a route: a story, the place it sits in, what is
+ * around it, and its own way into the booking flow. */
+function openStayDrawer(id, { keepFocus = false } = {}) {
+  const s = STAYS.find((x) => x.id === id);
+  if (!s) return;
+  if (!keepFocus) lastFocus = document.activeElement;
+  state.openStay = id;
+  state.openTour = null;
+  const added = state.trip.stays.includes(s.id);
+
+  $('#drawerKicker').textContent = `${t('stays.kicker')} · ${esc(tx(s.area))}`;
+  $('#drawerBody').innerHTML = `
+    <figure class="drawer__fig"><img src="${s.image}" alt="${esc(tx(s.name))}" width="1100" height="1375"></figure>
+    <h2 class="drawer__title" id="drawerTitle">${esc(tx(s.name))}</h2>
+    <div class="drawer__stats">
+      <div class="dstat"><b>${'★'.repeat(s.stars)}</b><span>${t('stays.stars')}</span></div>
+      <div class="dstat"><b>${usd(s.price)}</b><span>${t('stays.rate')}</span></div>
+      <div class="dstat"><b>${esc(tx(s.area))}</b><span>${t('stays.place')}</span></div>
+    </div>
+    <p class="drawer__blurb">${esc(tx(s.note))}</p>
+
+    <h3 class="drawer__h">${t('stays.place')}</h3>
+    ${paragraphs(s.story)}
+
+    <dl class="drawer__facts">
+      <div><dt>${t('stays.near')}</dt><dd>${esc(tx(s.near))}</dd></div>
+      <div><dt>${t('stays.rate')}</dt><dd>${usd(s.price)}</dd></div>
+    </dl>
+
+    ${galleryBlock(s.gallery)}
+
+    <div class="drawer__actions">
+      <button class="btn btn--solid drawer__cta" type="button" data-book-stay="${s.id}">${t('stays.book')}</button>
+      <button class="btn btn--line drawer__cta${added ? ' is-added' : ''}" type="button" data-add-stay="${s.id}">
+        ${added ? t('stays.added') : t('stays.add')}
+      </button>
+    </div>
+    <p class="drawer__note">${t('stays.note')}</p>
+  `;
+
+  $('#drawer').hidden = false;
+  $('#scrim').hidden = false;
+  document.body.classList.add('is-locked');
+  requestAnimationFrame(() => $('#drawer').classList.add('is-on'));
+  $('#drawer .x').focus();
+}
+
+/* Long copy is written as one paragraph per thought and split here, so the data stays a
+ * single string per language instead of an array that has to be kept in step. */
+function paragraphs(text) {
+  return String(tx(text)).split(/\n\n+/).map((p) => `<p class="drawer__p">${esc(p)}</p>`).join('');
+}
+
+function galleryBlock(images) {
+  if (!images || !images.length) return '';
+  return `<div class="gal">
+    ${images.map((src) => `<figure class="gal__fig"><img src="${src}" alt="" loading="lazy" width="1200" height="800"></figure>`).join('')}
+  </div>`;
 }
 
 /* Best months read as a range when the route runs straight through the calendar — and
@@ -360,14 +428,31 @@ function closeDrawer() {
   $('#scrim').hidden = true;
   document.body.classList.remove('is-locked');
   state.openTour = null;
+  state.openStay = null;
   setTimeout(() => { d.hidden = true; }, 260);
   if (lastFocus) lastFocus.focus();
 }
 
 /* ───────────────────────────── pricing ───────────────────────────── */
 
+const STAY_EXTRAS = ['transfer', 'insurance'];
+const isoIn = (days) => {
+  const dt = new Date();
+  dt.setDate(dt.getDate() + days);
+  return dt.toISOString().slice(0, 10);
+};
+
 function quote(d = state.draft) {
   if (!d) return { base: 0, extras: 0, stays: 0, total: 0, deposit: 0, balance: 0 };
+  if (d.mode === 'stay') {
+    const s = STAYS.find((x) => x.id === d.stayId);
+    const base = s ? s.price * Math.max(d.nights, 1) * Math.max(d.rooms, 1) : 0;
+    const paying = d.adults + d.children;
+    const extras = EXTRAS.filter((e) => d.extras.includes(e.id) && STAY_EXTRAS.includes(e.id))
+      .reduce((n, e) => n + e.price * (e.unit === 'person' ? paying : 1), 0);
+    const total = base + extras;
+    return { base, extras, stays: 0, total, deposit: total * 0.3, balance: total * 0.7 };
+  }
   const p = findTour(d.packageId);
   const nights = p ? Math.max(p.nights, 1) : 0;
   const paying = d.adults + d.children;
@@ -390,7 +475,7 @@ function priceLine() {
 
 /* ───────────────────────────── wizard ───────────────────────────── */
 
-function openBooking(packageId = null) {
+function openBooking(packageId = null, { mode = 'tour', stayId = null } = {}) {
   lastFocus = document.activeElement;
   state.step = 0;
   state.lastBooking = null;
@@ -398,12 +483,22 @@ function openBooking(packageId = null) {
   $('#btnBack').dataset.action = '';
   $('#btnBack').hidden = false;
   $('#btnBack').textContent = t('book.back');
-  state.draft = {
-    packageId: packageId || TOURS[0].id,
-    depart: packageId ? (findTour(packageId) || {}).depart : TOURS[0].depart,
-    adults: 2, children: 0, infants: 0, rooms: 1,
-    travellers: [], extras: [], notes: '',
-  };
+  state.draft = mode === 'stay'
+    ? {
+      mode: 'stay',
+      stayId: stayId || STAYS[0].id,
+      checkIn: isoIn(14),
+      nights: 2, rooms: 1,
+      adults: 2, children: 0, infants: 0,
+      travellers: [], extras: [], notes: '', packageId: null, depart: null,
+    }
+    : {
+      mode: 'tour',
+      packageId: packageId || TOURS[0].id,
+      depart: packageId ? (findTour(packageId) || {}).depart : TOURS[0].depart,
+      adults: 2, children: 0, infants: 0, rooms: 1,
+      travellers: [], extras: [], notes: '', stayId: null, checkIn: null, nights: null,
+    };
   $('#modal').hidden = false;
   document.body.classList.add('is-locked');
   requestAnimationFrame(() => $('#modal').classList.add('is-on'));
@@ -421,10 +516,14 @@ function closeBooking() {
   if (lastFocus) lastFocus.focus();
 }
 
-const STEP_KEYS = ['book.step1', 'book.step2', 'book.step3', 'book.step4'];
+function stepKeys() {
+  return state.draft && state.draft.mode === 'stay'
+    ? ['book.step1Stay', 'book.step2Stay', 'book.step3', 'book.step4']
+    : ['book.step1', 'book.step2', 'book.step3', 'book.step4'];
+}
 
 function renderTrack() {
-  $('#stepper').innerHTML = STEP_KEYS.map((k, i) => `
+  $('#stepper').innerHTML = stepKeys().map((k, i) => `
     <li class="track${i === state.step ? ' is-on' : ''}${i < state.step ? ' is-done' : ''}">
       <span class="track__n">${i < state.step ? '✓' : i + 1}</span>
       <span class="track__l">${t(k)}</span>
@@ -439,6 +538,7 @@ function renderStep() {
   const foot = $('#btnBack');
 
   if (state.lastBooking && state.step === 3) { renderTicket(); return; }
+  if (d.mode === 'stay') { renderStayStep(); return; }
 
   if (state.step === 0) {
     body.innerHTML = `
@@ -545,6 +645,135 @@ function renderStep() {
   }
 }
 
+/* Room-only booking: a lodge, a check-in date, nights and rooms, priced per room per
+ * night. Same four steps and the same reference number as a route, because the office
+ * should not have to learn a second flow to sell a bed. */
+function renderStayStep() {
+  const d = state.draft;
+  const s = STAYS.find((x) => x.id === d.stayId) || STAYS[0];
+  const body = $('#modalBody');
+  const foot = $('#btnBack');
+
+  if (state.step === 0) {
+    body.innerHTML = `
+      <div class="form">
+        <label class="field"><span>${t('book.lodge')}</span>
+          <select id="wStay">
+            ${STAYS.map((x) => `<option value="${x.id}"${x.id === d.stayId ? ' selected' : ''}>${esc(tx(x.name))} — ${usd(x.price)}</option>`).join('')}
+          </select>
+        </label>
+        <div class="row">
+          <label class="field"><span>${t('book.checkIn')}</span>
+            <input id="wCheckIn" type="date" value="${d.checkIn}" min="${isoIn(0)}">
+          </label>
+          ${numField('nights', t('book.nights'), d.nights, 1, 14)}
+          ${numField('rooms', t('book.rooms'), d.rooms, 1, 8)}
+        </div>
+        <div class="row">
+          ${numField('adults', t('book.adults'), d.adults, 1, 12)}
+          ${numField('children', t('book.children'), d.children, 0, 8)}
+          ${numField('infants', t('book.infants'), d.infants, 0, 4)}
+        </div>
+        <p class="form__note">${usd(s.price)} ${t('stays.rate')} · ${t('book.stayNote')}</p>
+      </div>`;
+    $('#btnNext').textContent = t('book.next');
+    foot.hidden = true;
+    $('#liveTotal').innerHTML = priceLine();
+    return;
+  }
+
+  if (state.step === 1) {
+    const pax = d.adults + d.children + d.infants;
+    while (d.travellers.length < pax) d.travellers.push({ name: '', phone: '', email: '' });
+    d.travellers.length = pax;
+    body.innerHTML = `
+      <div class="travellers">
+        ${d.travellers.map((tr, i) => `
+          <fieldset class="traveller">
+            <legend>${t('book.traveller')} ${i + 1}</legend>
+            <label class="field"><span>${t('book.fullName')} *</span><input data-tr="${i}" data-k="name" value="${esc(tr.name)}" autocomplete="name" required></label>
+            <div class="row">
+              <label class="field"><span>${t('book.phone')}</span><input data-tr="${i}" data-k="phone" value="${esc(tr.phone)}" type="tel" dir="ltr"></label>
+              <label class="field"><span>${t('book.email')}</span><input data-tr="${i}" data-k="email" value="${esc(tr.email)}" type="email" dir="ltr"></label>
+            </div>
+          </fieldset>`).join('')}
+        <label class="field"><span>${t('book.notes')}</span><textarea id="wNotes" rows="2">${esc(d.notes)}</textarea></label>
+      </div>`;
+    $('#btnNext').textContent = t('book.next');
+    foot.hidden = false;
+    $('#liveTotal').innerHTML = priceLine();
+    return;
+  }
+
+  if (state.step === 2) {
+    const paying = d.adults + d.children;
+    body.innerHTML = `
+      <div class="form">
+        <div class="extras">
+          ${EXTRAS.filter((e) => STAY_EXTRAS.includes(e.id)).map((e) => `
+            <label class="check">
+              <input type="checkbox" data-extra="${e.id}"${d.extras.includes(e.id) ? ' checked' : ''}>
+              <span class="check__box" aria-hidden="true"></span>
+              <span class="check__t">${esc(tx(e.name))}</span>
+              <span class="check__p">${usd(e.price)}${e.unit === 'person' ? ` × ${paying}` : ''}</span>
+            </label>`).join('')}
+        </div>
+      </div>`;
+    $('#btnNext').textContent = t('book.next');
+    foot.hidden = false;
+    return;
+  }
+
+  if (state.step === 3) {
+    const q = quote();
+    body.innerHTML = `
+      <div class="review">
+        <div class="review__rows">
+          <div><span>${t('book.lodge')}</span><b>${esc(tx(s.name))}</b></div>
+          <div><span>${t('book.checkIn')}</span><b>${fmtDate(d.checkIn)}</b></div>
+          <div><span>${t('book.nights')}</span><b>${d.nights}</b></div>
+          <div><span>${t('book.rooms')}</span><b>${d.rooms}</b></div>
+          <div><span>${t('book.adults')}</span><b>${d.adults}${d.children ? ` + ${d.children}` : ''}${d.infants ? ` + ${d.infants}` : ''}</b></div>
+          ${d.travellers.filter((x) => x.name).map((x, i) => `<div><span>${t('book.traveller')} ${i + 1}</span><b>${esc(x.name)}</b></div>`).join('')}
+        </div>
+        <div class="totals">
+          <div><span>${usd(s.price)} × ${d.nights} ${t('tours.night')} × ${d.rooms}</span><b>${usd(q.base)}</b></div>
+          ${q.extras ? `<div><span>${t('book.extras')}</span><b>${usd(q.extras)}</b></div>` : ''}
+          <div class="totals__sum"><span>${t('book.total')}</span><b>${usd(q.total)}</b></div>
+          <div class="totals__small"><span>${t('book.etb')}</span><b>ETB ${etb(q.total)}</b></div>
+          <div class="totals__dep"><span>${t('book.deposit')}</span><b>${usd(q.deposit)}</b></div>
+          <div class="totals__small"><span>${t('book.balance')}</span><b>${usd(q.balance)}</b></div>
+        </div>
+        <p class="form__note">${t('book.summaryNote')}</p>
+      </div>`;
+    $('#btnNext').textContent = t('book.confirm');
+    foot.hidden = false;
+    $('#liveTotal').innerHTML = priceLine();
+  }
+}
+
+function collectStayDates() {
+  const d = state.draft;
+  d.stayId = $('#wStay').value;
+  d.checkIn = $('#wCheckIn').value;
+  d.nights = clamp(parseInt($('#w-nights').value, 10) || 1, 1, 14);
+  d.rooms = clamp(parseInt($('#w-rooms').value, 10) || 1, 1, 8);
+  d.adults = clamp(parseInt($('#w-adults').value, 10) || 1, 1, 12);
+  d.children = clamp(parseInt($('#w-children').value, 10) || 0, 0, 8);
+  d.infants = clamp(parseInt($('#w-infants').value, 10) || 0, 0, 4);
+}
+
+function validateStayGuests() {
+  let bad = null;
+  $$('[data-tr][data-k="name"]').forEach((el) => {
+    const empty = !el.value.trim();
+    el.classList.toggle('is-bad', empty);
+    if (empty && !bad) bad = el;
+  });
+  if (bad) { bad.focus(); toast(t('book.required')); }
+  return !bad;
+}
+
 function numField(id, label, val, min, max) {
   return `<label class="field field--num"><span>${label}</span>
     <span class="stepper">
@@ -587,8 +816,12 @@ function collectStep2() {
 }
 
 function nextStep() {
-  if (state.step === 0) collectStep0();
-  if (state.step === 1) { collectStep1(); if (!validateStep1()) return; }
+  const stay = state.draft.mode === 'stay';
+  if (state.step === 0) { if (stay) collectStayDates(); else collectStep0(); }
+  if (state.step === 1) {
+    collectStep1();
+    if (!(stay ? validateStayGuests() : validateStep1())) return;
+  }
   if (state.step === 2) collectStep2();
   if (state.step === 3) { confirmBooking(); return; }
   state.step = Math.min(3, state.step + 1);
@@ -617,8 +850,22 @@ function confirmBooking() {
 }
 
 function waMessage(b) {
-  const p = findTour(b.packageId);
   const L = [];
+  if (b.mode === 'stay') {
+    const s = STAYS.find((x) => x.id === b.stayId);
+    L.push(isAr() ? 'طلب حجز نزل — سكينة' : 'Lodge booking request — Sekkenah');
+    L.push(`${t('book.ref')}: ${b.ref}`);
+    L.push(`${t('book.lodge')}: ${tx(s.name)}`);
+    L.push(`${t('book.checkIn')}: ${fmtDate(b.checkIn)}`);
+    L.push(`${t('book.nights')}: ${b.nights}  ${t('book.rooms')}: ${b.rooms}`);
+    L.push(`${t('book.adults')}: ${b.adults}  ${t('book.children')}: ${b.children}  ${t('book.infants')}: ${b.infants}`);
+    if (b.travellers.length) L.push(`${t('book.travellers')}: ` + b.travellers.map((x) => x.name).filter(Boolean).join(', '));
+    if (b.extras.length) L.push(`${t('book.extras')}: ` + b.extras.map((id) => tx((EXTRAS.find((e) => e.id === id) || {}).name)).join(', '));
+    L.push(`${t('book.total')}: ${usd(b.quote.total)} (~ETB ${etb(b.quote.total)})`);
+    L.push(`${t('book.deposit')}: ${usd(b.quote.deposit)}`);
+    return L.join('\n');
+  }
+  const p = findTour(b.packageId);
   L.push(isAr() ? 'طلب جولة في إثيوبيا — سكينة' : 'Ethiopia tour request — Sekkenah');
   L.push(`${t('book.ref')}: ${b.ref}`);
   L.push(`${t('book.package')}: ${tx(p.name)} (${fmtDate(b.depart)})`);
@@ -634,7 +881,7 @@ function waMessage(b) {
 
 function renderTicket() {
   const b = state.lastBooking;
-  const p = findTour(b.packageId);
+  const p = b.mode === 'stay' ? STAYS.find((x) => x.id === b.stayId) : findTour(b.packageId);
   renderTrack();
   $('#modalBody').innerHTML = `
     <div class="ticket" id="ticket">
@@ -645,8 +892,11 @@ function renderTicket() {
       <h3 class="ticket__title">${t('book.doneTitle')}</h3>
       <p class="ticket__body">${t('book.doneBody')}</p>
       <div class="review__rows">
-        <div><span>${t('book.package')}</span><b>${esc(tx(p.name))}</b></div>
-        <div><span>${t('book.depart')}</span><b>${fmtDate(b.depart)}</b></div>
+        <div><span>${b.mode === 'stay' ? t('book.lodge') : t('book.package')}</span><b>${esc(tx(p.name))}</b></div>
+        ${b.mode === 'stay'
+          ? `<div><span>${t('book.checkIn')}</span><b>${fmtDate(b.checkIn)}</b></div>
+             <div><span>${t('book.nights')}</span><b>${b.nights} · ${b.rooms} ${t('book.rooms')}</b></div>`
+          : `<div><span>${t('book.depart')}</span><b>${fmtDate(b.depart)}</b></div>`}
         <div><span>${t('book.adults')}</span><b>${b.adults}${b.children ? ` + ${b.children}` : ''}${b.infants ? ` + ${b.infants}` : ''}</b></div>
         ${b.travellers.filter((x) => x.name).length ? `<div><span>${t('book.travellers')}</span><b>${b.travellers.filter((x) => x.name).map((x) => esc(x.name)).join(', ')}</b></div>` : ''}
         <div><span>${t('book.total')}</span><b>${usd(b.quote.total)}</b></div>
@@ -737,12 +987,19 @@ function bind() {
     const openBtn = e.target.closest('[data-open-tour]');
     if (openBtn) { openTourDrawer(openBtn.dataset.openTour); return; }
 
+    const openStayBtn = e.target.closest('[data-open-stay]');
+    if (openStayBtn) { openStayDrawer(openStayBtn.dataset.openStay); return; }
+
+    const bookStay = e.target.closest('[data-book-stay]');
+    if (bookStay) { closeDrawer(); openBooking(null, { mode: 'stay', stayId: bookStay.dataset.bookStay }); return; }
+
     const addStay = e.target.closest('[data-add-stay]');
     if (addStay) {
       const id = addStay.dataset.addStay;
       const i = state.trip.stays.indexOf(id);
       if (i >= 0) state.trip.stays.splice(i, 1); else state.trip.stays.push(id);
       renderStays();
+      if (state.openStay === id) openStayDrawer(id, { keepFocus: true });
       toast(i >= 0 ? (isAr() ? 'أُزيل من الرحلة' : 'Removed from trip') : t('stays.added'));
       return;
     }
