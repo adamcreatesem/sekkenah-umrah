@@ -1,12 +1,12 @@
-/* Sekkenah — interface behaviour.
+/* Sekkenah — interface behaviour. Ethiopia tours only.
  *
  * Everything renders from data.js, so a language switch is a re-render rather than a
  * patch-up of half the page. The one piece of real state is the booking draft, which is
  * kept in memory while the wizard is open and written to localStorage only once the
- * visitor confirms - a half-finished booking should not survive a reload as if it were
+ * visitor confirms — a half-finished booking should not survive a reload as if it were
  * a reservation.
  */
-import { BRAND, JOURNEYS, TOURS, ALL_TRIPS, HOTELS, STAYS, ALL_HOTELS, CARS, SERVICES, STEPS, FAQS, EXTRAS, ROOM_TYPES } from './data.js';
+import { BRAND, REGIONS, LEVELS, TOURS, STAYS, CARS, SERVICES, STEPS, FAQS, EXTRAS } from './data.js';
 import { STR, MONTHS } from './i18n.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -18,14 +18,14 @@ const usd = (n) => '$' + Math.round(n).toLocaleString('en-US');
 const etb = (n) => Math.round(n * BRAND.etbPerUsd).toLocaleString('en-US');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
-const findTrip = (id) => ALL_TRIPS.find((x) => x.id === id);
+const findTour = (id) => TOURS.find((x) => x.id === id);
+const regionOf = (id) => REGIONS.find((r) => r.id === id);
 
 const state = {
   lang: 'en',
-  filter: 'all',
-  city: 'makkah',
-  openPackage: null,
-  trip: { hotels: [] },
+  region: 'all',
+  openTour: null,
+  trip: { stays: [] },
   draft: null,
   step: 0,
   lastBooking: null,
@@ -59,57 +59,56 @@ function setLang(lang, { announce = true } = {}) {
   document.title = t('meta.title');
   $('meta[name="description"]').setAttribute('content', t('meta.desc'));
 
+  const status = $('#searchStatus');
+  if (status) status.textContent = '';
   renderAll();
-  paintHijri();
+  paintCalendar();
   paintLinks();
   if (announce) $('#langBtn').setAttribute('aria-label', t('nav.langLabel'));
 }
 
 /* ───────────────────────────── catalogue ───────────────────────────── */
 
-const cardMeta = (p) => (p.nights
-  ? `<span>${p.nights} ${t('journeys.nights')}</span><span class="dot">·</span><span>${p.makkah} / ${p.madinah}</span>`
-  : `<span>${t('journeys.visa')}</span>`);
-
-function journeyCard(p) {
-  const seatsLow = p.seats <= 10;
+function tourCard(p) {
+  const low = p.seats <= 8;
   return `
-  <article class="card" data-pkg="${p.id}">
+  <article class="card card--tour" data-tour="${p.id}" data-region="${p.region}">
     <div class="card__media">
-      <img src="${p.image}" alt="${esc(tx(p.name))}" loading="lazy" decoding="async" width="1100" height="1375">
+      <img src="${p.image}" alt="${esc(tx(p.name))}" loading="lazy" decoding="async" width="1400" height="1050">
       <span class="card__tag">${esc(tx(p.tag))}</span>
-      <span class="card__seats${seatsLow ? ' is-low' : ''}">${p.seats} ${t('journeys.seats')}</span>
+      <span class="card__seats${low ? ' is-low' : ''}">${p.seats} ${t('tours.seats')}</span>
     </div>
     <div class="card__body">
-      <div class="card__meta">${cardMeta(p)}</div>
+      <div class="card__meta"><span>${p.days} ${t(p.days === 1 ? 'tours.day' : 'tours.days')}</span><span class="dot">·</span><span>${p.nights} ${t(p.nights === 1 ? 'tours.night' : 'tours.nights')}</span><span class="dot">·</span><span>${esc(tx(LEVELS[p.level]))}</span></div>
       <h3 class="card__title">${esc(tx(p.name))}</h3>
       <p class="card__blurb">${esc(tx(p.blurb))}</p>
       <div class="card__foot">
-        <span class="price"><small>${t('journeys.from')}</small><b>${usd(p.price)}</b><small>${t('journeys.perPerson')}</small></span>
-        <button class="btn btn--line btn--sm" type="button" data-open-pkg="${p.id}">${t('journeys.view')}</button>
+        <span class="price"><small>${t('tours.from')}</small><b>${usd(p.price)}</b><small>${t('tours.perPerson')}</small></span>
+        <button class="btn btn--line btn--sm" type="button" data-open-tour="${p.id}">${t('tours.view')}</button>
       </div>
-      <p class="card__date">${t('journeys.departs')} <b>${fmtDate(p.depart)}</b> · ${p.tier}</p>
+      <p class="card__date">${t('pkg.depart')} <b>${fmtDate(p.depart)}</b> · ${esc(tx(regionOf(p.region)?.label))}</p>
     </div>
   </article>`;
 }
 
-function tourCard(p) {
+function stayCard(s) {
+  const added = state.trip.stays.includes(s.id);
   return `
-  <article class="card card--tour" data-pkg="${p.id}">
-    <div class="card__media">
-      <img src="${p.image}" alt="${esc(tx(p.name))}" loading="lazy" decoding="async" width="1400" height="1050">
-      <span class="card__tag">${esc(tx(p.tag))}</span>
-      <span class="card__seats${p.seats <= 10 ? ' is-low' : ''}">${p.seats} ${t('journeys.seats')}</span>
+  <article class="stay">
+    <div class="stay__media">
+      <img src="${s.image}" alt="${esc(tx(s.name))}" loading="lazy" decoding="async" width="1100" height="1375">
+      <span class="stay__area">${esc(tx(s.area))}</span>
     </div>
-    <div class="card__body">
-      <div class="card__meta"><span>${p.days} ${t('tours.days')}</span><span class="dot">·</span><span>${p.nights} ${p.nights === 1 ? t('tours.night') : t('journeys.nights')}</span></div>
-      <h3 class="card__title">${esc(tx(p.name))}</h3>
-      <p class="card__blurb">${esc(tx(p.blurb))}</p>
-      <div class="card__foot">
-        <span class="price"><small>${t('journeys.from')}</small><b>${usd(p.price)}</b><small>${t('journeys.perPerson')}</small></span>
-        <button class="btn btn--line btn--sm" type="button" data-open-pkg="${p.id}">${t('tours.view')}</button>
+    <div class="stay__body">
+      <div class="stay__stars" aria-label="${s.stars} ${t('stays.stars')}">${'★'.repeat(s.stars)}<span>${'★'.repeat(5 - s.stars)}</span></div>
+      <h3 class="stay__name">${esc(tx(s.name))}</h3>
+      <p class="stay__note">${esc(tx(s.note))}</p>
+      <div class="stay__foot">
+        <span class="price"><b>${usd(s.price)}</b><small>/${t('stays.night')}</small></span>
+        <button class="btn btn--line btn--sm${added ? ' is-added' : ''}" type="button" data-add-stay="${s.id}">
+          ${added ? t('stays.added') : t('stays.add')}
+        </button>
       </div>
-      <p class="card__date">${t('journeys.departs')} <b>${fmtDate(p.depart)}</b></p>
     </div>
   </article>`;
 }
@@ -127,85 +126,53 @@ function carCard(c) {
   </article>`;
 }
 
-function hotelCard(h) {
-  const added = state.trip.hotels.includes(h.id);
-  return `
-  <article class="hotel">
-    <div class="hotel__media">
-      <img src="${h.image}" alt="${esc(tx(h.name))}" loading="lazy" decoding="async" width="1100" height="1375">
-      <span class="hotel__dist">${h.meters ? `${h.meters} m ${t('hotels.toHaram')}` : esc(tx(h.area))}</span>
-    </div>
-    <div class="hotel__body">
-      <div class="hotel__stars" aria-label="${h.stars} ${t('hotels.stars')}">${'★'.repeat(h.stars)}<span>${'★'.repeat(5 - h.stars)}</span></div>
-      <h3 class="hotel__name">${esc(tx(h.name))}</h3>
-      <p class="hotel__note">${esc(tx(h.note))}</p>
-      <div class="hotel__foot">
-        <span class="price"><b>${usd(h.price)}</b><small>/${t('hotels.night')}</small></span>
-        <button class="btn btn--line btn--sm${added ? ' is-added' : ''}" type="button" data-add-hotel="${h.id}">
-          ${added ? t('hotels.added') : t('hotels.add')}
-        </button>
-      </div>
-    </div>
-  </article>`;
-}
-
 function serviceCard(s) {
   return `
   <article class="service">
-    <span class="service__icon">${ICONS[s.icon] || ICONS.arch}</span>
+    <span class="service__icon">${ICONS[s.icon] || ICONS.route}</span>
     <h3 class="h3">${esc(tx(s.title))}</h3>
     <p>${esc(tx(s.body))}</p>
   </article>`;
 }
 
 const ICONS = {
-  passport: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2"/><circle cx="12" cy="10" r="3.2"/><path d="M8.5 17.5h7"/></svg>',
+  route: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6h5a4 4 0 0 1 0 8h-3a4 4 0 0 0 0 8h5"/></svg>',
   plane: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13.5 21 4l-4.5 17-3.5-6.5L3 13.5Z"/><path d="M13 14.5 21 4"/></svg>',
   bed: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18v-7h18v7M3 18h18M6 11V7h5v4"/><path d="M15 11V8h3a2 2 0 0 1 2 2v1"/></svg>',
   car: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16h16M5 16v2M19 16v2"/><path d="M4.5 16l1.6-5.2A2 2 0 0 1 8 9.3h8a2 2 0 0 1 1.9 1.5L19.5 16"/><circle cx="7.5" cy="16" r="1.4"/><circle cx="16.5" cy="16" r="1.4"/></svg>',
-  arch: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10a8 8 0 0 1 16 0v10"/><path d="M9 20v-9a3 3 0 0 1 6 0v9"/></svg>',
   users: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5.6M17.5 19a5.4 5.4 0 0 0-1.2-3.4"/></svg>',
   shield: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.5-3 7.6-7 9.5-4-1.9-7-5-7-9.5V6l7-3Z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>',
+  flag: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 21V4"/><path d="M6 5h10l-2 3.5L16 12H6"/></svg>',
   phone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z"/></svg>',
 };
 
-function renderJourneys() {
-  const grid = $('#journeyGrid');
-  const list = state.filter === 'all' ? JOURNEYS : JOURNEYS.filter((p) => p.type === state.filter);
-  grid.innerHTML = list.map(journeyCard).join('');
-  $('#journeyEmpty').hidden = list.length > 0;
-  observe(grid);
-}
-
 function renderFilters() {
-  const keys = ['all', 'umrah', 'family', 'ramadan', 'group', 'visa'];
-  $('#filters').innerHTML = keys.map((k) => `
-    <button class="chip${state.filter === k ? ' is-on' : ''}" type="button"
-      aria-pressed="${state.filter === k}" data-filter="${k}">${t('journeys.' + k)}</button>`).join('');
-}
-
-function renderHotels() {
-  const list = HOTELS.filter((h) => h.city === state.city);
-  $('#hotelGrid').innerHTML = list.map(hotelCard).join('');
-  $$('#hotelTabs .tab').forEach((b) => {
-    const on = b.dataset.city === state.city;
-    b.classList.toggle('is-on', on);
-    b.setAttribute('aria-pressed', String(on));
-  });
-  observe($('#hotelGrid'));
+  const row = $('#tourFilters');
+  if (!row) return;
+  // The count sits in the chip because the first question a filter row gets is "what is
+  // in there" — five routes or two changes whether the click is worth it.
+  const chips = [{ id: 'all', label: { en: t('filters.all'), ar: t('filters.all') }, n: TOURS.length }, ...REGIONS];
+  row.innerHTML = chips.map((r) => {
+    const n = r.n ?? TOURS.filter((p) => p.region === r.id).length;
+    return `
+    <button class="chip${state.region === r.id ? ' is-on' : ''}" type="button"
+      aria-pressed="${state.region === r.id}" data-region="${r.id}">${esc(tx(r.label))}<span class="chip__n">${n}</span></button>`;
+  }).join('');
 }
 
 function renderTours() {
   const grid = $('#tourGrid');
   if (!grid) return;
-  grid.innerHTML = TOURS.map(tourCard).join('');
+  const list = state.region === 'all' ? TOURS : TOURS.filter((p) => p.region === state.region);
+  grid.innerHTML = list.map(tourCard).join('');
+  $('#tourEmpty').hidden = list.length > 0;
   observe(grid);
 }
 
 function renderStays() {
   const grid = $('#stayGrid');
   if (!grid) return;
-  grid.innerHTML = STAYS.map(hotelCard).join('');
+  grid.innerHTML = STAYS.map(stayCard).join('');
   observe(grid);
 }
 
@@ -237,27 +204,37 @@ function renderFaq() {
 }
 
 function renderMonths() {
-  const months = new Set(JOURNEYS.flatMap((p) => p.months));
+  const months = new Set(TOURS.flatMap((p) => p.bestMonths));
   const sel = $('#fMonth');
+  if (!sel) return;
   const keep = sel.value;
   sel.innerHTML = `<option value="">${t('search.anyMonth')}</option>` +
     [...months].sort((a, b) => a - b).map((m) => `<option value="${m}">${MONTHS[state.lang][m - 1]}</option>`).join('');
   sel.value = keep;
 }
 
+function renderRegions() {
+  const sel = $('#fRegion');
+  if (!sel) return;
+  const keep = sel.value;
+  sel.innerHTML = `<option value="">${t('search.anyRegion')}</option>` +
+    REGIONS.map((r) => `<option value="${r.id}">${esc(tx(r.label))}</option>`).join('');
+  sel.value = keep || state.region;
+  if (!sel.value) sel.value = '';
+}
+
 function renderAll() {
   renderFilters();
-  renderJourneys();
   renderTours();
-  renderHotels();
   renderStays();
   renderCars();
   renderSteps();
   renderServices();
   renderFaq();
   renderMonths();
+  renderRegions();
   $('#year').textContent = new Date().getFullYear();
-  if (state.openPackage) openPackage(state.openPackage, { keepFocus: true });
+  if (state.openTour) openTourDrawer(state.openTour, { keepFocus: true });
   if (!$('#modal').hidden) renderStep();
 }
 
@@ -270,17 +247,22 @@ function fmtDate(iso) {
   catch { return d.toDateString(); }
 }
 
-function fmtHijri(date = new Date()) {
+/* The Ethiopian calendar is the one the country actually keeps; Intl computes it, so it
+ * is right today and in ten years without a lookup table. The era suffix is dropped
+ * because the label already says which calendar this is. */
+function fmtEthiopian(date = new Date()) {
   try {
-    return new Intl.DateTimeFormat(isAr() ? 'ar-SA-u-ca-islamic-umalqura' : 'en-GB-u-ca-islamic-umalqura',
-      { day: 'numeric', month: 'long', year: 'numeric' }).format(date).replace(/\s*AH$|\s*هـ$/, '');
+    return new Intl.DateTimeFormat(isAr() ? 'ar-ET-u-ca-ethiopic' : 'en-GB-u-ca-ethiopic',
+      { day: 'numeric', month: 'long', year: 'numeric' }).format(date).replace(/\s*(AM|هـ)$/, '');
   } catch { return ''; }
 }
 
-function paintHijri() {
-  const h = fmtHijri();
-  $('#hijri').textContent = h;
-  $('#hijriHero').textContent = h;
+function paintCalendar() {
+  const d = fmtEthiopian();
+  for (const id of ['calDate', 'calHero']) {
+    const el = $('#' + id);
+    if (el) el.textContent = d;
+  }
 }
 
 /* ───────────────────────────── links ───────────────────────────── */
@@ -288,8 +270,12 @@ function paintHijri() {
 const waHref = (text) => `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(text)}`;
 
 function paintLinks() {
-  $('#heroWa').href = waHref(isAr() ? 'السلام عليكم، أرغب في الاستفسار عن رحلات العمرة.' : 'Assalamu alaikum, I would like to ask about your Umrah journeys.');
-  $('#waBtn').href = waHref(isAr() ? 'السلام عليكم، لدي استفسار عن العمرة.' : 'Assalamu alaikum, I have an enquiry about Umrah.');
+  $('#heroWa').href = waHref(isAr()
+    ? 'السلام عليكم، أرغب في الاستفسار عن جولات في إثيوبيا.'
+    : 'Hello, I would like to ask about your tours in Ethiopia.');
+  $('#waBtn').href = waHref(isAr()
+    ? 'السلام عليكم، لدي استفسار عن جولة في إثيوبيا.'
+    : 'Hello, I have an enquiry about a tour in Ethiopia.');
   $('#mapBtn').href = `https://www.google.com/maps/search/?api=1&query=${BRAND.mapQuery}`;
 }
 
@@ -308,42 +294,39 @@ function observe(root = document) {
 
 let lastFocus = null;
 
-function openPackage(id, { keepFocus = false } = {}) {
-  const p = findTrip(id);
+function openTourDrawer(id, { keepFocus = false } = {}) {
+  const p = findTour(id);
   if (!p) return;
   if (!keepFocus) lastFocus = document.activeElement;
-  state.openPackage = id;
+  state.openTour = id;
 
-  $('#drawerKicker').textContent = p.tier ? `${tx(p.tag)} · ${p.tier}` : tx(p.tag);
-  const nights = p.type === 'tour'
-    ? `<div class="dstat"><b>${p.days}</b><span>${t('tours.days')}</span></div>
-       <div class="dstat"><b>${p.nights}</b><span>${p.nights === 1 ? t('tours.night') : t('journeys.nights')}</span></div>`
-    : p.nights
-      ? `<div class="dstat"><b>${p.nights}</b><span>${t('journeys.nights')}</span></div>
-         <div class="dstat"><b>${p.makkah} / ${p.madinah}</b><span>${t('journeys.split')}</span></div>`
-      : `<div class="dstat"><b>12</b><span>${t('visa.months')}</span></div>`;
-  const days = p.daysList ? p.daysList.map((d, i) => ({ day: i + 1, title: d.t, body: d.b })) : itinerary(p);
+  const region = regionOf(p.region);
+  $('#drawerKicker').textContent = `${tx(region?.label)} · ${tx(LEVELS[p.level])}`;
 
   $('#drawerBody').innerHTML = `
-    <figure class="drawer__fig"><img src="${p.image}" alt="${esc(tx(p.name))}" width="1100" height="1375"></figure>
+    <figure class="drawer__fig"><img src="${p.image}" alt="${esc(tx(p.name))}" width="1400" height="1050"></figure>
     <h2 class="drawer__title" id="drawerTitle">${esc(tx(p.name))}</h2>
-    <div class="drawer__stats">${nights}
-      <div class="dstat"><b>${usd(p.price)}</b><span>${t('journeys.perPerson')}</span></div>
-      <div class="dstat"><b>${p.seats}</b><span>${t('journeys.seats')}</span></div>
+    <div class="drawer__stats">
+      <div class="dstat"><b>${p.days} / ${p.nights}</b><span>${t('tours.days')} / ${p.nights === 1 ? t('tours.night') : t('tours.nights')}</span></div>
+      <div class="dstat"><b>${usd(p.price)}</b><span>${t('tours.perPerson')}</span></div>
+      <div class="dstat"><b>${p.seats}</b><span>${t('tours.seats')}</span></div>
+      <div class="dstat"><b>${esc(tx(LEVELS[p.level]))}</b><span>${t('tours.level')}</span></div>
     </div>
     <p class="drawer__blurb">${esc(tx(p.blurb))}</p>
 
     <h3 class="drawer__h">${t('pkg.included')}</h3>
     <ul class="ticks">${p.includes.map((i) => `<li>${esc(tx(i))}</li>`).join('')}</ul>
 
-    ${days.length ? `<h3 class="drawer__h">${t('pkg.itinerary')}</h3><ol class="itin">${days.map((d) => `
-      <li><span class="itin__d">${t('pkg.day')} ${d.day}</span><b>${esc(tx(d.title))}</b><span>${esc(tx(d.body))}</span></li>`).join('')}</ol>` : ''}
+    <h3 class="drawer__h">${t('pkg.itinerary')}</h3>
+    <ol class="itin">${p.daysList.map((d, i) => `
+      <li><span class="itin__d">${t('pkg.day')} ${i + 1}</span><b>${esc(tx(d.t))}</b><span>${esc(tx(d.b))}</span></li>`).join('')}</ol>
 
     <dl class="drawer__facts">
       <div><dt>${t('pkg.depart')}</dt><dd>${fmtDate(p.depart)}</dd></div>
-      ${p.hotel ? `<div><dt>${t('journeys.hotel')}</dt><dd>${esc(tx(p.hotel))}</dd></div>` : ''}
+      <div><dt>${t('tours.best')}</dt><dd>${bestMonths(p)}</dd></div>
+      <div><dt>${t('search.region')}</dt><dd>${esc(tx(region?.label))}</dd></div>
     </dl>
-    <p class="drawer__note">${t('pkg.priceNote')}</p>
+    <p class="drawer__note">${t('pkg.private')} · ${t('pkg.priceNote')}</p>
     <button class="btn btn--solid drawer__cta" type="button" data-book-from="${p.id}">${t('pkg.choose')}</button>
   `;
 
@@ -354,28 +337,20 @@ function openPackage(id, { keepFocus = false } = {}) {
   $('#drawer .x').focus();
 }
 
-/* The itinerary is generated from the nights split rather than written out six times;
-   a day-by-day list that disagrees with the package's own night count is the kind of
-   detail that makes a site look assembled rather than designed. */
-function itinerary(p) {
-  const days = [];
-  const mk = (n, title, body) => ({ day: n, title, body });
-  let d = 1;
-  days.push(mk(d++, { en: 'Depart Addis Ababa', ar: 'المغادرة من أديس أبابا' },
-    { en: 'Group meets at Bole, flies to Jeddah, transfer to Makkah and the first Umrah with the guide.', ar: 'تلتقي المجموعة في بولي، وتطير إلى جدة، ثم تنتقل إلى مكة وتؤدي أول عمرة مع المرشد.' }));
-  for (let i = 1; i <= p.makkah; i++) {
-    days.push(mk(d++, { en: `Makkah — day ${i}`, ar: `مكة — اليوم ${i}` },
-      { en: i === 1 ? 'Rest, then tawaf at a quieter hour. Ziyarah briefing after Isha.' : 'Free days for worship, with the guide available at the hotel desk each morning.', ar: i === 1 ? 'راحة، ثم طواف في ساعة أهدأ. لقاء تعريفي بالزيارة بعد العشاء.' : 'أيام حرة للعبادة، والمرشد متاح في مكتب الفندق كل صباح.' }));
+/* Best months read as a range when the route runs straight through the calendar — and
+ * most Ethiopian seasons do, across the year boundary: October to March is one run, not
+ * two. A single gap in the ring is a range; more than one is a list. */
+function bestMonths(p) {
+  const N = MONTHS[state.lang];
+  const ms = [...new Set(p.bestMonths)].sort((a, b) => a - b);
+  const gaps = ms.map((m, i) => ({ i, d: (ms[(i + 1) % ms.length] - m + 12) % 12 }));
+  const breaks = gaps.filter((g) => g.d > 1);
+  if (ms.length > 2 && breaks.length === 1) {
+    const start = ms[(breaks[0].i + 1) % ms.length];
+    const end = ms[breaks[0].i];
+    return `${N[start - 1]}–${N[end - 1]}`;
   }
-  days.push(mk(d++, { en: 'Makkah → Madinah', ar: 'مكة ← المدينة' },
-    { en: 'Morning transfer, check in, and the first prayer at the Prophet’s Mosque.', ar: 'تنقل صباحي، تسجيل الوصول، وأول صلاة في المسجد النبوي.' }));
-  for (let i = 1; i < p.madinah; i++) {
-    days.push(mk(d++, { en: `Madinah — day ${i}`, ar: `المدينة — اليوم ${i}` },
-      { en: i === 1 ? 'Guided ziyarah: Quba, Uhud and the Qiblatain.' : 'Free days, with a group lesson each evening.', ar: i === 1 ? 'زيارة مرشدة: قباء وأحد والقبلتين.' : 'أيام حرة، مع درس للمجموعة كل مساء.' }));
-  }
-  days.push(mk(d++, { en: 'Return', ar: 'العودة' },
-    { en: 'Transfer to Madinah airport and the flight back to Addis Ababa.', ar: 'التنقل إلى مطار المدينة والطيران عائدًا إلى أديس أبابا.' }));
-  return days;
+  return ms.map((m) => N[m - 1]).join(', ');
 }
 
 function closeDrawer() {
@@ -384,31 +359,28 @@ function closeDrawer() {
   d.classList.remove('is-on');
   $('#scrim').hidden = true;
   document.body.classList.remove('is-locked');
-  state.openPackage = null;
+  state.openTour = null;
   setTimeout(() => { d.hidden = true; }, 260);
   if (lastFocus) lastFocus.focus();
 }
 
 /* ───────────────────────────── pricing ───────────────────────────── */
 
-function roomFactor(id) {
-  return (ROOM_TYPES.find((r) => r.id === id) || ROOM_TYPES[2]).factor;
-}
-
 function quote(d = state.draft) {
-  if (!d) return { base: 0, extras: 0, hotels: 0, total: 0, deposit: 0, balance: 0 };
-  const p = findTrip(d.packageId);
-  const nights = p ? p.nights : 0;
-  const pax = d.adults + d.children * 0.7 + d.infants * 0.12;
-  const base = p ? p.price * pax * roomFactor(d.roomType) : 0;
+  if (!d) return { base: 0, extras: 0, stays: 0, total: 0, deposit: 0, balance: 0 };
+  const p = findTour(d.packageId);
+  const nights = p ? Math.max(p.nights, 1) : 0;
+  const paying = d.adults + d.children;
+  const pax = d.adults + d.children * 0.6 + d.infants * 0.1;
+  const base = p ? p.price * pax : 0;
   const extras = EXTRAS.filter((e) => d.extras.includes(e.id))
-    .reduce((n, e) => n + e.price * (e.unit === 'person' ? d.adults + d.children : 1), 0);
-  const hotels = state.trip.hotels
-    .map((id) => ALL_HOTELS.find((h) => h.id === id))
+    .reduce((n, e) => n + e.price * (e.unit === 'person' ? paying : 1), 0);
+  const stays = state.trip.stays
+    .map((id) => STAYS.find((s) => s.id === id))
     .filter(Boolean)
-    .reduce((n, h) => n + h.price * Math.max(nights, 1) * Math.max(d.rooms, 1), 0);
-  const total = base + extras + hotels;
-  return { base, extras, hotels, total, deposit: total * 0.3, balance: total * 0.7 };
+    .reduce((n, s) => n + s.price * nights * Math.max(d.rooms, 1), 0);
+  const total = base + extras + stays;
+  return { base, extras, stays, total, deposit: total * 0.3, balance: total * 0.7 };
 }
 
 function priceLine() {
@@ -427,9 +399,9 @@ function openBooking(packageId = null) {
   $('#btnBack').hidden = false;
   $('#btnBack').textContent = t('book.back');
   state.draft = {
-    packageId: packageId || (JOURNEYS[0] && JOURNEYS[0].id),
-    depart: packageId ? (findTrip(packageId) || {}).depart : JOURNEYS[0].depart,
-    adults: 2, children: 0, infants: 0, rooms: 1, roomType: 'double',
+    packageId: packageId || TOURS[0].id,
+    depart: packageId ? (findTour(packageId) || {}).depart : TOURS[0].depart,
+    adults: 2, children: 0, infants: 0, rooms: 1,
     travellers: [], extras: [], notes: '',
   };
   $('#modal').hidden = false;
@@ -471,24 +443,20 @@ function renderStep() {
   if (state.step === 0) {
     body.innerHTML = `
       <div class="form">
-        <label class="field"><span>${t('book.journey')}</span>
+        <label class="field"><span>${t('book.route')}</span>
           <select id="wPkg">
-            <optgroup label="${t('nav.journeys')}">${JOURNEYS.map((p) => `<option value="${p.id}"${p.id === d.packageId ? ' selected' : ''}>${esc(tx(p.name))} — ${usd(p.price)}</option>`).join('')}</optgroup>
-            <optgroup label="${t('nav.tours')}">${TOURS.map((p) => `<option value="${p.id}"${p.id === d.packageId ? ' selected' : ''}>${esc(tx(p.name))} — ${usd(p.price)}</option>`).join('')}</optgroup>
+            ${TOURS.map((p) => `<option value="${p.id}"${p.id === d.packageId ? ' selected' : ''}>${esc(tx(p.name))} — ${usd(p.price)}</option>`).join('')}
           </select>
         </label>
         <label class="field"><span>${t('book.depart')}</span>
           <input id="wDepart" type="date" value="${d.depart}">
         </label>
         <div class="row">
-          ${numField('adults', t('book.adults'), d.adults, 1, 12)}
-          ${numField('children', t('book.children'), d.children, 0, 10)}
+          ${numField('adults', t('book.adults'), d.adults, 1, 20)}
+          ${numField('children', t('book.children'), d.children, 0, 12)}
           ${numField('infants', t('book.infants'), d.infants, 0, 6)}
-          ${numField('rooms', t('book.rooms'), d.rooms, 1, 6)}
+          ${numField('rooms', t('book.rooms'), d.rooms, 1, 8)}
         </div>
-        <label class="field"><span>${t('book.roomType')}</span>
-          <select id="wRoom">${ROOM_TYPES.map((r) => `<option value="${r.id}"${r.id === d.roomType ? ' selected' : ''}>${esc(tx(r.label))}</option>`).join('')}</select>
-        </label>
         <p class="form__note">${t('pkg.priceNote')}</p>
       </div>`;
     $('#btnNext').textContent = t('book.next');
@@ -498,9 +466,9 @@ function renderStep() {
   }
 
   if (state.step === 1) {
-    if (!d.travellers.length) d.travellers = Array.from({ length: d.adults + d.children + d.infants }, () => ({ name: '', passport: '', phone: '', email: '' }));
-    while (d.travellers.length < d.adults + d.children + d.infants) d.travellers.push({ name: '', passport: '', phone: '', email: '' });
-    d.travellers.length = d.adults + d.children + d.infants;
+    const pax = d.adults + d.children + d.infants;
+    while (d.travellers.length < pax) d.travellers.push({ name: '', passport: '', phone: '', email: '' });
+    d.travellers.length = pax;
     body.innerHTML = `
       <div class="travellers">
         ${d.travellers.map((tr, i) => `
@@ -522,7 +490,7 @@ function renderStep() {
   }
 
   if (state.step === 2) {
-    const pax = d.adults + d.children;
+    const paying = d.adults + d.children;
     body.innerHTML = `
       <div class="form">
         <div class="extras">
@@ -531,13 +499,13 @@ function renderStep() {
               <input type="checkbox" data-extra="${e.id}"${d.extras.includes(e.id) ? ' checked' : ''}>
               <span class="check__box" aria-hidden="true"></span>
               <span class="check__t">${esc(tx(e.name))}</span>
-              <span class="check__p">${usd(e.price)}${e.unit === 'person' ? ` × ${pax}` : ''}</span>
+              <span class="check__p">${usd(e.price)}${e.unit === 'person' ? ` × ${paying}` : ''}</span>
             </label>`).join('')}
         </div>
-        ${state.trip.hotels.length ? `<h3 class="drawer__h">${t('hotels.title')}</h3>
-        <ul class="ticks">${state.trip.hotels.map((id) => {
-          const h = ALL_HOTELS.find((x) => x.id === id);
-          return h ? `<li>${esc(tx(h.name))} — ${usd(h.price)}/${t('hotels.night')}</li>` : '';
+        ${state.trip.stays.length ? `<h3 class="drawer__h">${t('stays.title')}</h3>
+        <ul class="ticks">${state.trip.stays.map((id) => {
+          const s = STAYS.find((x) => x.id === id);
+          return s ? `<li>${esc(tx(s.name))} — ${usd(s.price)}/${t('stays.night')}</li>` : '';
         }).join('')}</ul>` : ''}
       </div>`;
     $('#btnNext').textContent = t('book.next');
@@ -546,7 +514,7 @@ function renderStep() {
   }
 
   if (state.step === 3) {
-    const p = findTrip(d.packageId);
+    const p = findTour(d.packageId);
     const q = quote();
     body.innerHTML = `
       <div class="review">
@@ -556,13 +524,14 @@ function renderStep() {
           <div><span>${t('book.adults')}</span><b>${d.adults}</b></div>
           ${d.children ? `<div><span>${t('book.children')}</span><b>${d.children}</b></div>` : ''}
           ${d.infants ? `<div><span>${t('book.infants')}</span><b>${d.infants}</b></div>` : ''}
-          <div><span>${t('book.rooms')}</span><b>${d.rooms} · ${esc(tx((ROOM_TYPES.find((r) => r.id === d.roomType) || {}).label))}</b></div>
+          <div><span>${t('book.rooms')}</span><b>${d.rooms}</b></div>
+          ${state.trip.stays.length ? `<div><span>${t('stays.title')}</span><b>${state.trip.stays.map((id) => esc(tx((STAYS.find((s) => s.id === id) || {}).name))).join(', ')}</b></div>` : ''}
           ${d.travellers.filter((x) => x.name).map((x, i) => `<div><span>${t('book.traveller')} ${i + 1}</span><b>${esc(x.name)}</b></div>`).join('')}
         </div>
         <div class="totals">
           <div><span>${t('book.subtotal')}</span><b>${usd(q.base)}</b></div>
           ${q.extras ? `<div><span>${t('book.extras')}</span><b>${usd(q.extras)}</b></div>` : ''}
-          ${q.hotels ? `<div><span>${t('hotels.title')}</span><b>${usd(q.hotels)}</b></div>` : ''}
+          ${q.stays ? `<div><span>${t('stays.title')}</span><b>${usd(q.stays)}</b></div>` : ''}
           <div class="totals__sum"><span>${t('book.total')}</span><b>${usd(q.total)}</b></div>
           <div class="totals__small"><span>${t('book.etb')}</span><b>ETB ${etb(q.total)}</b></div>
           <div class="totals__dep"><span>${t('book.deposit')}</span><b>${usd(q.deposit)}</b></div>
@@ -579,7 +548,7 @@ function renderStep() {
 function numField(id, label, val, min, max) {
   return `<label class="field field--num"><span>${label}</span>
     <span class="stepper">
-      <button type="button" data-nudge="${id}" data-dir="-1" aria-label="-">−</button>
+      <button type="button" data-nudge="${id}" data-dir="-1" aria-label="−">−</button>
       <input id="w-${id}" type="number" value="${val}" min="${min}" max="${max}" inputmode="numeric">
       <button type="button" data-nudge="${id}" data-dir="1" aria-label="+">+</button>
     </span></label>`;
@@ -589,11 +558,10 @@ function collectStep0() {
   const d = state.draft;
   d.packageId = $('#wPkg').value;
   d.depart = $('#wDepart').value;
-  d.adults = clamp(parseInt($('#w-adults').value, 10) || 1, 1, 12);
-  d.children = clamp(parseInt($('#w-children').value, 10) || 0, 0, 10);
+  d.adults = clamp(parseInt($('#w-adults').value, 10) || 1, 1, 20);
+  d.children = clamp(parseInt($('#w-children').value, 10) || 0, 0, 12);
   d.infants = clamp(parseInt($('#w-infants').value, 10) || 0, 0, 6);
-  d.rooms = clamp(parseInt($('#w-rooms').value, 10) || 1, 1, 6);
-  d.roomType = $('#wRoom').value;
+  d.rooms = clamp(parseInt($('#w-rooms').value, 10) || 1, 1, 8);
 }
 
 function collectStep1() {
@@ -614,6 +582,10 @@ function validateStep1() {
   return !bad;
 }
 
+function collectStep2() {
+  state.draft.extras = $$('[data-extra]').filter((el) => el.checked).map((el) => el.dataset.extra);
+}
+
 function nextStep() {
   if (state.step === 0) collectStep0();
   if (state.step === 1) { collectStep1(); if (!validateStep1()) return; }
@@ -631,34 +603,30 @@ function prevStep() {
   renderStep();
 }
 
-function collectStep2() {
-  state.draft.extras = $$('[data-extra]').filter((el) => el.checked).map((el) => el.dataset.extra);
-}
-
 function confirmBooking() {
   const d = state.draft;
   const q = quote();
   const ref = 'SKN-' + Date.now().toString(36).slice(-6).toUpperCase();
-  state.lastBooking = { ref, ...structuredClone(d), quote: q, hotels: [...state.trip.hotels], at: new Date().toISOString() };
+  state.lastBooking = { ref, ...structuredClone(d), quote: q, stays: [...state.trip.stays], at: new Date().toISOString() };
   try {
     const all = JSON.parse(localStorage.getItem(LS.bookings) || '[]');
     all.push(state.lastBooking);
     localStorage.setItem(LS.bookings, JSON.stringify(all.slice(-40)));
-  } catch { /* storage full or blocked - the ticket on screen is still valid */ }
+  } catch { /* storage full or blocked — the ticket on screen is still valid */ }
   renderTicket();
 }
 
 function waMessage(b) {
-  const p = findTrip(b.packageId);
+  const p = findTour(b.packageId);
   const L = [];
-  L.push(isAr() ? 'طلب حجز عمرة — سكينة' : 'Umrah booking request — Sekkenah');
+  L.push(isAr() ? 'طلب جولة في إثيوبيا — سكينة' : 'Ethiopia tour request — Sekkenah');
   L.push(`${t('book.ref')}: ${b.ref}`);
   L.push(`${t('book.package')}: ${tx(p.name)} (${fmtDate(b.depart)})`);
   L.push(`${t('book.adults')}: ${b.adults}  ${t('book.children')}: ${b.children}  ${t('book.infants')}: ${b.infants}`);
-  L.push(`${t('book.rooms')}: ${b.rooms} × ${tx((ROOM_TYPES.find((r) => r.id === b.roomType) || {}).label)}`);
+  L.push(`${t('book.rooms')}: ${b.rooms}`);
   if (b.travellers.length) L.push(`${t('book.travellers')}: ` + b.travellers.map((x) => x.name).filter(Boolean).join(', '));
   if (b.extras.length) L.push(`${t('book.extras')}: ` + b.extras.map((id) => tx((EXTRAS.find((e) => e.id === id) || {}).name)).join(', '));
-  if (b.hotels && b.hotels.length) L.push(`${t('hotels.title')}: ` + b.hotels.map((id) => tx((ALL_HOTELS.find((h) => h.id === id) || {}).name)).filter(Boolean).join(', '));
+  if (b.stays && b.stays.length) L.push(`${t('stays.title')}: ` + b.stays.map((id) => tx((STAYS.find((s) => s.id === id) || {}).name)).filter(Boolean).join(', '));
   L.push(`${t('book.total')}: ${usd(b.quote.total)} (~ETB ${etb(b.quote.total)})`);
   L.push(`${t('book.deposit')}: ${usd(b.quote.deposit)}`);
   return L.join('\n');
@@ -666,7 +634,7 @@ function waMessage(b) {
 
 function renderTicket() {
   const b = state.lastBooking;
-  const p = findTrip(b.packageId);
+  const p = findTour(b.packageId);
   renderTrack();
   $('#modalBody').innerHTML = `
     <div class="ticket" id="ticket">
@@ -757,33 +725,25 @@ function bind() {
   $('#langBtn').addEventListener('click', () => setLang(isAr() ? 'en' : 'ar'));
   $$('[data-lang-toggle]').forEach((b) => b.addEventListener('click', () => setLang(isAr() ? 'en' : 'ar')));
 
-  $('#filters').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-filter]');
+  $('#tourFilters').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-region]');
     if (!b) return;
-    state.filter = b.dataset.filter;
+    state.region = b.dataset.region;
     renderFilters();
-    renderJourneys();
-  });
-
-  $('#hotelTabs').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-city]');
-    if (!b) return;
-    state.city = b.dataset.city;
-    renderHotels();
+    renderTours();
   });
 
   document.addEventListener('click', (e) => {
-    const openPkgBtn = e.target.closest('[data-open-pkg]');
-    if (openPkgBtn) { openPackage(openPkgBtn.dataset.openPkg); return; }
+    const openBtn = e.target.closest('[data-open-tour]');
+    if (openBtn) { openTourDrawer(openBtn.dataset.openTour); return; }
 
-    const addHotel = e.target.closest('[data-add-hotel]');
-    if (addHotel) {
-      const id = addHotel.dataset.addHotel;
-      const i = state.trip.hotels.indexOf(id);
-      if (i >= 0) state.trip.hotels.splice(i, 1); else state.trip.hotels.push(id);
-      renderHotels();
+    const addStay = e.target.closest('[data-add-stay]');
+    if (addStay) {
+      const id = addStay.dataset.addStay;
+      const i = state.trip.stays.indexOf(id);
+      if (i >= 0) state.trip.stays.splice(i, 1); else state.trip.stays.push(id);
       renderStays();
-      toast(i >= 0 ? (isAr() ? 'أُزيل من الرحلة' : 'Removed from trip') : t('hotels.added'));
+      toast(i >= 0 ? (isAr() ? 'أُزيل من الرحلة' : 'Removed from trip') : t('stays.added'));
       return;
     }
 
@@ -798,21 +758,20 @@ function bind() {
     if (e.target.closest('[data-close-modal]')) { closeBooking(); return; }
     if (e.target.closest('[data-open-book]')) {
       closeDrawer();
-      openBooking(state.openPackage || null);
+      openBooking(state.openTour || null);
       return;
     }
-    const fromPkg = e.target.closest('[data-book-from]');
-    if (fromPkg) { closeDrawer(); openBooking(fromPkg.dataset.bookFrom); return; }
+    const fromTour = e.target.closest('[data-book-from]');
+    if (fromTour) { closeDrawer(); openBooking(fromTour.dataset.bookFrom); return; }
   });
 
   $('#modal').addEventListener('change', (e) => {
     if (e.target.id === 'wPkg') {
       state.draft.packageId = e.target.value;
-      const p = findTrip(e.target.value);
+      const p = findTour(e.target.value);
       if (p) { state.draft.depart = p.depart; $('#wDepart').value = p.depart; }
       $('#liveTotal').innerHTML = priceLine();
     }
-    if (e.target.id === 'wRoom') { state.draft.roomType = e.target.value; $('#liveTotal').innerHTML = priceLine(); }
     if (e.target.dataset.extra) {
       collectStep2();
       const q = quote();
@@ -857,18 +816,23 @@ function bind() {
 
   $('#search').addEventListener('submit', (e) => {
     e.preventDefault();
-    const type = $('#fJourney').value;
+    const region = $('#fRegion').value;
     const month = Number($('#fMonth').value) || 0;
     const pax = Number($('#fPax').value) || 1;
-    state.filter = type || 'all';
-    const list = JOURNEYS.filter((p) => (!type || p.type === type) && (!month || p.months.includes(month)) && p.seats >= pax);
+    state.region = region || 'all';
+    const list = TOURS.filter((p) =>
+      (state.region === 'all' || p.region === state.region) &&
+      (!month || p.bestMonths.includes(month)) &&
+      p.seats >= pax);
     renderFilters();
-    $('#journeyGrid').innerHTML = list.map(journeyCard).join('');
-    $('#journeyEmpty').hidden = list.length > 0;
+    $('#tourGrid').innerHTML = list.map(tourCard).join('');
+    $('#tourEmpty').hidden = list.length > 0;
     const status = $('#searchStatus');
-    status.textContent = list.length ? `${list.length} ${t('search.results')}` : t('search.none');
-    observe($('#journeyGrid'));
-    document.getElementById('journeys').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    status.textContent = list.length
+      ? `${list.length} ${t('search.results')}`
+      : t('search.none');
+    observe($('#tourGrid'));
+    $('#tours').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   $('#enquiry').addEventListener('submit', (e) => {

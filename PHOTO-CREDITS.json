@@ -1,138 +1,138 @@
 [
   {
-    "file": "assets/img/hero-night.jpg",
+    "file": "assets/img/about-coffee.jpg",
+    "px": "1100x1375",
+    "kb": 233,
+    "title": "Coffee ceremony of Ethiopia and Eritrea 4.jpg",
+    "author": "ProtoplasmaKid",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Coffee_ceremony_of_Ethiopia_and_Eritrea_4.jpg"
+  },
+  {
+    "file": "assets/img/about-lalibela.jpg",
+    "px": "1600x1200",
+    "kb": 615,
+    "title": "Bete Giyorgis 01.jpg",
+    "author": "Bernard Gagnon",
+    "licence": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Bete_Giyorgis_01.jpg"
+  },
+  {
+    "file": "assets/img/band-omo.jpg",
+    "px": "1900x1050",
+    "kb": 309,
+    "title": "Near Turmi, Omo Valley, Ethiopia (23419547879).jpg",
+    "author": "Rod Waddington",
+    "licence": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Near_Turmi,_Omo_Valley,_Ethiopia_(23419547879).jpg"
+  },
+  {
+    "file": "assets/img/hero-plateau.jpg",
+    "px": "2400x1350",
+    "kb": 553,
+    "title": "Bale horses on Sanetti Plateau.jpg",
+    "author": "Laika ac from UK",
+    "licence": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Bale_horses_on_Sanetti_Plateau.jpg"
+  },
+  {
+    "file": "assets/img/road-simien.jpg",
     "px": "2000x1125",
-    "kb": 242,
-    "title": "File:Abraj-al-Bait largest clock tower ever.jpg",
-    "author": "saudipics",
-    "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Abraj-al-Bait_largest_clock_tower_ever.jpg"
-  },
-  {
-    "file": "assets/img/kaaba-night.jpg",
-    "px": "1600x1000",
-    "kb": 176,
-    "title": "File:Kaaba, Masjid Al Haram, Mecca.jpg",
-    "author": "Shahin Olakara",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Kaaba,_Masjid_Al_Haram,_Mecca.jpg"
-  },
-  {
-    "file": "assets/img/kaaba-card.jpg",
-    "px": "1100x1375",
-    "kb": 158,
-    "title": "File:Kaaba, Masjid Al Haram, Mecca.jpg",
-    "author": "Shahin Olakara",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Kaaba,_Masjid_Al_Haram,_Mecca.jpg"
-  },
-  {
-    "file": "assets/img/arcade.jpg",
-    "px": "1600x1000",
-    "kb": 336,
-    "title": "File:Mecca.JPG",
-    "author": "Ariandra 03",
-    "licence": "CC BY-SA 3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Mecca.JPG"
-  },
-  {
-    "file": "assets/img/kaaba-day.jpg",
-    "px": "1600x1000",
-    "kb": 249,
-    "title": "File:Kaaba-Masjid al-Haram.JPG",
-    "author": "The original uploader was Betaneik at Persian Wikipedia.",
-    "licence": "GFDL",
-    "page": "https://commons.wikimedia.org/wiki/File:Kaaba-Masjid_al-Haram.JPG"
-  },
-  {
-    "file": "assets/img/crowd-gold.jpg",
-    "px": "1100x1375",
-    "kb": 371,
-    "title": "File:Masjid al-Haram, Tawaf 20092012 1130PM (8008466944).jpg",
-    "author": "Basheer Olakara",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Masjid_al-Haram,_Tawaf_20092012_1130PM_(8008466944).jpg"
-  },
-  {
-    "file": "assets/img/canopy.jpg",
-    "px": "1800x1012",
-    "kb": 394,
-    "title": "File:Al-Masjid al-Nabawi, Medina - panoramio.jpg",
-    "author": "Vebra",
-    "licence": "CC BY 3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Al-Masjid_al-Nabawi,_Medina_-_panoramio.jpg"
-  },
-  {
-    "file": "assets/img/dome.jpg",
-    "px": "1100x1375",
-    "kb": 136,
-    "title": "File:The Green Dome, Masjid Nabawi, Madina.jpg",
-    "author": "Muhammad Mahdi Karim",
-    "licence": "GFDL 1.2",
-    "page": "https://commons.wikimedia.org/wiki/File:The_Green_Dome,_Masjid_Nabawi,_Madina.jpg"
-  },
-  {
-    "file": "assets/img/dome-dusk.jpg",
-    "px": "1100x1375",
-    "kb": 195,
-    "title": "File:Green Dome of Al-Masjed Al-Nabawi.jpg",
-    "author": "آرمین",
-    "licence": "CC0",
-    "page": "https://commons.wikimedia.org/wiki/File:Green_Dome_of_Al-Masjed_Al-Nabawi.jpg"
-  },
-  {
-    "file": "assets/img/towers.jpg",
-    "px": "1100x1375",
-    "kb": 400,
-    "title": "File:Abraj Al Bait Tower.jpg",
-    "author": "King Eliot",
-    "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Abraj_Al_Bait_Tower.jpg"
-  },
-  {
-    "file": "assets/img/colonnade.jpg",
-    "px": "1800x1012",
-    "kb": 386,
-    "title": "File:Masjid al-Nabawi 2024 (4).jpg",
-    "author": "Radosław Botev",
-    "licence": "CC BY 3.0 pl",
-    "page": "https://commons.wikimedia.org/wiki/File:Masjid_al-Nabawi_2024_(4).jpg"
-  },
-  {
-    "file": "assets/img/piazza.jpg",
-    "px": "1100x1375",
-    "kb": 358,
-    "title": "File:Masjid al-Nabawi 2024 (3).jpg",
-    "author": "Radosław Botev",
-    "licence": "CC BY 3.0 pl",
-    "page": "https://commons.wikimedia.org/wiki/File:Masjid_al-Nabawi_2024_(3).jpg"
-  },
-  {
-    "file": "assets/img/archive.jpg",
-    "px": "1600x900",
-    "kb": 378,
-    "title": "File:The sword of Islam (1905) (14782347214).jpg",
-    "author": "Internet Archive Book Images",
-    "licence": "No restrictions",
-    "page": "https://commons.wikimedia.org/wiki/File:The_sword_of_Islam_(1905)_(14782347214).jpg"
-  },
-  {
-    "file": "assets/img/tour-lalibela.jpg",
-    "px": "1400x1050",
-    "kb": 390,
-    "title": "File:The Bete Giyorgis.jpg",
-    "author": "Tmanahan344",
-    "licence": "CC BY-SA 3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:The_Bete_Giyorgis.jpg"
-  },
-  {
-    "file": "assets/img/tour-simien.jpg",
-    "px": "1400x1050",
-    "kb": 185,
-    "title": "File:Simien Mountains Landscape, Ethiopia (2466923746).jpg",
+    "kb": 464,
+    "title": "Simien Mountains Landscape, Ethiopia (2466094405).jpg",
     "author": "A. Davey from Where I Live Now: Pacific Northwest",
     "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Simien_Mountains_Landscape,_Ethiopia_(2466923746).jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Simien_Mountains_Landscape,_Ethiopia_(2466094405).jpg"
+  },
+  {
+    "file": "assets/img/stay-arba-minch.jpg",
+    "px": "1100x1375",
+    "kb": 331,
+    "title": "File:Arba Minch, Ethiopia (12563180364).jpg",
+    "author": "Rod Waddington from Kergunyah, Australia",
+    "licence": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Arba_Minch,_Ethiopia_(12563180364).jpg"
+  },
+  {
+    "file": "assets/img/stay-bahir-dar.jpg",
+    "px": "1100x1375",
+    "kb": 181,
+    "title": "File:ET Amhara asv2018-02 img068 Lake Tana at Bahir Dar.jpg",
+    "author": "A.Savin",
+    "licence": "FAL",
+    "page": "https://commons.wikimedia.org/wiki/File:ET_Amhara_asv2018-02_img068_Lake_Tana_at_Bahir_Dar.jpg"
+  },
+  {
+    "file": "assets/img/stay-bale.jpg",
+    "px": "1100x1375",
+    "kb": 490,
+    "title": "File:Harenna Forest, Bale Mountains National Park (18) (28664897084).jpg",
+    "author": "Richard Mortel from Riyadh, Saudi Arabia",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Harenna_Forest,_Bale_Mountains_National_Park_(18)_(28664897084).jpg"
+  },
+  {
+    "file": "assets/img/stay-bishoftu.jpg",
+    "px": "1100x1375",
+    "kb": 543,
+    "title": "File:Bishoftu Lake, Ethiopia (51645441819).jpg",
+    "author": "Nina R from Africa",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Bishoftu_Lake,_Ethiopia_(51645441819).jpg"
+  },
+  {
+    "file": "assets/img/stay-hawassa.jpg",
+    "px": "1100x1375",
+    "kb": 529,
+    "title": "File:Marabou Storks, Lake Hawassa (10902664475).jpg",
+    "author": "Rod Waddington from Kergunyah, Australia",
+    "licence": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Marabou_Storks,_Lake_Hawassa_(10902664475).jpg"
+  },
+  {
+    "file": "assets/img/stay-langano-bishangari.jpg",
+    "px": "1100x1375",
+    "kb": 321,
+    "title": "File:Lake Langano (49688114426).jpg",
+    "author": "Nina R from Africa",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Lake_Langano_(49688114426).jpg"
+  },
+  {
+    "file": "assets/img/stay-langano-sabana.jpg",
+    "px": "1100x1375",
+    "kb": 613,
+    "title": "File:Lake Langano (49688374812).jpg",
+    "author": "Nina R from Africa",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Lake_Langano_(49688374812).jpg"
+  },
+  {
+    "file": "assets/img/stay-wonchi.jpg",
+    "px": "1100x1375",
+    "kb": 373,
+    "title": "File:Wonchi Lake of Ethiopia.jpg",
+    "author": "Wenjvn",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Wonchi_Lake_of_Ethiopia.jpg"
+  },
+  {
+    "file": "assets/img/tour-arba-minch.jpg",
+    "px": "1400x1050",
+    "kb": 368,
+    "title": "File:Crocodile, Lake Chamo (11) (29151142925).jpg",
+    "author": "Richard Mortel from Riyadh, Saudi Arabia",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Crocodile,_Lake_Chamo_(11)_(29151142925).jpg"
+  },
+  {
+    "file": "assets/img/tour-axum.jpg",
+    "px": "1400x1050",
+    "kb": 434,
+    "title": "File:The Great Obelisk, Axum (2812691618).jpg",
+    "author": "A. Davey from Where I Live Now: Pacific Northwest",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Great_Obelisk,_Axum_(2812691618).jpg"
   },
   {
     "file": "assets/img/tour-bale.jpg",
@@ -142,6 +142,15 @@
     "author": "Charles J. Sharp",
     "licence": "CC BY-SA 4.0",
     "page": "https://commons.wikimedia.org/wiki/File:Ethiopian_wolf_(Canis_simensis_citernii)_2.jpg"
+  },
+  {
+    "file": "assets/img/tour-bishoftu.jpg",
+    "px": "1400x1050",
+    "kb": 382,
+    "title": "File:Bishoftu Lake, Ethiopia (51643965827).jpg",
+    "author": "Nina R from Africa",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Bishoftu_Lake,_Ethiopia_(51643965827).jpg"
   },
   {
     "file": "assets/img/tour-danakil.jpg",
@@ -162,22 +171,13 @@
     "page": "https://commons.wikimedia.org/wiki/File:Fasil_Ghebbi_(6821475763).jpg"
   },
   {
-    "file": "assets/img/tour-axum.jpg",
-    "px": "1400x1050",
-    "kb": 434,
-    "title": "File:The Great Obelisk, Axum (2812691618).jpg",
-    "author": "A. Davey from Where I Live Now: Pacific Northwest",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:The_Great_Obelisk,_Axum_(2812691618).jpg"
-  },
-  {
-    "file": "assets/img/tour-rift-lakes.jpg",
+    "file": "assets/img/tour-harar.jpg",
     "px": "1400x1050",
     "kb": 272,
-    "title": "File:Lake Langano (51101281157).jpg",
-    "author": "Nina R from Africa",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Lake_Langano_(51101281157).jpg"
+    "title": "File:Old City (Jugal) Jamia Mosque inside Jugol 4.jpg",
+    "author": "Bikoadem",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Old_City_(Jugal)_Jamia_Mosque_inside_Jugol_4.jpg"
   },
   {
     "file": "assets/img/tour-hawassa.jpg",
@@ -189,22 +189,13 @@
     "page": "https://commons.wikimedia.org/wiki/File:Fishing_Boats_In_Lake_Hawassa.jpg"
   },
   {
-    "file": "assets/img/tour-bishoftu.jpg",
+    "file": "assets/img/tour-lalibela.jpg",
     "px": "1400x1050",
-    "kb": 382,
-    "title": "File:Bishoftu Lake, Ethiopia (51643965827).jpg",
-    "author": "Nina R from Africa",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Bishoftu_Lake,_Ethiopia_(51643965827).jpg"
-  },
-  {
-    "file": "assets/img/tour-arba-minch.jpg",
-    "px": "1400x1050",
-    "kb": 368,
-    "title": "File:Crocodile, Lake Chamo (11) (29151142925).jpg",
-    "author": "Richard Mortel from Riyadh, Saudi Arabia",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Crocodile,_Lake_Chamo_(11)_(29151142925).jpg"
+    "kb": 390,
+    "title": "File:The Bete Giyorgis.jpg",
+    "author": "Tmanahan344",
+    "licence": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Bete_Giyorgis.jpg"
   },
   {
     "file": "assets/img/tour-omo.jpg",
@@ -216,67 +207,22 @@
     "page": "https://commons.wikimedia.org/wiki/File:Near_Turmi,_Omo_Valley,_Ethiopia_(23419547879).jpg"
   },
   {
-    "file": "assets/img/tour-harar.jpg",
+    "file": "assets/img/tour-rift-lakes.jpg",
     "px": "1400x1050",
     "kb": 272,
-    "title": "File:Old City (Jugal) Jamia Mosque inside Jugol 4.jpg",
-    "author": "Bikoadem",
-    "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Old_City_(Jugal)_Jamia_Mosque_inside_Jugol_4.jpg"
-  },
-  {
-    "file": "assets/img/stay-langano-sabana.jpg",
-    "px": "1100x1375",
-    "kb": 613,
-    "title": "File:Lake Langano (49688374812).jpg",
+    "title": "File:Lake Langano (51101281157).jpg",
     "author": "Nina R from Africa",
     "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Lake_Langano_(49688374812).jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Lake_Langano_(51101281157).jpg"
   },
   {
-    "file": "assets/img/stay-langano-bishangari.jpg",
-    "px": "1100x1375",
-    "kb": 321,
-    "title": "File:Lake Langano (49688114426).jpg",
-    "author": "Nina R from Africa",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Lake_Langano_(49688114426).jpg"
-  },
-  {
-    "file": "assets/img/stay-hawassa.jpg",
-    "px": "1100x1375",
-    "kb": 529,
-    "title": "File:Marabou Storks, Lake Hawassa (10902664475).jpg",
-    "author": "Rod Waddington from Kergunyah, Australia",
-    "licence": "CC BY-SA 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Marabou_Storks,_Lake_Hawassa_(10902664475).jpg"
-  },
-  {
-    "file": "assets/img/stay-bishoftu.jpg",
-    "px": "1100x1375",
-    "kb": 543,
-    "title": "File:Bishoftu Lake, Ethiopia (51645441819).jpg",
-    "author": "Nina R from Africa",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Bishoftu_Lake,_Ethiopia_(51645441819).jpg"
-  },
-  {
-    "file": "assets/img/stay-arba-minch.jpg",
-    "px": "1100x1375",
-    "kb": 331,
-    "title": "File:Arba Minch, Ethiopia (12563180364).jpg",
-    "author": "Rod Waddington from Kergunyah, Australia",
-    "licence": "CC BY-SA 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Arba_Minch,_Ethiopia_(12563180364).jpg"
-  },
-  {
-    "file": "assets/img/tour-wonchi.jpg",
+    "file": "assets/img/tour-simien.jpg",
     "px": "1400x1050",
-    "kb": 335,
-    "title": "File:Wonchi crater lake.jpg",
-    "author": "Tricholome",
-    "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Wonchi_crater_lake.jpg"
+    "kb": 185,
+    "title": "File:Simien Mountains Landscape, Ethiopia (2466923746).jpg",
+    "author": "A. Davey from Where I Live Now: Pacific Northwest",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Simien_Mountains_Landscape,_Ethiopia_(2466923746).jpg"
   },
   {
     "file": "assets/img/tour-sof-omar.jpg",
@@ -288,30 +234,12 @@
     "page": "https://commons.wikimedia.org/wiki/File:Underground_River,_Sof_Omer_Cave,_Ethiopia_(11562528124).jpg"
   },
   {
-    "file": "assets/img/stay-wonchi.jpg",
-    "px": "1100x1375",
-    "kb": 373,
-    "title": "File:Wonchi Lake of Ethiopia.jpg",
-    "author": "Wenjvn",
+    "file": "assets/img/tour-wonchi.jpg",
+    "px": "1400x1050",
+    "kb": 335,
+    "title": "File:Wonchi crater lake.jpg",
+    "author": "Tricholome",
     "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Wonchi_Lake_of_Ethiopia.jpg"
-  },
-  {
-    "file": "assets/img/stay-bale.jpg",
-    "px": "1100x1375",
-    "kb": 490,
-    "title": "File:Harenna Forest, Bale Mountains National Park (18) (28664897084).jpg",
-    "author": "Richard Mortel from Riyadh, Saudi Arabia",
-    "licence": "CC BY 2.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Harenna_Forest,_Bale_Mountains_National_Park_(18)_(28664897084).jpg"
-  },
-  {
-    "file": "assets/img/stay-bahir-dar.jpg",
-    "px": "1100x1375",
-    "kb": 181,
-    "title": "File:ET Amhara asv2018-02 img068 Lake Tana at Bahir Dar.jpg",
-    "author": "A.Savin",
-    "licence": "FAL",
-    "page": "https://commons.wikimedia.org/wiki/File:ET_Amhara_asv2018-02_img068_Lake_Tana_at_Bahir_Dar.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Wonchi_crater_lake.jpg"
   }
 ]

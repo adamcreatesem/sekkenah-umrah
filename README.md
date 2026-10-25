@@ -1,110 +1,82 @@
-# Sekkenah — website build
+# Sekkenah — Ethiopia tours, Addis Ababa
 
-A bilingual (English / Arabic) booking site for **Sekkenah Tour & Travel**, an Umrah and
-Hajj operator at Jemo Michael, Addis Ababa. Static HTML, CSS and ES modules — no build
-step, no framework, no dependencies. Open `index.html` through the preview server:
+A bilingual (English ⇄ Arabic) site for Sekkenah Tour & Travel, a tour operator at Jemo
+Michael in Addis Ababa. The whole site is about tours **inside Ethiopia**: fourteen routes
+out of Addis, eight lodges, cars and drivers, and the services a route needs. Nothing on
+the page sells Umrah, Hajj, Makkah or Madinah hotels.
 
-```bash
-node serve.mjs 8910        # http://127.0.0.1:8910/
-```
-
-The server is `no-store` on purpose: this is a design build that gets edited between
-screenshots.
-
----
+Live: <https://adamcreatesem.github.io/sekkenah-umrah/> (GitHub Pages, repo
+`adamcreatesem/sekkenah-umrah`, branch `main`). The repo path still says `umrah` because
+the URL was already in use; renaming it would break the shared link.
 
 ## What is in it
 
 | Section | What it does |
 |---|---|
-| Hero + search | Journey type / month / traveller count, filters the grid and scrolls to it |
-| Umrah | Six rounds, filter chips, live seat counts, detail drawer |
-| Ethiopia tours | One grid of fourteen guided tours from Addis — Rift Valley lakes and resorts (Ziway, Langano, Hawassa), Bishoftu crater lakes, Wonchi, Arba Minch and Nech Sar, Bale and Sof Omar, Omo Valley, Harar, plus Lalibela, Simien, Danakil, Gondar and Axum. Own itineraries, bookable through the same wizard. The lakes and resorts are part of this list, not a section of their own |
-| Lodges by the water | Inside the tours section: eight Ethiopian lodges — Langano, Hawassa, Bishoftu, Arba Minch, Bahir Dar, Wonchi and the Harenna forest — per-room rate, add-to-trip |
-| Cars & drivers | Airport transfer, day car, 4×4 and minibus with rates, reserved over WhatsApp with the route and date |
-| Detail drawer | Includes, generated day-by-day (13 days for the 11-night round), departure, price note |
-| How it works | Six-step path from enquiry to return |
-| Hotels | Makkah / Madinah tabs, distance to the Haram, per-night rate, add-to-trip |
-| Services | Visa, tickets, hotels, transfers, ziyarah, groups, insurance, on-trip support |
-| Booking | Four steps → reference number → printable ticket → WhatsApp handoff |
-| About / social / FAQ | Story, the two real accounts with their real counts, seven questions |
-| Contact | Office, both phone lines, WhatsApp, map link, enquiry form |
+| Hero + search | Region / month / traveller count, filters the tour grid and scrolls to it |
+| Why | One quote, guides who know the road, rates before you commit |
+| Tours | Fourteen routes, region chips with counts, duration and level on every card |
+| Detail drawer | Region and level, price, seats, what is included, the written day-by-day, next departure, best months |
+| How it works | Six steps from "tell us the dates" to "back in Addis" |
+| Lodges | Eight places on the water and in the forest, per-room rate, add-to-trip |
+| Cars & drivers | Airport transfer, day car, 4×4 and minibus with rates, reserved over WhatsApp |
+| Services | Routes, domestic flights, cars, lodges, permits, guides, groups, on-trip support |
+| Booking | Four steps → reference number → printable summary → WhatsApp handoff |
+| About / FAQ / contact | The office, seven real questions, both phone lines, map link, enquiry form |
 
-**Language toggle** is in the header, in the footer, and available as `?lang=ar`
-(an explicit parameter wins over the stored preference). The choice persists in
-`localStorage`; the document swaps `lang` and `dir` and every string, including the
-data-driven cards, is re-rendered — there is no half-translated state. The header button
-names the language it switches *to*, so it reads `ع العربية` on the English page and
-`E English` on the Arabic one.
+**Routes.** `assets/js/data.js` holds the fourteen tours, each with a region (`rift`,
+`north`, `south`, `wild`), a level (easy / moderate / demanding), `bestMonths` for the
+season filter, an explicit itinerary, and bilingual copy. Region chips are generated from
+`REGIONS`, so an empty region still reads as a place.
 
-**Booking model.** `assets/js/data.js` holds packages; price is
-`base × (adults + 0.7 × children + 0.12 × infants) × room factor`, plus extras, plus any
-attached hotel nights. Deposit is 30%. Confirmation stores the request in
+**Booking model.** A route is a private departure, priced per person:
+`price × (adults + 0.6 × children + 0.1 × infants)`, plus extras, plus lodge nights
+(`rate × route nights × rooms`). Deposit is 30%. Confirmation stores the request in
 `localStorage` (`sekkenah.bookings.v1`), issues an `SKN-XXXXXX` reference, renders a
-printable ticket, and builds a pre-filled WhatsApp message containing every field, so the
-office confirms instead of re-keying.
+printable summary, and builds a pre-filled WhatsApp message with every field.
 
----
+**Language.** Header, footer and `?lang=ar` all switch. The button glyph follows the
+language it switches *to* (`ع` on English, `E` on Arabic). Layout is written with logical
+properties, so Arabic mirrors rather than flips; the display and body type stacks swap and
+letterspacing is dropped. The date in the header is the **Ethiopian calendar**, computed
+with `Intl` (`ethiopic`), not a hardcoded string.
 
 ## Files
 
 ```
-index.html                 markup, i18n hooks, drawer + modal shells
-credits.html               generated photo attribution (licence requirement)
-assets/css/site.css        design system, layout, RTL, print, reduced motion
-assets/fonts/              self-hosted Fraunces, Instrument Sans, Reem Kufi, IBM Plex Sans Arabic
-assets/js/data.js          packages, tours, hotels, stays, cars, services, steps, FAQs, extras, room types
-assets/js/i18n.js          flat EN/AR dictionary + month names
-assets/js/app.js           rendering, filters, wizard, drawer, focus trap, persistence
-assets/img/                cropped and graded photography, the vector emblem, the client's logo
-PHOTO-CREDITS.json         machine-readable attribution manifest
-RESEARCH.md                what was found about the client and what it changed
-serve.mjs                  no-store preview server
+index.html            page
+credits.html          photo attribution (required by the licences)
+assets/css/site.css   the design system
+assets/js/data.js     tours, lodges, cars, services, steps, FAQs, extras
+assets/js/i18n.js     interface strings, EN + AR
+assets/js/app.js      rendering, filters, drawer, booking wizard
+assets/img/           route, lodge and editorial photography
+PHOTO-CREDITS.json    the same attribution as data
+serve.mjs             local preview (node serve.mjs 8910)
 ```
 
----
+`RESEARCH.md` records where the content and photography came from, and what is still a
+draft figure.
 
-## Draft data to replace before this goes live
+## Open items for the client
 
-Everything below is a placeholder. Nothing here was published by the client.
-
-- **Prices** on all six journeys except `USD 1850` (that figure is from their own post).
-  The hotel rates, seats left and departure dates are invented, and **the Ethiopia tours
-  are a proposed product line** — the client has no published tours, so their prices,
-  dates and itineraries are drafts to be replaced with real operations.
-- **The emblem** in `assets/img/mark.svg` is a redraw of the client's badge, simplified so
-  it survives at 38 px; the untouched artwork is `assets/img/logo-full.png` (taken from
-  their 1080 px TikTok avatar). Their lockup spells the brand **SEKINA UMRA SERVICE**
-  while the handles read Sekkenah / Sekinah — the site keeps their trading name and uses
-  the emblem, so nothing on the page contradicts either.
-- **Hotel names** — the eight Makkah / Madinah properties are fictional, with invented
-  distances and rates. The eight Ethiopian lodges in `STAYS` (Sabana Beach Resort,
-  Bishangari Lodge, Haile Resort Hawassa, Kuriftu Bishoftu, Haile Resort Arba Minch,
-  Kuriftu Lake Tana, Wonchi Eco Lodge, Bale Mountain Lodge) are real named properties,
-  but their rates, star ratings and availability here are drafts — confirm with the
-  client before this is sent to anyone as bookable inventory.
-- **`hello@sekkenah.com`** and any domain assumptions.
-- **The tagline tail** — they use "Journey with trust, travel with …"; the site says
-  "Journey with trust." until they confirm the rest.
-- **Licence line** — no Ministry of Hajj and Umrah number was available, so none is
-  claimed. Add it when supplied.
-- **Amharic and Afaan Oromo** — the audience speaks both; only EN/AR ship here.
-
-## Before launch
-
-1. Replace the catalogue in `data.js` with real inventory.
-2. Add the licence number and a real email; point the map link at the exact pin.
-3. Wire the booking flow to a backend (or a form service) — the WhatsApp handoff is a
+1. Replace the draft prices, lodge rates and route dates with real inventory.
+2. Wire the booking flow to a backend (or a form service) — the WhatsApp handoff is a
    stopgap, not a booking engine.
-4. Add a privacy note: the enquiry and booking forms collect names, phone numbers and
+3. Add a privacy note: the enquiry and booking forms collect names, phone numbers and
    passport numbers, and at present they only ever reach `localStorage` on the visitor's
    own device. Nothing is transmitted.
-5. Add analytics and an Amharic / Afaan Oromo locale.
+4. Add analytics, and an Amharic / Afaan Oromo locale.
+5. Send a tours-specific social handle if there is one — the Umrah accounts
+   (`@sekkenah.umra.serv`, `@sekinah.umrah`) are deliberately not linked from this site.
 
 ## Checks run
 
-Chromium (headless, CDP): 14 tours in one grid, 8 Makkah/Madinah hotels, 8 Ethiopian
-lodges inside the tours section, 4 car cards, 6 journeys, 8 services, 7 FAQs, 0 console
-errors, 0 broken images. The Rift Valley Lakes drawer, the booking wizard (listing every
-tour), adding a lodge to the trip, and the Arabic switch (RTL, 14 tours still rendered,
-glyph flipping to `E`) were all exercised against the local server.
+Chromium (headless, CDP), against the local server and the live GitHub Pages URL: 14 tours,
+5 region chips with counts, 8 lodges, 4 cars, 8 services, 6 steps, 7 FAQs, every image
+loading, 0 console errors, no "Makkah / Madinah / Umrah / Hajj / Haram" string anywhere on
+the page. Region filtering, month and party-size search (including the empty state), the
+Rift Valley Lakes drawer, the wizard through to the `SKN` reference, adding a lodge and
+seeing it priced in the review, and the Arabic switch (RTL, glyph `E`, translated headings,
+chips, levels and card metadata) were all exercised. Layout measured at 390 / 768 / 1440 px
+in both languages: no horizontal overflow, 1 / 2 / 3 tour columns, 4 lodge columns.

@@ -1,6 +1,6 @@
-/* Sekkenah — catalogue data.
+/* Sekkenah — catalogue data. Ethiopia only.
  *
- * Everything a visitor can book lives here so the page, the filter row, the detail
+ * Everything a visitor can book lives here so the page, the region filter, the detail
  * drawer and the booking wizard all read from one source. Prices are DRAFT figures for
  * this preview: the client's real inventory and rates replace this file wholesale.
  * Bilingual fields are always { en, ar } so a language switch never leaves half a card
@@ -12,187 +12,43 @@ export const BRAND = {
   legal: { en: 'Sekkenah Tour & Travel', ar: 'سكينة للسياحة والسفر' },
   phones: ['+251 95 960 7070', '+251 95 960 8080'],
   whatsapp: '251959607070',
-  telegram: 'sekkenahumrah',
   email: 'hello@sekkenah.com',
   address: {
     en: 'Jemo Michael, Megfira Mall, 4th floor, Addis Ababa',
     ar: 'جيمو ميخائيل، مجمع مغفيرا، الطابق الرابع، أديس أبابا',
   },
   mapQuery: 'XP9C%2BQG9%2C%20Addis%20Ababa',
-  social: {
-    tiktok: 'https://www.tiktok.com/@sekkenah.umra.serv',
-    instagram: 'https://www.instagram.com/sekinah.umrah/',
-  },
   // Indicative only. The invoice is always struck in ETB at the day's rate.
   etbPerUsd: 156,
 };
 
-export const JOURNEYS = [
-  {
-    id: 'rihla-11',
-    name: { en: 'Rihla Umrah', ar: 'رحلة العمرة' },
-    tag: { en: 'Signature', ar: 'الرحلة المميّزة' },
-    type: 'umrah',
-    nights: 11, makkah: 7, madinah: 4,
-    tier: '4★',
-    hotel: { en: 'Haram-adjacent 4-star hotels', ar: 'فنادق أربع نجوم قريبة من الحرم' },
-    price: 1850,
-    seats: 14,
-    depart: '2026-11-02',
-    months: [11, 12],
-    image: 'assets/img/kaaba-card.jpg',
-    blurb: {
-      en: 'Our flagship round: seven nights in Makkah, four in Madinah, hotels within walking distance and a guide with the group from Addis.',
-      ar: 'رحلتنا الأساسية: سبع ليالٍ في مكة وأربع في المدينة، فنادق على مسافة قريبة سيرًا، ومرشد مع المجموعة من أديس أبابا.',
-    },
-    includes: [
-      { en: 'Return airfare Addis Ababa – Jeddah', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا – جدة' },
-      { en: 'Umrah visa and processing', ar: 'تأشيرة العمرة وإجراءاتها' },
-      { en: '7 nights Makkah, 4 nights Madinah', ar: '٧ ليالٍ مكة و٤ ليالٍ المدينة' },
-      { en: 'Airport and inter-city transfers', ar: 'التنقلات من المطار وبين المدينتين' },
-      { en: 'Guided ziyarah in both cities', ar: 'زيارة الأماكن المقدسة في المدينتين' },
-      { en: 'Group guide in Amharic', ar: 'مرشد للمجموعة باللغة الأمهرية' },
-    ],
-  },
-  {
-    id: 'family-10',
-    name: { en: 'Family Umrah', ar: 'عمرة العائلة' },
-    tag: { en: 'For families', ar: 'للعائلات' },
-    type: 'family',
-    nights: 10, makkah: 6, madinah: 4,
-    tier: '4★',
-    hotel: { en: 'Family rooms, 4-star', ar: 'غرف عائلية، أربع نجوم' },
-    price: 1650,
-    seats: 22,
-    depart: '2026-12-18',
-    months: [12, 1],
-    image: 'assets/img/crowd-gold.jpg',
-    blurb: {
-      en: 'Built around family rooms and a slower pace: shorter walking days, meals at the hotel, and a guide who keeps the group together.',
-      ar: 'مصمّمة حول الغرف العائلية ووتيرة أهدأ: أيام تنقّل أقصر، ووجبات في الفندق، ومرشد يحافظ على المجموعة معًا.',
-    },
-    includes: [
-      { en: 'Return airfare Addis Ababa – Jeddah', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا – جدة' },
-      { en: 'Umrah visa for every traveller', ar: 'تأشيرة العمرة لكل مسافر' },
-      { en: 'Quad and triple family rooms', ar: 'غرف عائلية رباعية وثلاثية' },
-      { en: 'Half-board meal plan', ar: 'نظام إقامة مع وجبتين' },
-      { en: 'Child seats on transfers', ar: 'مقاعد أطفال في التنقلات' },
-      { en: 'Group guide in Amharic and Afaan Oromo', ar: 'مرشد باللغتين الأمهرية والأورومية' },
-    ],
-  },
-  {
-    id: 'ramadan-10',
-    name: { en: 'Ramadan — Last Ten', ar: 'رمضان — العشر الأواخر' },
-    tag: { en: 'Ramadan', ar: 'رمضان' },
-    type: 'ramadan',
-    nights: 12, makkah: 8, madinah: 4,
-    tier: '4★ superior',
-    hotel: { en: 'Walking distance, iftar at the hotel', ar: 'على مسافة قريبة، إفطار في الفندق' },
-    price: 2450,
-    seats: 9,
-    depart: '2027-03-08',
-    months: [3],
-    image: 'assets/img/arcade.jpg',
-    blurb: {
-      en: 'The last ten nights in Makkah, with suhoor and iftar arranged and the group seated together for qiyam.',
-      ar: 'العشر الأواخر في مكة، مع ترتيب السحور والإفطار وجلوس المجموعة معًا للقيام.',
-    },
-    includes: [
-      { en: 'Return airfare Addis Ababa – Jeddah', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا – جدة' },
-      { en: 'Umrah visa and processing', ar: 'تأشيرة العمرة وإجراءاتها' },
-      { en: 'Suhoor and iftar daily', ar: 'السحور والإفطار يوميًا' },
-      { en: '8 nights Makkah, 4 nights Madinah', ar: '٨ ليالٍ مكة و٤ ليالٍ المدينة' },
-      { en: 'Guided qiyam and ziyarah', ar: 'قيام وزيارة بإرشاد' },
-      { en: 'Group guide in Amharic', ar: 'مرشد للمجموعة باللغة الأمهرية' },
-    ],
-  },
-  {
-    id: 'oromo-11',
-    name: { en: 'Afaan Oromo Group', ar: 'مجموعة بالأورومية' },
-    tag: { en: 'With a scholar', ar: 'مع شيخ' },
-    type: 'group',
-    nights: 11, makkah: 7, madinah: 4,
-    tier: '4★',
-    hotel: { en: '4-star, Haram-adjacent', ar: 'أربع نجوم قرب الحرم' },
-    price: 1980,
-    seats: 18,
-    depart: '2026-11-21',
-    months: [11, 12],
-    image: 'assets/img/canopy.jpg',
-    blurb: {
-      en: 'Every lesson, every instruction and every ziyarah in Afaan Oromo, led by a scholar who travels with the group.',
-      ar: 'كل درس وكل إرشاد وكل زيارة بالأورومية، بقيادة شيخ يسافر مع المجموعة.',
-    },
-    includes: [
-      { en: 'Return airfare Addis Ababa – Jeddah', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا – جدة' },
-      { en: 'Umrah visa and processing', ar: 'تأشيرة العمرة وإجراءاتها' },
-      { en: 'Scholar travelling with the group', ar: 'شيخ يسافر مع المجموعة' },
-      { en: 'Daily lessons in Afaan Oromo', ar: 'دروس يومية بالأورومية' },
-      { en: 'Departure from Adama available', ar: 'إمكانية الانطلاق من أداما' },
-      { en: 'Guided ziyarah in both cities', ar: 'زيارة الأماكن المقدسة في المدينتين' },
-    ],
-  },
-  {
-    id: 'visa-year',
-    name: { en: 'One-Year Umrah Visa', ar: 'تأشيرة عمرة لسنة' },
-    tag: { en: 'Visa only', ar: 'التأشيرة فقط' },
-    type: 'visa',
-    nights: 0, makkah: 0, madinah: 0,
-    tier: 'Documents',
-    hotel: { en: 'No hotel included', ar: 'دون فندق' },
-    price: 340,
-    seats: 40,
-    depart: '2026-11-01',
-    months: [11, 12, 1, 2],
-    image: 'assets/img/kaaba-day.jpg',
-    blurb: {
-      en: 'A twelve-month multiple-entry Umrah visa, processed in our office. Travel whenever you like, for as long as the visa allows.',
-      ar: 'تأشيرة عمرة متعددة الدخول لمدة اثني عشر شهرًا، تُنجَز في مكتبنا. سافر متى شئت ضمن مدة التأشيرة.',
-    },
-    includes: [
-      { en: 'Visa application and submission', ar: 'تقديم الطلب وإرساله' },
-      { en: 'Insurance included', ar: 'التأمين مشمول' },
-      { en: 'Document checklist and review', ar: 'قائمة المستندات ومراجعتها' },
-      { en: 'Status updates by phone', ar: 'تحديثات الحالة هاتفيًا' },
-    ],
-  },
-  {
-    id: 'premium-8',
-    name: { en: 'Haram View — Premium', ar: 'إطلالة على الحرم — بريميوم' },
-    tag: { en: '5-star', ar: 'خمس نجوم' },
-    type: 'umrah',
-    nights: 8, makkah: 5, madinah: 3,
-    tier: '5★',
-    hotel: { en: '5-star with Haram view', ar: 'خمس نجوم بإطلالة على الحرم' },
-    price: 3200,
-    seats: 6,
-    depart: '2026-12-05',
-    months: [12, 1],
-    image: 'assets/img/dome.jpg',
-    blurb: {
-      en: 'The short, quiet version: five nights facing the Haram, three beside the Prophet’s Mosque, private transfers throughout.',
-      ar: 'النسخة القصيرة والهادئة: خمس ليالٍ مطلة على الحرم، وثلاث بجوار المسجد النبوي، وتنقلات خاصة طوال الرحلة.',
-    },
-    includes: [
-      { en: 'Return airfare, business class option', ar: 'تذاكر ذهابًا وإيابًا، مع خيار درجة الأعمال' },
-      { en: 'Umrah visa and processing', ar: 'تأشيرة العمرة وإجراءاتها' },
-      { en: 'Haram-view rooms', ar: 'غرف بإطلالة على الحرم' },
-      { en: 'Private car and driver', ar: 'سيارة وسائق خاص' },
-      { en: 'Private ziyarah with a guide', ar: 'زيارة خاصة مع مرشد' },
-      { en: 'Breakfast daily', ar: 'إفطار يومي' },
-    ],
-  },
+/* Regions are the filter axis: every route belongs to exactly one, and the chip row is
+ * generated from this list rather than from the tours, so an empty region still reads
+ * as a place rather than as a bug. */
+export const REGIONS = [
+  { id: 'rift', label: { en: 'Rift Valley & lakes', ar: 'الوادي المتصدّع والبحيرات' } },
+  { id: 'north', label: { en: 'Historic north', ar: 'الشمال التاريخي' } },
+  { id: 'south', label: { en: 'South & east', ar: 'الجنوب والشرق' } },
+  { id: 'wild', label: { en: 'Wild Ethiopia', ar: 'إثيوبيا البرية' } },
 ];
 
-/* Ethiopia tours. Same shape as a journey so the drawer, the wizard and the WhatsApp
- * message all handle them without a second code path; the only differences are an
- * explicit itinerary (a tour is not a nights-split of two cities) and a day count. */
+export const LEVELS = {
+  easy: { en: 'Easy', ar: 'سهل' },
+  moderate: { en: 'Moderate', ar: 'متوسط' },
+  demanding: { en: 'Demanding', ar: 'شاق' },
+};
+
+/* A route is priced per person and includes the car, the driver and the guide; the
+ * itinerary is written out day by day rather than generated, because a tour is not a
+ * nights-split of two cities. `bestMonths` drives the month filter and is the honest
+ * axis for private departures — the date is yours, the season is the country's. */
 export const TOURS = [
   {
     id: 'tour-rift-lakes',
     name: { en: 'Rift Valley Lakes', ar: 'بحيرات الوادي المتصدّع' },
     tag: { en: 'Lakes & resorts', ar: 'بحيرات ومنتجعات' },
-    type: 'tour', days: 3, nights: 2, price: 420, seats: 12, depart: '2026-11-13',
+    region: 'rift', level: 'easy', days: 3, nights: 2, price: 420, seats: 12,
+    depart: '2026-11-13', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-rift-lakes.jpg',
     blurb: {
       en: 'Ziway, Abijatta-Shalla and Langano in one run south: boat to the bird islands, the hot springs on the Shalla shore, and a swim in the one Rift lake that is safe to swim in.',
@@ -215,7 +71,8 @@ export const TOURS = [
     id: 'tour-hawassa',
     name: { en: 'Hawassa & Wondo Genet', ar: 'هواسا وووندو جينيت' },
     tag: { en: 'Lakes & resorts', ar: 'بحيرات ومنتجعات' },
-    type: 'tour', days: 2, nights: 1, price: 340, seats: 14, depart: '2026-11-21',
+    region: 'rift', level: 'easy', days: 2, nights: 1, price: 340, seats: 14,
+    depart: '2026-11-21', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-hawassa.jpg',
     blurb: {
       en: 'The fish market at Amora Gedel, the view from Tabor Hill, and the hot springs at Wondo Genet under the forest canopy.',
@@ -237,7 +94,8 @@ export const TOURS = [
     id: 'tour-bishoftu',
     name: { en: 'Bishoftu Crater Lakes', ar: 'بحيرات بيشوفتو الفوهية' },
     tag: { en: 'Day trip', ar: 'رحلة يوم' },
-    type: 'tour', days: 1, nights: 0, price: 120, seats: 8, depart: '2026-11-08',
+    region: 'rift', level: 'easy', days: 1, nights: 0, price: 120, seats: 8,
+    depart: '2026-11-08', bestMonths: [10, 11, 12, 1, 2, 3, 4, 5],
     image: 'assets/img/tour-bishoftu.jpg',
     blurb: {
       en: 'A string of crater lakes an hour from Addis: the rim walk at Hora, a boat on Bishoftu, and lunch by the water.',
@@ -257,7 +115,8 @@ export const TOURS = [
     id: 'tour-arba-minch',
     name: { en: 'Arba Minch & Nech Sar', ar: 'أربا منش ونيش سار' },
     tag: { en: 'Lakes & wildlife', ar: 'بحيرات وحياة برية' },
-    type: 'tour', days: 3, nights: 2, price: 560, seats: 10, depart: '2026-11-27',
+    region: 'rift', level: 'easy', days: 3, nights: 2, price: 560, seats: 10,
+    depart: '2026-11-27', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-arba-minch.jpg',
     blurb: {
       en: 'Lake Chamo by boat for the crocodile market and the hippos, the plains and Forty Springs of Nech Sar, and a Dorze village on the ridge above.',
@@ -279,8 +138,9 @@ export const TOURS = [
   {
     id: 'tour-wonchi',
     name: { en: 'Wonchi Crater Lake', ar: 'بحيرة ونتشي الفوهية' },
-    tag: { en: 'Lakes & resorts', ar: 'بحيرات ومنتجعات' },
-    type: 'tour', days: 2, nights: 1, price: 290, seats: 10, depart: '2026-11-15',
+    tag: { en: 'Crater & hot springs', ar: 'فوهة وينابيع ساخنة' },
+    region: 'rift', level: 'moderate', days: 2, nights: 1, price: 290, seats: 10,
+    depart: '2026-11-15', bestMonths: [9, 10, 11, 12, 1, 2, 3, 4],
     image: 'assets/img/tour-wonchi.jpg',
     blurb: {
       en: 'A crater lake at 3,380 m between Ambo and Weliso: walk or ride down the rim, boat to the island monastery, and the hot springs and waterfalls on the crater floor.',
@@ -302,7 +162,8 @@ export const TOURS = [
     id: 'tour-omo',
     name: { en: 'Omo Valley', ar: 'وادي أومو' },
     tag: { en: 'Culture', ar: 'ثقافة' },
-    type: 'tour', days: 5, nights: 4, price: 980, seats: 6, depart: '2026-12-04',
+    region: 'south', level: 'moderate', days: 5, nights: 4, price: 980, seats: 6,
+    depart: '2026-12-04', bestMonths: [9, 10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-omo.jpg',
     blurb: {
       en: 'The South Omo road — Jinka, Turmi and Omorate — with a local guide, a 4×4, and the market days if the dates fall right.',
@@ -327,7 +188,8 @@ export const TOURS = [
     id: 'tour-harar',
     name: { en: 'Harar', ar: 'هرر' },
     tag: { en: 'Culture', ar: 'ثقافة' },
-    type: 'tour', days: 2, nights: 1, price: 360, seats: 12, depart: '2026-11-14',
+    region: 'south', level: 'easy', days: 2, nights: 1, price: 360, seats: 12,
+    depart: '2026-11-14', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-harar.jpg',
     blurb: {
       en: 'Inside the Jugol wall: the markets and the shrines, the old houses with their walls of plates, and the hyena feeding at dusk outside the gate.',
@@ -349,7 +211,8 @@ export const TOURS = [
     id: 'tour-sof-omar',
     name: { en: 'Sof Omar Caves', ar: 'كهوف سوف عمر' },
     tag: { en: 'Caves & pilgrimage', ar: 'كهوف وزيارة' },
-    type: 'tour', days: 2, nights: 1, price: 390, seats: 8, depart: '2026-12-11',
+    region: 'south', level: 'moderate', days: 2, nights: 1, price: 390, seats: 8,
+    depart: '2026-12-11', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-sof-omar.jpg',
     blurb: {
       en: 'The Web river cutting fifteen kilometres through limestone, and the shrines cut into the chambers — a pilgrimage site long before it was a tour.',
@@ -370,7 +233,8 @@ export const TOURS = [
     id: 'tour-lalibela',
     name: { en: 'Lalibela', ar: 'لاليبيلا' },
     tag: { en: 'Heritage', ar: 'تراث' },
-    type: 'tour', days: 3, nights: 2, price: 520, seats: 12, depart: '2026-11-14',
+    region: 'north', level: 'easy', days: 3, nights: 2, price: 520, seats: 12,
+    depart: '2026-11-14', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-lalibela.jpg',
     blurb: {
       en: 'Eleven churches cut down into the rock in the twelfth century, and the quiet hill town around them.',
@@ -392,7 +256,8 @@ export const TOURS = [
     id: 'tour-simien',
     name: { en: 'Simien Mountains', ar: 'جبال سِميِن' },
     tag: { en: 'Trekking', ar: 'مشي جبلي' },
-    type: 'tour', days: 4, nights: 3, price: 690, seats: 10, depart: '2026-11-27',
+    region: 'north', level: 'demanding', days: 4, nights: 3, price: 690, seats: 10,
+    depart: '2026-11-27', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-simien.jpg',
     blurb: {
       en: 'The escarpment above Gondar, gelada monkeys in the morning, and walks between the lodges.',
@@ -415,7 +280,8 @@ export const TOURS = [
     id: 'tour-bale',
     name: { en: 'Bale Mountains', ar: 'جبال بالي' },
     tag: { en: 'Wildlife', ar: 'حياة برية' },
-    type: 'tour', days: 3, nights: 2, price: 480, seats: 12, depart: '2026-12-04',
+    region: 'wild', level: 'moderate', days: 3, nights: 2, price: 480, seats: 12,
+    depart: '2026-12-04', bestMonths: [11, 12, 1, 2, 3],
     image: 'assets/img/tour-bale.jpg',
     blurb: {
       en: 'The Sanetti plateau by road, Ethiopian wolves at dawn, and the Harenna forest on the far side.',
@@ -437,7 +303,8 @@ export const TOURS = [
     id: 'tour-danakil',
     name: { en: 'Danakil Depression', ar: 'منخفض الدناكل' },
     tag: { en: 'Expedition', ar: 'رحلة استكشافية' },
-    type: 'tour', days: 4, nights: 3, price: 820, seats: 8, depart: '2026-12-11',
+    region: 'wild', level: 'demanding', days: 4, nights: 3, price: 820, seats: 8,
+    depart: '2026-12-11', bestMonths: [11, 12, 1, 2],
     image: 'assets/img/tour-danakil.jpg',
     blurb: {
       en: 'Sulphur terraces at Dallol, the salt flats at Assale, and the caravans that still cut the salt by hand.',
@@ -445,7 +312,7 @@ export const TOURS = [
     },
     includes: [
       { en: 'Return flights Addis – Semera', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – سيميرا' },
-      { en: '4x4, driver and cook', ar: 'سيارة دفع رباعي وسائق وطاهٍ' },
+      { en: '4×4, driver and cook', ar: 'سيارة دفع رباعي وسائق وطاهٍ' },
       { en: 'Permits and police escort', ar: 'التصاريح والمرافقة الأمنية' },
       { en: 'Camping equipment and all meals', ar: 'معدات التخييم وجميع الوجبات' },
     ],
@@ -460,7 +327,8 @@ export const TOURS = [
     id: 'tour-gondar',
     name: { en: 'Gondar & Lake Tana', ar: 'غوندار وبحيرة تانا' },
     tag: { en: 'History', ar: 'تاريخ' },
-    type: 'tour', days: 3, nights: 2, price: 560, seats: 14, depart: '2026-11-20',
+    region: 'north', level: 'easy', days: 3, nights: 2, price: 560, seats: 14,
+    depart: '2026-11-20', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-gondar.jpg',
     blurb: {
       en: 'The castle compound at Fasil Ghebbi, the painted ceiling at Debre Berhan Selassie, and the island monasteries by boat.',
@@ -482,7 +350,8 @@ export const TOURS = [
     id: 'tour-axum',
     name: { en: 'Axum', ar: 'أكسوم' },
     tag: { en: 'Short break', ar: 'إقامة قصيرة' },
-    type: 'tour', days: 2, nights: 1, price: 380, seats: 16, depart: '2026-11-07',
+    region: 'north', level: 'easy', days: 2, nights: 1, price: 380, seats: 16,
+    depart: '2026-11-07', bestMonths: [10, 11, 12, 1, 2, 3],
     image: 'assets/img/tour-axum.jpg',
     blurb: {
       en: 'The stelae field, the Queen of Sheba’s bath and the church that claims the Ark.',
@@ -501,36 +370,18 @@ export const TOURS = [
   },
 ];
 
-export const ALL_TRIPS = [...JOURNEYS, ...TOURS];
-
-export const HOTELS = [
-  { id: 'safa-royal', city: 'makkah', name: { en: 'Safa Royal Makkah', ar: 'صفا رويال مكة' }, stars: 5, meters: 350, price: 210, image: 'assets/img/towers.jpg', note: { en: 'Haram view, breakfast', ar: 'إطلالة على الحرم، إفطار' } },
-  { id: 'ajyad-grand', city: 'makkah', name: { en: 'Ajyad Grand', ar: 'أجياد جراند' }, stars: 4, meters: 700, price: 128, image: 'assets/img/kaaba-night.jpg', note: { en: 'Family rooms, 24h shuttle', ar: 'غرف عائلية، نقل على مدار الساعة' } },
-  { id: 'jabal-omar', city: 'makkah', name: { en: 'Jabal Omar Suites', ar: 'أجنحة جبل عمر' }, stars: 4, meters: 550, price: 155, image: 'assets/img/arcade.jpg', note: { en: 'Apartments with kitchenette', ar: 'شقق بمطبخ صغير' } },
-  { id: 'marwa-res', city: 'makkah', name: { en: 'Al Marwa Residence', ar: 'المروة ريزيدنس' }, stars: 3, meters: 900, price: 78, image: 'assets/img/kaaba-day.jpg', note: { en: 'Best value, quad rooms', ar: 'أفضل قيمة، غرف رباعية' } },
-  { id: 'anwar-madinah', city: 'madinah', name: { en: 'Anwar Al Madinah', ar: 'أنوار المدينة' }, stars: 5, meters: 150, price: 185, image: 'assets/img/dome.jpg', note: { en: 'Facing the Prophet’s Mosque', ar: 'مقابل المسجد النبوي' } },
-  { id: 'markaziyah', city: 'madinah', name: { en: 'Markaziyah Court', ar: 'المركزية كورت' }, stars: 4, meters: 300, price: 110, image: 'assets/img/piazza.jpg', note: { en: 'Central, walk to the gates', ar: 'مركزي، على مسافة قريبة من الأبواب' } },
-  { id: 'quba-gate', city: 'madinah', name: { en: 'Quba Gate Hotel', ar: 'فندق باب قباء' }, stars: 4, meters: 450, price: 96, image: 'assets/img/canopy.jpg', note: { en: 'Quiet side, large rooms', ar: 'جهة هادئة، غرف واسعة' } },
-  { id: 'shuhada', city: 'madinah', name: { en: 'Sayed Al Shuhada Suites', ar: 'أجنحة سيد الشهداء' }, stars: 3, meters: 800, price: 62, image: 'assets/img/colonnade.jpg', note: { en: 'Suites for families', ar: 'أجنحة للعائلات' } },
-];
-
-/* Ethiopian lodges and resorts. Same card shape as the Haram hotels, but the badge is a
- * place on the map rather than a distance in metres, and the rate is per room per night.
- * Draft figures, like everything else on this preview, confirmed when the room is held. */
+/* Ethiopian lodges and resorts. The badge is a place on the map rather than a distance,
+ * and the rate is per room per night. Draft figures, confirmed when the room is held. */
 export const STAYS = [
-  { id: 'sabana-langano', city: 'langano', area: { en: 'Lake Langano shore', ar: 'ضفة بحيرة لانغانو' }, name: { en: 'Sabana Beach Resort', ar: 'منتجع سابانا بيتش' }, stars: 4, price: 95, image: 'assets/img/stay-langano-sabana.jpg', note: { en: 'Beach, pool, breakfast', ar: 'شاطئ ومسبح وإفطار' } },
-  { id: 'bishangari', city: 'langano', area: { en: 'Eastern shore, Bishangari', ar: 'الضفة الشرقية، بيشانغاري' }, name: { en: 'Bishangari Lodge', ar: 'نزل بيشانغاري' }, stars: 4, price: 120, image: 'assets/img/stay-langano-bishangari.jpg', note: { en: 'Forest lodge, full board', ar: 'نزل في الغابة، إقامة كاملة' } },
-  { id: 'haile-hawassa', city: 'hawassa', area: { en: 'Lake Hawassa waterfront', ar: 'واجهة بحيرة هواسا' }, name: { en: 'Haile Resort Hawassa', ar: 'منتجع هايلي هواسا' }, stars: 4, price: 110, image: 'assets/img/stay-hawassa.jpg', note: { en: 'Pool, lakeside lawn', ar: 'مسبح وحديقة على البحيرة' } },
-  { id: 'kuriftu-bishoftu', city: 'bishoftu', area: { en: 'Lake Bishoftu rim', ar: 'حافة بحيرة بيشوفتو' }, name: { en: 'Kuriftu Resort & Spa Bishoftu', ar: 'منتجع كوريفتو وسبا بيشوفتو' }, stars: 5, price: 140, image: 'assets/img/stay-bishoftu.jpg', note: { en: 'Spa, water park, breakfast', ar: 'سبا ومدينة مائية وإفطار' } },
-  { id: 'haile-arba-minch', city: 'arba-minch', area: { en: 'Above Lake Chamo', ar: 'فوق بحيرة تشامو' }, name: { en: 'Haile Resort Arba Minch', ar: 'منتجع هايلي أربا منش' }, stars: 4, price: 105, image: 'assets/img/stay-arba-minch.jpg', note: { en: 'Pool, lake view', ar: 'مسبح وإطلالة على البحيرة' } },
-  { id: 'kuriftu-tana', city: 'bahir-dar', area: { en: 'Lake Tana shore, Bahir Dar', ar: 'ضفة بحيرة تانا، بحر دار' }, name: { en: 'Kuriftu Resort & Spa Lake Tana', ar: 'منتجع كوريفتو وسبا بحيرة تانا' }, stars: 5, price: 130, image: 'assets/img/stay-bahir-dar.jpg', note: { en: 'Lake view, spa', ar: 'إطلالة على البحيرة وسبا' } },
-  { id: 'wonchi-eco', city: 'wonchi', area: { en: 'Crater rim, Wonchi', ar: 'حافة الفوهة، ونتشي' }, name: { en: 'Wonchi Eco Lodge', ar: 'نزل ونتشي البيئي' }, stars: 4, price: 100, image: 'assets/img/stay-wonchi.jpg', note: { en: 'Crater view, dinner and breakfast', ar: 'إطلالة على الفوهة، عشاء وإفطار' } },
-  { id: 'bale-lodge', city: 'bale', area: { en: 'Harenna Forest, Bale', ar: 'غابة هارينا، بالي' }, name: { en: 'Bale Mountain Lodge', ar: 'نزل جبال بالي' }, stars: 4, price: 180, image: 'assets/img/stay-bale.jpg', note: { en: 'Eleven rooms, forest wilderness', ar: 'إحدى عشرة غرفة وسط غابة برية' } },
+  { id: 'sabana-langano', area: { en: 'Lake Langano shore', ar: 'ضفة بحيرة لانغانو' }, name: { en: 'Sabana Beach Resort', ar: 'منتجع سابانا بيتش' }, stars: 4, price: 95, image: 'assets/img/stay-langano-sabana.jpg', note: { en: 'Beach, pool, breakfast', ar: 'شاطئ ومسبح وإفطار' } },
+  { id: 'bishangari', area: { en: 'Eastern shore, Bishangari', ar: 'الضفة الشرقية، بيشانغاري' }, name: { en: 'Bishangari Lodge', ar: 'نزل بيشانغاري' }, stars: 4, price: 120, image: 'assets/img/stay-langano-bishangari.jpg', note: { en: 'Forest lodge, full board', ar: 'نزل في الغابة، إقامة كاملة' } },
+  { id: 'haile-hawassa', area: { en: 'Lake Hawassa waterfront', ar: 'واجهة بحيرة هواسا' }, name: { en: 'Haile Resort Hawassa', ar: 'منتجع هايلي هواسا' }, stars: 4, price: 110, image: 'assets/img/stay-hawassa.jpg', note: { en: 'Pool, lakeside lawn', ar: 'مسبح وحديقة على البحيرة' } },
+  { id: 'kuriftu-bishoftu', area: { en: 'Lake Bishoftu rim', ar: 'حافة بحيرة بيشوفتو' }, name: { en: 'Kuriftu Resort & Spa Bishoftu', ar: 'منتجع كوريفتو وسبا بيشوفتو' }, stars: 5, price: 140, image: 'assets/img/stay-bishoftu.jpg', note: { en: 'Spa, water park, breakfast', ar: 'سبا ومدينة مائية وإفطار' } },
+  { id: 'haile-arba-minch', area: { en: 'Above Lake Chamo', ar: 'فوق بحيرة تشامو' }, name: { en: 'Haile Resort Arba Minch', ar: 'منتجع هايلي أربا منش' }, stars: 4, price: 105, image: 'assets/img/stay-arba-minch.jpg', note: { en: 'Pool, lake view', ar: 'مسبح وإطلالة على البحيرة' } },
+  { id: 'kuriftu-tana', area: { en: 'Lake Tana shore, Bahir Dar', ar: 'ضفة بحيرة تانا، بحر دار' }, name: { en: 'Kuriftu Resort & Spa Lake Tana', ar: 'منتجع كوريفتو وسبا بحيرة تانا' }, stars: 5, price: 130, image: 'assets/img/stay-bahir-dar.jpg', note: { en: 'Lake view, spa', ar: 'إطلالة على البحيرة وسبا' } },
+  { id: 'wonchi-eco', area: { en: 'Crater rim, Wonchi', ar: 'حافة الفوهة، ونتشي' }, name: { en: 'Wonchi Eco Lodge', ar: 'نزل ونتشي البيئي' }, stars: 4, price: 100, image: 'assets/img/stay-wonchi.jpg', note: { en: 'Crater view, dinner and breakfast', ar: 'إطلالة على الفوهة، عشاء وإفطار' } },
+  { id: 'bale-lodge', area: { en: 'Harenna Forest, Bale', ar: 'غابة هارينا، بالي' }, name: { en: 'Bale Mountain Lodge', ar: 'نزل جبال بالي' }, stars: 4, price: 180, image: 'assets/img/stay-bale.jpg', note: { en: 'Eleven rooms, forest wilderness', ar: 'إحدى عشرة غرفة وسط غابة برية' } },
 ];
-
-/* One lookup for pricing: the wizard should not care whether a room is in Makkah or on
- * the Langano shore when it adds the nights up. */
-export const ALL_HOTELS = [...HOTELS, ...STAYS];
 
 /* Cars and drivers. Reserved over WhatsApp because a vehicle needs a route and a date
  * before it needs a price; the card carries the rate so the conversation starts from a
@@ -543,46 +394,38 @@ export const CARS = [
 ];
 
 export const SERVICES = [
-  { id: 'visa', icon: 'passport', title: { en: 'Umrah & Hajj visas', ar: 'تأشيرات العمرة والحج' }, body: { en: 'One-year multiple-entry visas, processed in the office, with the insurance and document review included.', ar: 'تأشيرات متعددة الدخول لسنة، تُنجَز في المكتب، مع التأمين ومراجعة المستندات.' } },
-  { id: 'flights', icon: 'plane', title: { en: 'Air tickets', ar: 'تذاكر الطيران' }, body: { en: 'Ethiopian Airlines and Gulf carriers, group fares held for confirmed bookings.', ar: 'الخطوط الإثيوبية وناقلات الخليج، بأسعار مجموعات مثبّتة للحجوزات المؤكدة.' } },
-  { id: 'hotels', icon: 'bed', title: { en: 'Hotels near the Haram', ar: 'فنادق قرب الحرم' }, body: { en: 'Makkah and Madinah rooms we have walked to ourselves, from three to five stars.', ar: 'غرف في مكة والمدينة سِرنا إليها بأنفسنا، من ثلاث إلى خمس نجوم.' } },
-  { id: 'transfers', icon: 'car', title: { en: 'Transfers', ar: 'التنقلات' }, body: { en: 'Jeddah and Madinah airports, Makkah–Madinah runs, and private cars on request.', ar: 'مطارا جدة والمدينة، وتنقلات مكة–المدينة، وسيارات خاصة عند الطلب.' } },
-  { id: 'ziyarah', icon: 'arch', title: { en: 'Ziyarah tours', ar: 'جولات الزيارة' }, body: { en: 'Guided visits to the sites in both cities, in Amharic, Afaan Oromo or Arabic.', ar: 'زيارات مرشدة للمعالم في المدينتين، بالأمهرية أو الأورومية أو العربية.' } },
-  { id: 'groups', icon: 'users', title: { en: 'Group departures', ar: 'رحلات المجموعات' }, body: { en: 'Monthly rounds with a scholar, a guide and a fixed price agreed before you pay.', ar: 'رحلات شهرية مع شيخ ومرشد وسعر ثابت يُتفق عليه قبل الدفع.' } },
-  { id: 'insurance', icon: 'shield', title: { en: 'Travel insurance', ar: 'تأمين السفر' }, body: { en: 'Cover arranged with the visa, extended for longer stays on request.', ar: 'تأمين يُرتَّب مع التأشيرة، ويمكن تمديده للإقامات الأطول عند الطلب.' } },
-  { id: 'support', icon: 'phone', title: { en: 'On-trip support', ar: 'دعم أثناء الرحلة' }, body: { en: 'A number that answers while you are there, in your language, not an inbox.', ar: 'رقم يُجيب أثناء وجودك هناك، بلغتك، لا صندوق بريد.' } },
+  { id: 'routes', icon: 'route', title: { en: 'Routes & itineraries', ar: 'المسارات والبرامج' }, body: { en: 'A written day-by-day with the driving hours on it, built around your dates rather than a brochure.', ar: 'برنامج مكتوب يومًا بيوم مع ساعات القيادة، يُبنى على تواريخك لا على كتيّب.' } },
+  { id: 'flights', icon: 'plane', title: { en: 'Domestic flights', ar: 'الطيران الداخلي' }, body: { en: 'Ethiopian Airlines seats to Lalibela, Gondar, Axum, Arba Minch, Jinka and Semera, held with the route.', ar: 'مقاعد الخطوط الإثيوبية إلى لاليبيلا وغوندار وأكسوم وأربا منش وجينكا وسيميرا، تُحجز مع المسار.' } },
+  { id: 'cars', icon: 'car', title: { en: 'Cars & drivers', ar: 'سيارات وسائقون' }, body: { en: 'Our own vehicles and drivers: saloon for the city, 4×4 for the south and the Danakil road.', ar: 'سياراتنا وسائقونا: صالون للمدينة، ودفع رباعي للجنوب وطريق الدناكل.' } },
+  { id: 'lodges', icon: 'bed', title: { en: 'Lodges & camps', ar: 'النزل والمخيمات' }, body: { en: 'Rooms on the lakes, in the Harenna forest and on the crater rim — booked under your name.', ar: 'غرف على البحيرات، وفي غابة هارينا، وعلى حافة الفوهة — تُحجز باسمك.' } },
+  { id: 'permits', icon: 'shield', title: { en: 'Permits & scouts', ar: 'التصاريح والمرافقون' }, body: { en: 'Park fees, scouting and the Danakil escort arranged before you land, not at the gate.', ar: 'رسوم المنتزهات والمرافقة الأمنية في الدناكل تُرتَّب قبل وصولك، لا عند البوابة.' } },
+  { id: 'guides', icon: 'users', title: { en: 'Guides & languages', ar: 'المرشدون واللغات' }, body: { en: 'Amharic, Afaan Oromo, English and Arabic — the same guide for the whole route.', ar: 'الأمهرية والأورومية والإنجليزية والعربية — والمرشد نفسه طوال المسار.' } },
+  { id: 'groups', icon: 'flag', title: { en: 'Groups & companies', ar: 'المجموعات والشركات' }, body: { en: 'Family reunions, film crews and company retreats, priced as one booking with one invoice.', ar: 'لقاءات العائلة وفرق التصوير ورحلات الشركات، بسعر حجز واحد وفاتورة واحدة.' } },
+  { id: 'support', icon: 'phone', title: { en: 'On-trip support', ar: 'الدعم أثناء الرحلة' }, body: { en: 'A number that answers while you are on the road, in your language, not an inbox.', ar: 'رقم يُجيب أثناء وجودك على الطريق، بلغتك، لا صندوق بريد.' } },
 ];
 
 export const STEPS = [
-  { title: { en: 'Choose your round', ar: 'اختر رحلتك' }, body: { en: 'Pick a departure, or tell us the dates you want.', ar: 'اختر موعدًا للانطلاق، أو أخبرنا بالتواريخ التي تريدها.' } },
-  { title: { en: 'Send your documents', ar: 'أرسل مستنداتك' }, body: { en: 'Passport, photo and the form. We check them before they are submitted.', ar: 'الجواز والصورة والنموذج. نراجعها قبل إرسالها.' } },
-  { title: { en: 'Visa and confirmation', ar: 'التأشيرة والتأكيد' }, body: { en: 'The visa is issued and your rooms are held under your name.', ar: 'تُصدَر التأشيرة وتُحجَز غرفك باسمك.' } },
-  { title: { en: 'Briefing', ar: 'التحضير' }, body: { en: 'A group briefing on what to pack, what to expect and where to meet.', ar: 'لقاء تحضيري عن ما تحمله وما تتوقعه ومكان اللقاء.' } },
-  { title: { en: 'Travel', ar: 'السفر' }, body: { en: 'We meet you at the airport and stay reachable the whole way.', ar: 'نلتقي بك في المطار ونبقى على تواصل طوال الطريق.' } },
-  { title: { en: 'Return', ar: 'العودة' }, body: { en: 'Transfers back, and your documents returned with you.', ar: 'التنقلات للعودة، ومستنداتك تُعاد معك.' } },
+  { title: { en: 'Tell us the dates', ar: 'أخبرنا بالتواريخ' }, body: { en: 'The route you like, or just the days you have and what you want to see.', ar: 'المسار الذي يعجبك، أو فقط الأيام المتاحة وما تريد رؤيته.' } },
+  { title: { en: 'A written plan', ar: 'خطة مكتوبة' }, body: { en: 'Driving hours, lodges, what is included and a price per person — before you pay anything.', ar: 'ساعات القيادة والنزل وما يشمله السعر وسعر للشخص — قبل أن تدفع شيئًا.' } },
+  { title: { en: 'Deposit and permits', ar: 'الدفعة والتصاريح' }, body: { en: 'Thirty per cent holds the car and the rooms; park permits and scouts are filed in your name.', ar: 'ثلاثون بالمئة تحجز السيارة والغرف؛ وتُستخرج تصاريح المنتزهات والمرافقين باسمك.' } },
+  { title: { en: 'Flights and rooms', ar: 'الطيران والغرف' }, body: { en: 'Domestic seats and the lodges are held and confirmed in writing.', ar: 'تُحجز المقاعد الداخلية والنزل وتُؤكَّد كتابيًا.' } },
+  { title: { en: 'On the road', ar: 'على الطريق' }, body: { en: 'Driver and guide at your hotel in Addis, and the same two people to the last day.', ar: 'السائق والمرشد عند فندقك في أديس، والشخصان نفسهما حتى اليوم الأخير.' } },
+  { title: { en: 'Back in Addis', ar: 'العودة إلى أديس' }, body: { en: 'Airport drop, photographs from the trip, and the office still answering.', ar: 'توصيل المطار، وصور من الرحلة، والمكتب لا يزال يجيب.' } },
 ];
 
 export const FAQS = [
-  { q: { en: 'What documents do I need for an Umrah visa?', ar: 'ما المستندات المطلوبة لتأشيرة العمرة؟' }, a: { en: 'A passport valid for at least six months, one recent white-background photograph, and a completed application. We prepare the rest, including the insurance that comes with the visa.', ar: 'جواز سفر صالح لستة أشهر على الأقل، وصورة حديثة بخلفية بيضاء، وطلب مكتمل. نتولى الباقي، بما فيه التأمين المرافق للتأشيرة.' } },
-  { q: { en: 'Do women need a mahram?', ar: 'هل تحتاج المرأة إلى محرم؟' }, a: { en: 'Women travelling for Umrah no longer need a male guardian on the visa itself, but Saudi rules change. We confirm the current requirement for your dates in writing before you pay.', ar: 'لم تعد المرأة تحتاج إلى محرم في التأشيرة نفسها، لكن الأنظمة السعودية تتغير. نؤكد لك الشرط الساري في تواريخك كتابيًا قبل الدفع.' } },
-  { q: { en: 'How much deposit holds a seat?', ar: 'كم يبلغ مبلغ الحجز المبدئي؟' }, a: { en: 'Thirty per cent of the package price holds your seat and starts the visa. The balance is due fourteen days before departure.', ar: 'ثلاثون بالمئة من سعر الرحلة تحجز مقعدك وتبدأ التأشيرة. يُسدَّد الباقي قبل أربعة عشر يومًا من السفر.' } },
-  { q: { en: 'Can I book hotels without a package?', ar: 'هل يمكنني حجز الفندق فقط دون باقة؟' }, a: { en: 'Yes. Hotel-only bookings are confirmed within one working day, and you can add transfers or ziyarah separately.', ar: 'نعم. تُؤكَّد حجوزات الفندق فقط خلال يوم عمل واحد، ويمكنك إضافة التنقلات أو الزيارة بشكل منفصل.' } },
-  { q: { en: 'What if my visa is refused?', ar: 'ماذا لو رُفضت التأشيرة؟' }, a: { en: 'The visa fee is not refundable once submitted. The rest of your payment is returned, or moved to another departure, whichever you prefer.', ar: 'رسم التأشيرة غير قابل للاسترداد بعد التقديم. أما بقية المبلغ فتُعاد إليك أو تُحوَّل إلى رحلة أخرى، كما تفضّل.' } },
-  { q: { en: 'Do you guide in Afaan Oromo?', ar: 'هل ترشدون بالأورومية؟' }, a: { en: 'Yes. One round each month travels with a scholar who teaches and guides in Afaan Oromo, and departures from Adama are available.', ar: 'نعم. رحلة كل شهر مع شيخ يدرّس ويرشد بالأورومية، وتتوفر انطلاقات من أداما.' } },
-  { q: { en: 'How far are the hotels from the Haram?', ar: 'ما مدى بُعد الفنادق عن الحرم؟' }, a: { en: 'Every hotel in this list is one we have walked from the Haram ourselves. The distance shown is door to gate, not as the crow flies.', ar: 'كل فندق في هذه القائمة سِرنا إليه من الحرم بأنفسنا. المسافة المعروضة من الباب إلى الباب، لا خطًا مستقيمًا.' } },
+  { q: { en: 'What does the price include?', ar: 'ماذا يشمل السعر؟' }, a: { en: 'The car or the domestic flights named on the route, the driver, the guide, park and site fees, and the lodges listed under “what is included”. Meals are named per route — most are breakfast only, the treks are full board.', ar: 'السيارة أو الرحلات الداخلية المذكورة في المسار، والسائق، والمرشد، ورسوم المنتزهات والمواقع، والنزل المذكورة في «ما يشمله السعر». الوجبات مذكورة لكل مسار — معظمها إفطار فقط، والمشي الجبلي بإقامة كاملة.' } },
+  { q: { en: 'Do we travel with strangers?', ar: 'هل نسافر مع غرباء؟' }, a: { en: 'No. Every route on this page is a private departure: your group, your car, your guide. The seat count is how many places we can run on that date, not how many strangers join you.', ar: 'لا. كل مسار في هذه الصفحة انطلاقة خاصة: مجموعتك وسيارتك ومرشدك. عدد المقاعد هو عدد الأماكن التي نستطيع تشغيلها في ذلك التاريخ، لا عدد الغرباء الذين ينضمون إليك.' } },
+  { q: { en: 'Do we drive or fly?', ar: 'هل نسافر بالسيارة أم بالطائرة؟' }, a: { en: 'Both, depending on the route. The Rift Valley and Bishoftu are road trips from Addis; Lalibela, Gondar, Axum, Arba Minch, Jinka and Semera start with a domestic flight. Driving hours are written into the plan so nothing is hidden in “transfer”.', ar: 'كلاهما، حسب المسار. الوادي المتصدّع وبيشوفتو رحلات برية من أديس؛ ولاليبيلا وغوندار وأكسوم وأربا منش وجينكا وسيميرا تبدأ برحلة داخلية. ساعات القيادة مكتوبة في الخطة حتى لا يختفي شيء تحت كلمة «تنقلات».' } },
+  { q: { en: 'What deposit do you ask for?', ar: 'كم تطلبون مقدمًا؟' }, a: { en: 'Thirty per cent of the total holds the car and the rooms and starts the permits. The balance is due seven days before departure. Nothing is charged on this website.', ar: 'ثلاثون بالمئة من الإجمالي تحجز السيارة والغرف وتبدأ التصاريح. ويُسدَّد الباقي قبل سبعة أيام من الانطلاق. لا يُخصم شيء من هذا الموقع.' } },
+  { q: { en: 'When is the best time to come?', ar: 'ما أفضل وقت للزيارة؟' }, a: { en: 'The dry season, October to March, for most of the country. The Danakil is only sensible between November and February; the Omo and the south are good from September. Each route card lists its own months.', ar: 'الموسم الجاف، من أكتوبر إلى مارس، لمعظم البلاد. والدناكل لا يُنصح به إلا بين نوفمبر وفبراير؛ والجنوب وأومو جيدان من سبتمبر. كل بطاقة مسار تذكر أشهرها.' } },
+  { q: { en: 'Can children come?', ar: 'هل يمكن أن يأتي الأطفال؟' }, a: { en: 'Yes on the road routes and the short flights — the lakes, Harar, Lalibela, Gondar and Axum all work with children. Not on the Simien trek or the Danakil, where the days are long and the altitude or the heat is the point.', ar: 'نعم في المسارات البرية والرحلات القصيرة — البحيرات وهرر ولاليبيلا وغوندار وأكسوم تناسب الأطفال. لا في مشي سِميِن ولا في الدناكل، حيث الأيام طويلة والارتفاع أو الحرارة هي جوهر الرحلة.' } },
+  { q: { en: 'Can you build a route for us?', ar: 'هل تبنيون لنا مسارًا خاصًا؟' }, a: { en: 'That is most of what we do. Send the dates, how many are travelling and the two or three places you will not skip; the office writes the route and sends a price, usually within a day.', ar: 'هذا معظم عملنا. أرسل التواريخ وعدد المسافرين والمكانين أو الثلاثة التي لا تريد تفويتها؛ ويكتب المكتب المسار ويرسل السعر، عادة في خلال يوم.' } },
 ];
 
 export const EXTRAS = [
-  { id: 'transfer', price: 45, unit: 'person', name: { en: 'Airport & inter-city transfers', ar: 'التنقلات من المطار وبين المدينتين' } },
-  { id: 'ziyarah', price: 35, unit: 'person', name: { en: 'Guided ziyarah tour', ar: 'جولة زيارة مرشدة' } },
-  { id: 'insurance', price: 28, unit: 'person', name: { en: 'Extended travel insurance', ar: 'تأمين سفر ممتد' } },
-  { id: 'sim', price: 15, unit: 'person', name: { en: 'Saudi SIM card, delivered on arrival', ar: 'شريحة سعودية تُسلَّم عند الوصول' } },
-  { id: 'wheelchair', price: 60, unit: 'booking', name: { en: 'Wheelchair assistance', ar: 'مساعدة بالكرسي المتحرك' } },
-];
-
-export const ROOM_TYPES = [
-  { id: 'quad', label: { en: 'Quad', ar: 'رباعية' }, factor: 0.88 },
-  { id: 'triple', label: { en: 'Triple', ar: 'ثلاثية' }, factor: 0.94 },
-  { id: 'double', label: { en: 'Double', ar: 'مزدوجة' }, factor: 1.0 },
-  { id: 'single', label: { en: 'Single', ar: 'فردية' }, factor: 1.22 },
+  { id: 'transfer', price: 30, unit: 'booking', name: { en: 'Airport pickup and drop-off', ar: 'الاستقبال والتوصيل من المطار' } },
+  { id: 'insurance', price: 28, unit: 'person', name: { en: 'Travel insurance', ar: 'تأمين السفر' } },
+  { id: 'single', price: 180, unit: 'booking', name: { en: 'Single room supplement', ar: 'إضافة الغرفة الفردية' } },
+  { id: 'private', price: 95, unit: 'booking', name: { en: 'Private vehicle, no sharing', ar: 'سيارة خاصة بلا مشاركة' } },
 ];
