@@ -1,4 +1,4 @@
-/* Sekkenah — catalogue data. Ethiopia only.
+/* Sekkenah, catalogue data. Ethiopia only.
  *
  * Everything a visitor can book lives here so the page, the region filter, the detail
  * drawer and the booking wizard all read from one source. Prices are DRAFT figures for
@@ -41,7 +41,7 @@ export const LEVELS = {
 /* A route is priced per person and includes the car, the driver and the guide; the
  * itinerary is written out day by day rather than generated, because a tour is not a
  * nights-split of two cities. `bestMonths` drives the month filter and is the honest
- * axis for private departures — the date is yours, the season is the country's. */
+ * axis for private departures, the date is yours, the season is the country's. */
 export const TOURS = [
   {
     id: 'tour-rift-lakes',
@@ -83,7 +83,7 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-hawassa-1.jpg', 'assets/img/g-tour-hawassa-2.jpg'],
     getting: { en: 'Four to five hours by road, or a one-hour flight.', ar: 'أربع إلى خمس ساعات بالطريق، أو رحلة طيران ساعة.' },
     story: {
-      en: 'Hawassa is a working lake: the fish market at Amora Gedel is loud, wet and worth the walk, with pelicans waiting for what the boats throw back. Above it, Tabor Hill gives the whole crater-shaped town and the lake in one view. Wondo Genet, half an hour further, is the other Ethiopia — hot springs under a canopy of wild fig, where the water comes out of the ground at forty degrees and the forest is full of monkeys.',
+      en: 'Hawassa is a working lake: the fish market at Amora Gedel is loud, wet and worth the walk, with pelicans waiting for what the boats throw back. Above it, Tabor Hill gives the whole crater-shaped town and the lake in one view. Wondo Genet, half an hour further, is the other Ethiopia, hot springs under a canopy of wild fig, where the water comes out of the ground at forty degrees and the forest is full of monkeys.',
       ar: 'هواسا بحيرة عاملة: سوق السمك في أمورا غيديل صاخب ومبلّل ويستحق المشي، والبجعات تنتظر ما تعيده القوارب. وفوقه يمنحك تل تابور البلدة كلها والبحيرة في مشهد واحد. وووندو جينيت، على نصف ساعة، هي إثيوبيا الأخرى: ينابيع ساخنة تحت ظل التين البري، والماء يخرج من الأرض بحرارة أربعين درجة، والغابة مليئة بالقرود.',
     },
     blurb: {
@@ -91,7 +91,7 @@ export const TOURS = [
       ar: 'سوق السمك في أمورا غيديل، والإطلالة من تل تابور، والينابيع الساخنة في ووندو جينيت تحت ظل الغابة.',
     },
     includes: [
-      { en: 'Road transfer Addis – Hawassa', ar: 'نقل بري أديس – هواسا' },
+      { en: 'Road transfer Addis إلى Hawassa', ar: 'نقل بري أديس إلى هواسا' },
       { en: 'One night in a lakeside hotel', ar: 'ليلة في فندق على البحيرة' },
       { en: 'Boat trip on Lake Hawassa', ar: 'رحلة قارب في بحيرة هواسا' },
       { en: 'Wondo Genet entry and guide', ar: 'دخول ووندو جينيت والمرشد' },
@@ -112,8 +112,8 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-bishoftu-1.jpg', 'assets/img/g-tour-bishoftu-2.jpg'],
     getting: { en: 'One hour east of Addis: an easy morning, or a whole day by the water.', ar: 'ساعة شرق أديس: صباح خفيف، أو يوم كامل على الماء.' },
     story: {
-      en: 'An hour out of Addis the land suddenly has holes in it. Bishoftu — Debre Zeit to anyone over forty — sits among seven crater lakes, and the walk around Hora, the one with the rim path and the old fig trees, takes about an hour. Babogaya is where people go for a long lunch by the water. It is the easiest day out of the city, and the one locals actually take.',
-      ar: 'على بعد ساعة من أديس تصبح الأرض مثقوبة. بيشوفتو — أو دبري زيت لمن تجاوز الأربعين — تقع بين سبع بحيرات فوهية، والطواف حول هورا، ذات الممر الجبلي وأشجار التين العتيقة، يستغرق ساعة. وبابوغايا مكان الغداء الطويل على الماء. إنها أسهل رحلة يوم من المدينة، والرحلة التي يأخذها أهلها فعلًا.',
+      en: 'An hour out of Addis the land suddenly has holes in it. Bishoftu, Debre Zeit to anyone over forty, sits among seven crater lakes, and the walk around Hora, the one with the rim path and the old fig trees, takes about an hour. Babogaya is where people go for a long lunch by the water. It is the easiest day out of the city, and the one locals actually take.',
+      ar: 'على بعد ساعة من أديس تصبح الأرض مثقوبة. بيشوفتو، أو دبري زيت لمن تجاوز الأربعين، تقع بين سبع بحيرات فوهية، والطواف حول هورا، ذات الممر الجبلي وأشجار التين العتيقة، يستغرق ساعة. وبابوغايا مكان الغداء الطويل على الماء. إنها أسهل رحلة يوم من المدينة، والرحلة التي يأخذها أهلها فعلًا.',
     },
     blurb: {
       en: 'A string of crater lakes an hour from Addis: the rim walk at Hora, a boat on Bishoftu, and lunch by the water.',
@@ -139,7 +139,7 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-arba-minch-1.jpg', 'assets/img/g-tour-arba-minch-2.jpg'],
     getting: { en: 'One hour by air, or a full day’s drive south.', ar: 'ساعة بالطائرة، أو يوم كامل بالطريق جنوبًا.' },
     story: {
-      en: 'Arba Minch means forty springs, and the town sits on a ridge between two of the Rift\u2019s great lakes — Abaya and Chamo. Chamo is the one with the crocodiles: a boat out to the \u201ccrocodile market\u201d where dozens lie on the bank, and hippos in the shallows. Across the water, Nech Sar is a dry plain where zebra and gazelle graze under the escarpment, and the Dorze villages on the ridge above weave tall huts from bamboo.',
+      en: 'Arba Minch means forty springs, and the town sits on a ridge between two of the Rift\u2019s great lakes, Abaya and Chamo. Chamo is the one with the crocodiles: a boat out to the \u201ccrocodile market\u201d where dozens lie on the bank, and hippos in the shallows. Across the water, Nech Sar is a dry plain where zebra and gazelle graze under the escarpment, and the Dorze villages on the ridge above weave tall huts from bamboo.',
       ar: 'أربا منش تعني أربعين نبعًا، والبلدة على حافة بين بحيرتين من كبريات بحيرات الوادي: أبيا وتشامو. وتشامو هي بحيرة التماسيح: قارب إلى «سوق التماسيح» حيث ترقد العشرات على الضفة، وأفراس النهر في المياه الضحلة. وعلى الجانب الآخر، نيش سار سهل جاف ترعى فيه الحمير الوحشية والغزلان تحت الجرف، وقرى دورزي على الحافة تنسج أكواخًا عالية من البامبو.',
     },
     blurb: {
@@ -147,7 +147,7 @@ export const TOURS = [
       ar: 'بحيرة تشامو بالقارب لسوق التماسيح والبراري وأربعين نبعًا في نيش سار، وقرية دورزي على الحافة فوق.',
     },
     includes: [
-      { en: 'Return flights Addis – Arba Minch', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – أربا منش' },
+      { en: 'Return flights Addis إلى Arba Minch', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى أربا منش' },
       { en: 'Two nights, breakfast included', ar: 'ليلتان مع الإفطار' },
       { en: 'Boat trip on Lake Chamo', ar: 'رحلة قارب في بحيرة تشامو' },
       { en: 'Nech Sar fees and scout', ar: 'رسوم نيش سار والمرافق' },
@@ -166,11 +166,17 @@ export const TOURS = [
     region: 'rift', level: 'moderate', days: 2, nights: 1, price: 290, seats: 10,
     depart: '2026-11-15', bestMonths: [9, 10, 11, 12, 1, 2, 3, 4],
     image: 'assets/img/tour-wonchi.jpg',
-    gallery: ['assets/img/stay-wonchi.jpg'],
+    // The crater photographs have one home on the page: the past-trips gallery. These
+    // are the alternate frames of the same moments, so no picture appears twice.
+    gallery: [
+      'assets/img/own-tour-2-wide.jpg',   // the banner, second angle
+      'assets/img/own-tour-6-wide.jpg',   // on horseback down the crater rim
+      'assets/img/stay-wonchi.jpg',
+    ],
     getting: { en: 'Three hours west of Addis, with the last stretch on a crater track.', ar: 'ثلاث ساعات غرب أديس، والمقطع الأخير على مسار الفوهة.' },
     story: {
-      en: 'Wonchi is a crater lake at 3,380 metres, the highest in Ethiopia, reached by a road that turns off between Ambo and Weliso. You walk or ride a horse down the rim — the drop is steep enough to make the lake look painted — and at the bottom there is a monastery on an island, hot springs, and a waterfall that feeds the crater. Cold at night, green all year.',
-      ar: 'ونتشي بحيرة فوهية على ارتفاع ٣٣٨٠ مترًا، أعلى بحيرة في إثيوبيا، تصل إليها من طريق يتفرّع بين أمبو وويليسو. تنزل الحافة سيرًا أو على دابة — الانحدار حاد لدرجة تجعل البحيرة تبدو مرسومة — وفي القاع دير على جزيرة وينابيع ساخنة وشلال يغذّي الفوهة. بارد ليلًا، وأخضر طوال السنة.',
+      en: 'Wonchi is a crater lake at 3,380 metres, the highest in Ethiopia, reached by a road that turns off between Ambo and Weliso. You walk or ride a horse down the rim, the drop is steep enough to make the lake look painted, and at the bottom there is a monastery on an island, hot springs, and a waterfall that feeds the crater. Cold at night, green all year.',
+      ar: 'ونتشي بحيرة فوهية على ارتفاع ٣٣٨٠ مترًا، أعلى بحيرة في إثيوبيا، تصل إليها من طريق يتفرّع بين أمبو وويليسو. تنزل الحافة سيرًا أو على دابة، الانحدار حاد لدرجة تجعل البحيرة تبدو مرسومة، وفي القاع دير على جزيرة وينابيع ساخنة وشلال يغذّي الفوهة. بارد ليلًا، وأخضر طوال السنة.',
     },
     blurb: {
       en: 'A crater lake at 3,380 m between Ambo and Weliso: walk or ride down the rim, boat to the island monastery, and the hot springs and waterfalls on the crater floor.',
@@ -202,11 +208,11 @@ export const TOURS = [
       ar: 'جنوب أومو أكثر بقاع إثيوبيا تصويرًا وأقلها فهمًا. جينكا البوابة، وفيها متحف يشرح مجتمعات الوادي قبل أن تلتقيها؛ وتورمي أرض الهامر حيث السوق هو حدث الأسبوع؛ وأوموراتي معبر نهري إلى الضفة الأخرى. الطريق وعر والأيام طويلة، والمرشد هنا أهم من أي مكان آخر في هذه القائمة.',
     },
     blurb: {
-      en: 'The South Omo road — Jinka, Turmi and Omorate — with a local guide, a 4×4, and the market days if the dates fall right.',
-      ar: 'طريق جنوب أومو — جينكا وتورمي وأوموراتي — مع مرشد محلي وسيارة دفع رباعي وأيام الأسواق إن وافقت التواريخ.',
+      en: 'The South Omo road, Jinka, Turmi and Omorate, with a local guide, a 4×4, and the market days if the dates fall right.',
+      ar: 'طريق جنوب أومو، جينكا وتورمي وأوموراتي، مع مرشد محلي وسيارة دفع رباعي وأيام الأسواق إن وافقت التواريخ.',
     },
     includes: [
-      { en: 'Return flights Addis – Jinka', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – جينكا' },
+      { en: 'Return flights Addis إلى Jinka', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى جينكا' },
       { en: '4×4 with driver throughout', ar: 'دفع رباعي مع سائق طوال الرحلة' },
       { en: 'Local guide and translator', ar: 'مرشد محلي ومترجم' },
       { en: 'Four nights in lodges', ar: 'أربع ليالٍ في النزل' },
@@ -230,15 +236,15 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-harar-1.jpg', 'assets/img/g-tour-harar-2.jpg'],
     getting: { en: 'One hour’s flight to Dire Dawa, then an hour by road.', ar: 'ساعة طيران إلى ديري داوا، ثم ساعة بالطريق.' },
     story: {
-      en: 'Harar is a walled city of 82 mosques and a hundred shrines, and it feels like neither a museum nor a ruin. Inside the Jugol the streets are too narrow for cars, the houses have walls of plates and baskets, and the old gates still divide the quarters. At dusk, outside the wall, a man feeds the hyenas by hand — a nightly ritual, not a show invented for visitors.',
-      ar: 'هرر مدينة مسوّرة فيها ٨٢ مسجدًا ومئة مقام، وهي ليست متحفًا ولا أطلالًا. داخل جوغول الأزقة أضيق من أن تمرّ بها سيارة، وبيوت جدرانها أطباق وسلال، والأبواب القديمة لا تزال تفصل الحارات. وعند الغروب خارج السور يطعم رجل الضباع بيده — طقس ليلي، لا عرض اخترع للزوّار.',
+      en: 'Harar is a walled city of 82 mosques and a hundred shrines, and it feels like neither a museum nor a ruin. Inside the Jugol the streets are too narrow for cars, the houses have walls of plates and baskets, and the old gates still divide the quarters. At dusk, outside the wall, a man feeds the hyenas by hand, a nightly ritual, not a show invented for visitors.',
+      ar: 'هرر مدينة مسوّرة فيها ٨٢ مسجدًا ومئة مقام، وهي ليست متحفًا ولا أطلالًا. داخل جوغول الأزقة أضيق من أن تمرّ بها سيارة، وبيوت جدرانها أطباق وسلال، والأبواب القديمة لا تزال تفصل الحارات. وعند الغروب خارج السور يطعم رجل الضباع بيده، طقس ليلي، لا عرض اخترع للزوّار.',
     },
     blurb: {
       en: 'Inside the Jugol wall: the markets and the shrines, the old houses with their walls of plates, and the hyena feeding at dusk outside the gate.',
       ar: 'داخل سور جوغول: الأسواق والمقامات، والبيوت القديمة بجدرانها المزينة بالأطباق، وإطعام الضباع عند الغروب خارج الباب.',
     },
     includes: [
-      { en: 'Return flights Addis – Dire Dawa', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – ديري داوا' },
+      { en: 'Return flights Addis إلى Dire Dawa', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى ديري داوا' },
       { en: 'Road transfer to Harar', ar: 'نقل بري إلى هرر' },
       { en: 'One night inside the wall', ar: 'ليلة داخل السور' },
       { en: 'Guide and site entries', ar: 'مرشد ودخول المواقع' },
@@ -259,15 +265,15 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-sof-omar-1.jpg', 'assets/img/g-tour-sof-omar-2.jpg'],
     getting: { en: 'One hour’s flight to Robe, then two hours by road through Goba.', ar: 'ساعة طيران إلى روبي، ثم ساعتان بالطريق عبر غوبا.' },
     story: {
-      en: 'The Web river has cut fifteen kilometres of passage through limestone, and the result is the largest cave system in Ethiopia — chambers the size of halls, a river you cross on foot, and shrines cut into the rock where pilgrims still come. It is a holy place before it is a sight, so the walk is quiet and the guide sets the pace.',
-      ar: 'شقّ نهر ويب خمسة عشر كيلومترًا من الممرات في الحجر الجيري، فخرج أكبر نظام كهوف في إثيوبيا — قاعات بحجم الصالات، ونهر تعبره سيرًا، ومقامات منحوتة في الصخر لا يزال الحجاج يأتون إليها. المكان مقدّس قبل أن يكون معلمًا، لذا تكون المسيرة هادئة والمرشد هو من يضبط إيقاعها.',
+      en: 'The Web river has cut fifteen kilometres of passage through limestone, and the result is the largest cave system in Ethiopia, chambers the size of halls, a river you cross on foot, and shrines cut into the rock where pilgrims still come. It is a holy place before it is a sight, so the walk is quiet and the guide sets the pace.',
+      ar: 'شقّ نهر ويب خمسة عشر كيلومترًا من الممرات في الحجر الجيري، فخرج أكبر نظام كهوف في إثيوبيا، قاعات بحجم الصالات، ونهر تعبره سيرًا، ومقامات منحوتة في الصخر لا يزال الحجاج يأتون إليها. المكان مقدّس قبل أن يكون معلمًا، لذا تكون المسيرة هادئة والمرشد هو من يضبط إيقاعها.',
     },
     blurb: {
-      en: 'The Web river cutting fifteen kilometres through limestone, and the shrines cut into the chambers — a pilgrimage site long before it was a tour.',
-      ar: 'نهر ويب يشق خمسة عشر كيلومترًا في الحجر الجيري، ومقامات منحوتة في القاعات — موقع زيارة قبل أن يصير مقصدًا سياحيًا بزمن طويل.',
+      en: 'The Web river cutting fifteen kilometres through limestone, and the shrines cut into the chambers, a pilgrimage site long before it was a tour.',
+      ar: 'نهر ويب يشق خمسة عشر كيلومترًا في الحجر الجيري، ومقامات منحوتة في القاعات، موقع زيارة قبل أن يصير مقصدًا سياحيًا بزمن طويل.',
     },
     includes: [
-      { en: 'Return flights Addis – Robe', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – روبي' },
+      { en: 'Return flights Addis إلى Robe', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى روبي' },
       { en: '4×4 to the caves and back', ar: 'دفع رباعي إلى الكهوف والعودة' },
       { en: 'One night in Goba', ar: 'ليلة في غوبا' },
       { en: 'Guide, lamps and entry', ar: 'مرشد ومصابيح ودخول' },
@@ -295,7 +301,7 @@ export const TOURS = [
       ar: 'إحدى عشرة كنيسة منحوتة في الصخر في القرن الثاني عشر، والبلدة الهادئة على التل حولها.',
     },
     includes: [
-      { en: 'Return flights Addis Ababa – Lalibela', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا – لاليبيلا' },
+      { en: 'Return flights Addis Ababa إلى Lalibela', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا إلى لاليبيلا' },
       { en: 'Two nights, breakfast included', ar: 'ليلتان مع الإفطار' },
       { en: 'Guide and all church entries', ar: 'مرشد ودخول جميع الكنائس' },
       { en: 'Airport transfers', ar: 'التنقلات من المطار' },
@@ -316,8 +322,8 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-simien-1.jpg', 'assets/img/g-tour-simien-2.jpg'],
     getting: { en: 'One hour’s flight to Gondar, then two to three hours by road to Debark.', ar: 'ساعة طيران إلى غوندار، ثم ساعتان إلى ثلاث بالطريق إلى دبارك.' },
     story: {
-      en: 'The Simien escarpment is a wall of rock a kilometre high, and the walk along the top of it is the reason people come. Gelada monkeys — the only primates that graze — sit in troops of hundreds on the plateau, unbothered by walkers. The track from Sankaber to Geech to Chenek is four days at a walking pace, with lodges and camps between; Ras Dejen, Ethiopia\u2019s highest point, is the optional fifth.',
-      ar: 'جرف سِميِن حائط صخري بارتفاع كيلومتر، والمشي على أعلاه هو سبب مجيء الناس. قردة الجلادا — الرئيسيات الوحيدة التي ترعى — تجلس في قطعان بمئات على الهضبة، لا تهتم بالمشاة. ومسار سانكابر إلى جيتش إلى تشينيك أربعة أيام بوتيرة مشي، بين نزل ومخيمات؛ وراس ديجن، أعلى قمة في إثيوبيا، هو اليوم الخامس الاختياري.',
+      en: 'The Simien escarpment is a wall of rock a kilometre high, and the walk along the top of it is the reason people come. Gelada monkeys, the only primates that graze, sit in troops of hundreds on the plateau, unbothered by walkers. The track from Sankaber to Geech to Chenek is four days at a walking pace, with lodges and camps between; Ras Dejen, Ethiopia\u2019s highest point, is the optional fifth.',
+      ar: 'جرف سِميِن حائط صخري بارتفاع كيلومتر، والمشي على أعلاه هو سبب مجيء الناس. قردة الجلادا، الرئيسيات الوحيدة التي ترعى، تجلس في قطعان بمئات على الهضبة، لا تهتم بالمشاة. ومسار سانكابر إلى جيتش إلى تشينيك أربعة أيام بوتيرة مشي، بين نزل ومخيمات؛ وراس ديجن، أعلى قمة في إثيوبيا، هو اليوم الخامس الاختياري.',
     },
     blurb: {
       en: 'The escarpment above Gondar, gelada monkeys in the morning, and walks between the lodges.',
@@ -346,15 +352,15 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-bale-1.jpg', 'assets/img/g-tour-bale-2.jpg'],
     getting: { en: 'One hour’s flight to Robe, then an hour to Dinsho.', ar: 'ساعة طيران إلى روبي، ثم ساعة إلى دينشو.' },
     story: {
-      en: 'Bale is where Ethiopia turns alpine: the Sanetti plateau at four thousand metres, giant lobelia like something from another age, and the Ethiopian wolf — the rarest canid in the world — hunting mole rats at dawn. The road over Sanetti is the highest in Africa. On the far side, the Harenna forest drops into cloud, and the lodge at the edge of it has eleven rooms and no neighbours.',
-      ar: 'بالي حيث تصير إثيوبيا ألبية: هضبة سانيتي على أربعة آلاف متر، ولوبيليا عملاقة كأنها من زمن آخر، والذئب الإثيوبي — أندر الكلبيات في العالم — يصطاد صباحًا. والطريق فوق سانيتي أعلى طريق في إفريقيا. وعلى الجانب الآخر تنحدر غابة هارينا في السحاب، والنزل عند طرفها أحد عشر غرفة بلا جيران.',
+      en: 'Bale is where Ethiopia turns alpine: the Sanetti plateau at four thousand metres, giant lobelia like something from another age, and the Ethiopian wolf, the rarest canid in the world, hunting mole rats at dawn. The road over Sanetti is the highest in Africa. On the far side, the Harenna forest drops into cloud, and the lodge at the edge of it has eleven rooms and no neighbours.',
+      ar: 'بالي حيث تصير إثيوبيا ألبية: هضبة سانيتي على أربعة آلاف متر، ولوبيليا عملاقة كأنها من زمن آخر، والذئب الإثيوبي، أندر الكلبيات في العالم، يصطاد صباحًا. والطريق فوق سانيتي أعلى طريق في إفريقيا. وعلى الجانب الآخر تنحدر غابة هارينا في السحاب، والنزل عند طرفها أحد عشر غرفة بلا جيران.',
     },
     blurb: {
       en: 'The Sanetti plateau by road, Ethiopian wolves at dawn, and the Harenna forest on the far side.',
       ar: 'هضبة سانيتي بالطريق، والذئب الإثيوبي عند الفجر، وغابة هارينا على الجانب الآخر.',
     },
     includes: [
-      { en: 'Return flights Addis – Robe', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – روبي' },
+      { en: 'Return flights Addis إلى Robe', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى روبي' },
       { en: 'Two nights in Dinsho', ar: 'ليلتان في دينشو' },
       { en: 'Park fees and guide', ar: 'رسوم المنتزه والمرشد' },
       { en: 'Full board', ar: 'إقامة كاملة' },
@@ -383,7 +389,7 @@ export const TOURS = [
       ar: 'مدرجات الكبريت في دالول، ومسطحات الملح في أسالي، والقوافل التي لا تزال تقطع الملح باليد.',
     },
     includes: [
-      { en: 'Return flights Addis – Semera', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – سيميرا' },
+      { en: 'Return flights Addis إلى Semera', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى سيميرا' },
       { en: '4×4, driver and cook', ar: 'سيارة دفع رباعي وسائق وطاهٍ' },
       { en: 'Permits and police escort', ar: 'التصاريح والمرافقة الأمنية' },
       { en: 'Camping equipment and all meals', ar: 'معدات التخييم وجميع الوجبات' },
@@ -405,15 +411,15 @@ export const TOURS = [
     gallery: ['assets/img/g-tour-gondar-1.jpg', 'assets/img/g-tour-gondar-2.jpg'],
     getting: { en: 'One hour’s flight to Bahir Dar; Gondar is three hours by road from there.', ar: 'ساعة طيران إلى بحر دار؛ وغوندار على ثلاث ساعات بالطريق منها.' },
     story: {
-      en: 'Gondar was the capital of Ethiopia for two centuries, and Fasil Ghebbi — the castle compound — is what is left of that: stone halls, a bathing pool the size of a lake, and walls you can walk. Debre Berhan Selassie has a ceiling of painted faces, hundreds of them, each one different. An hour away, Lake Tana\u2019s monasteries sit on islands reached by papyrus boat, and the Blue Nile falls at Tis Issat.',
-      ar: 'كانت غوندار عاصمة إثيوبيا قرنين، وفاسيل غيبي — مجمع القلاع — ما بقي من ذلك: قاعات حجرية، وحوض بحجم بحيرة، وأسوار يمكنك المشي عليها. وفي دبرا برهان سيلاسي سقف من وجوه مرسومة، مئات، كل واحد مختلف. وعلى بعد ساعة، أديرة بحيرة تانا على جزر تصل إليها بقارب من البردي، وشلالات النيل الأزرق في تيس إيسات.',
+      en: 'Gondar was the capital of Ethiopia for two centuries, and Fasil Ghebbi, the castle compound, is what is left of that: stone halls, a bathing pool the size of a lake, and walls you can walk. Debre Berhan Selassie has a ceiling of painted faces, hundreds of them, each one different. An hour away, Lake Tana\u2019s monasteries sit on islands reached by papyrus boat, and the Blue Nile falls at Tis Issat.',
+      ar: 'كانت غوندار عاصمة إثيوبيا قرنين، وفاسيل غيبي، مجمع القلاع، ما بقي من ذلك: قاعات حجرية، وحوض بحجم بحيرة، وأسوار يمكنك المشي عليها. وفي دبرا برهان سيلاسي سقف من وجوه مرسومة، مئات، كل واحد مختلف. وعلى بعد ساعة، أديرة بحيرة تانا على جزر تصل إليها بقارب من البردي، وشلالات النيل الأزرق في تيس إيسات.',
     },
     blurb: {
       en: 'The castle compound at Fasil Ghebbi, the painted ceiling at Debre Berhan Selassie, and the island monasteries by boat.',
       ar: 'مجمع القلاع في فاسيل غيبي، والسقف المرسوم في دبرا برهان سيلاسي، وأديرة الجزر بالقارب.',
     },
     includes: [
-      { en: 'Return flights Addis – Bahir Dar', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – بحر دار' },
+      { en: 'Return flights Addis إلى Bahir Dar', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى بحر دار' },
       { en: 'Two nights on the lake shore', ar: 'ليلتان على ضفة البحيرة' },
       { en: 'Boat to the monasteries', ar: 'قارب إلى الأديرة' },
       { en: 'Guide and all entries', ar: 'مرشد وجميع الرسوم' },
@@ -442,7 +448,7 @@ export const TOURS = [
       ar: 'حقل المسلات، وحمّام ملكة سبأ، والكنيسة التي تقول إنها تحفظ التابوت.',
     },
     includes: [
-      { en: 'Return flights Addis – Axum', ar: 'تذاكر طيران ذهابًا وإيابًا أديس – أكسوم' },
+      { en: 'Return flights Addis إلى Axum', ar: 'تذاكر طيران ذهابًا وإيابًا أديس إلى أكسوم' },
       { en: 'One night, breakfast included', ar: 'ليلة واحدة مع الإفطار' },
       { en: 'Guide and site entries', ar: 'مرشد ودخول المواقع' },
       { en: 'Airport transfers', ar: 'التنقلات من المطار' },
@@ -462,16 +468,16 @@ export const STAYS = [
     near: { en: 'Three hours from Addis', ar: 'ثلاث ساعات من أديس' },
     note: { en: 'Beach, pool, breakfast', ar: 'شاطئ ومسبح وإفطار' },
     story: {
-      en: 'The western shore of Langano, where the water is the colour of tea and the beach is soft enough to walk barefoot. Sabana is the biggest of the lake places, with a lawn running down to the water — and Langano is the only Rift lake in Ethiopia you can swim in.',
-      ar: 'الضفة الغربية لبحيرة لانغانو، حيث لون الماء كلون الشاي والرمل ناعم يمشي عليه المرء حافيًا. سابانا أكبر أماكن البحيرة، بحديقة تنحدر إلى الماء — ولانغانو هي البحيرة الوحيدة في الوادي المتصدّع التي يمكن السباحة فيها.',
+      en: 'The western shore of Langano, where the water is the colour of tea and the beach is soft enough to walk barefoot. Sabana is the biggest of the lake places, with a lawn running down to the water, and Langano is the only Rift lake in Ethiopia you can swim in.',
+      ar: 'الضفة الغربية لبحيرة لانغانو، حيث لون الماء كلون الشاي والرمل ناعم يمشي عليه المرء حافيًا. سابانا أكبر أماكن البحيرة، بحديقة تنحدر إلى الماء، ولانغانو هي البحيرة الوحيدة في الوادي المتصدّع التي يمكن السباحة فيها.',
     } },
   { id: 'bishangari', area: { en: 'Eastern shore, Bishangari', ar: 'الضفة الشرقية، بيشانغاري' }, name: { en: 'Bishangari Lodge', ar: 'نزل بيشانغاري' }, stars: 4, price: 120, image: 'assets/img/stay-langano-bishangari.jpg',
     gallery: ['assets/img/g-bishangari-1.jpg'],
     near: { en: 'Three and a half hours from Addis, the last hour on a forest track', ar: 'ثلاث ساعات ونصف من أديس، والساعة الأخيرة على مسار غابة' },
     note: { en: 'Forest lodge, full board', ar: 'نزل في الغابة، إقامة كاملة' },
     story: {
-      en: 'The eastern shore is the quiet side: a lodge under old figs, with the lake in front and the Bishangari forest behind. Solar-powered and deliberately low-key — the birds start before your alarm does. It suits the end of a lakes trip rather than the first night.',
-      ar: 'الضفة الشرقية هي الجانب الهادئ: نزل تحت أشجار تين عتيقة، البحيرة أمامه وغابة بيشانغاري خلفه. يعمل بالطاقة الشمسية ومتواضع عن قصد — الطيور تبدأ قبل منبّهك. يناسب آخر رحلة البحيرات لا ليلتها الأولى.',
+      en: 'The eastern shore is the quiet side: a lodge under old figs, with the lake in front and the Bishangari forest behind. Solar-powered and deliberately low-key, the birds start before your alarm does. It suits the end of a lakes trip rather than the first night.',
+      ar: 'الضفة الشرقية هي الجانب الهادئ: نزل تحت أشجار تين عتيقة، البحيرة أمامه وغابة بيشانغاري خلفه. يعمل بالطاقة الشمسية ومتواضع عن قصد، الطيور تبدأ قبل منبّهك. يناسب آخر رحلة البحيرات لا ليلتها الأولى.',
     } },
   { id: 'haile-hawassa', area: { en: 'Lake Hawassa waterfront', ar: 'واجهة بحيرة هواسا' }, name: { en: 'Haile Resort Hawassa', ar: 'منتجع هايلي هواسا' }, stars: 4, price: 110, image: 'assets/img/stay-hawassa.jpg',
     gallery: ['assets/img/g-haile-hawassa-1.jpg'],
@@ -506,7 +512,10 @@ export const STAYS = [
       ar: 'على الضفة في بحر دار، البحيرة من جهة والبلدة من أخرى. قوارب البردي تمر أمام الحديقة صباحًا، وأديرة الجزر على بعد ساعة بالقارب.',
     } },
   { id: 'wonchi-eco', area: { en: 'Crater rim, Wonchi', ar: 'حافة الفوهة، ونتشي' }, name: { en: 'Wonchi Eco Lodge', ar: 'نزل ونتشي البيئي' }, stars: 4, price: 100, image: 'assets/img/stay-wonchi.jpg',
-    gallery: ['assets/img/tour-wonchi.jpg'],
+    gallery: [
+      'assets/img/own-tour-4-wide.jpg',   // the guides resting, second frame
+      'assets/img/tour-wonchi.jpg',
+    ],
     near: { en: 'Three hours from Addis', ar: 'ثلاث ساعات من أديس' },
     note: { en: 'Crater view, dinner and breakfast', ar: 'إطلالة على الفوهة، عشاء وإفطار' },
     story: {
@@ -563,16 +572,16 @@ export const SERVICES = [
   { id: 'routes', icon: 'route', title: { en: 'Routes & itineraries', ar: 'المسارات والبرامج' }, body: { en: 'A written day-by-day with the driving hours on it, built around your dates rather than a brochure.', ar: 'برنامج مكتوب يومًا بيوم مع ساعات القيادة، يُبنى على تواريخك لا على كتيّب.' } },
   { id: 'flights', icon: 'plane', title: { en: 'Domestic flights', ar: 'الطيران الداخلي' }, body: { en: 'Ethiopian Airlines seats to Lalibela, Gondar, Axum, Arba Minch, Jinka and Semera, held with the route.', ar: 'مقاعد الخطوط الإثيوبية إلى لاليبيلا وغوندار وأكسوم وأربا منش وجينكا وسيميرا، تُحجز مع المسار.' } },
   { id: 'cars', icon: 'car', title: { en: 'Cars & drivers', ar: 'سيارات وسائقون' }, body: { en: 'Our own vehicles and drivers: saloon for the city, 4×4 for the south and the Danakil road.', ar: 'سياراتنا وسائقونا: صالون للمدينة، ودفع رباعي للجنوب وطريق الدناكل.' } },
-  { id: 'lodges', icon: 'bed', title: { en: 'Lodges & camps', ar: 'النزل والمخيمات' }, body: { en: 'Rooms on the lakes, in the Harenna forest and on the crater rim — booked under your name.', ar: 'غرف على البحيرات، وفي غابة هارينا، وعلى حافة الفوهة — تُحجز باسمك.' } },
+  { id: 'lodges', icon: 'bed', title: { en: 'Lodges & camps', ar: 'النزل والمخيمات' }, body: { en: 'Rooms on the lakes, in the Harenna forest and on the crater rim، booked under your name.', ar: 'غرف على البحيرات، وفي غابة هارينا، وعلى حافة الفوهة، تُحجز باسمك.' } },
   { id: 'permits', icon: 'shield', title: { en: 'Permits & scouts', ar: 'التصاريح والمرافقون' }, body: { en: 'Park fees, scouting and the Danakil escort arranged before you land, not at the gate.', ar: 'رسوم المنتزهات والمرافقة الأمنية في الدناكل تُرتَّب قبل وصولك، لا عند البوابة.' } },
-  { id: 'guides', icon: 'users', title: { en: 'Guides & languages', ar: 'المرشدون واللغات' }, body: { en: 'Amharic, Afaan Oromo, English and Arabic — the same guide for the whole route.', ar: 'الأمهرية والأورومية والإنجليزية والعربية — والمرشد نفسه طوال المسار.' } },
+  { id: 'guides', icon: 'users', title: { en: 'Guides & languages', ar: 'المرشدون واللغات' }, body: { en: 'Amharic, Afaan Oromo, English and Arabic، the same guide for the whole route.', ar: 'الأمهرية والأورومية والإنجليزية والعربية، والمرشد نفسه طوال المسار.' } },
   { id: 'groups', icon: 'flag', title: { en: 'Groups & companies', ar: 'المجموعات والشركات' }, body: { en: 'Family reunions, film crews and company retreats, priced as one booking with one invoice.', ar: 'لقاءات العائلة وفرق التصوير ورحلات الشركات، بسعر حجز واحد وفاتورة واحدة.' } },
   { id: 'support', icon: 'phone', title: { en: 'On-trip support', ar: 'الدعم أثناء الرحلة' }, body: { en: 'A number that answers while you are on the road, in your language, not an inbox.', ar: 'رقم يُجيب أثناء وجودك على الطريق، بلغتك، لا صندوق بريد.' } },
 ];
 
 export const STEPS = [
   { title: { en: 'Tell us the dates', ar: 'أخبرنا بالتواريخ' }, body: { en: 'The route you like, or just the days you have and what you want to see.', ar: 'المسار الذي يعجبك، أو فقط الأيام المتاحة وما تريد رؤيته.' } },
-  { title: { en: 'A written plan', ar: 'خطة مكتوبة' }, body: { en: 'Driving hours, lodges, what is included and a price per person — before you pay anything.', ar: 'ساعات القيادة والنزل وما يشمله السعر وسعر للشخص — قبل أن تدفع شيئًا.' } },
+  { title: { en: 'A written plan', ar: 'خطة مكتوبة' }, body: { en: 'Driving hours, lodges, what is included and a price per person، before you pay anything.', ar: 'ساعات القيادة والنزل وما يشمله السعر وسعر للشخص، قبل أن تدفع شيئًا.' } },
   { title: { en: 'Deposit and permits', ar: 'الدفعة والتصاريح' }, body: { en: 'Thirty per cent holds the car and the rooms; park permits and scouts are filed in your name.', ar: 'ثلاثون بالمئة تحجز السيارة والغرف؛ وتُستخرج تصاريح المنتزهات والمرافقين باسمك.' } },
   { title: { en: 'Flights and rooms', ar: 'الطيران والغرف' }, body: { en: 'Domestic seats and the lodges are held and confirmed in writing.', ar: 'تُحجز المقاعد الداخلية والنزل وتُؤكَّد كتابيًا.' } },
   { title: { en: 'On the road', ar: 'على الطريق' }, body: { en: 'Driver and guide at your hotel in Addis, and the same two people to the last day.', ar: 'السائق والمرشد عند فندقك في أديس، والشخصان نفسهما حتى اليوم الأخير.' } },
@@ -580,12 +589,12 @@ export const STEPS = [
 ];
 
 export const FAQS = [
-  { q: { en: 'What does the price include?', ar: 'ماذا يشمل السعر؟' }, a: { en: 'The car or the domestic flights named on the route, the driver, the guide, park and site fees, and the lodges listed under “what is included”. Meals are named per route — most are breakfast only, the treks are full board.', ar: 'السيارة أو الرحلات الداخلية المذكورة في المسار، والسائق، والمرشد، ورسوم المنتزهات والمواقع، والنزل المذكورة في «ما يشمله السعر». الوجبات مذكورة لكل مسار — معظمها إفطار فقط، والمشي الجبلي بإقامة كاملة.' } },
+  { q: { en: 'What does the price include?', ar: 'ماذا يشمل السعر؟' }, a: { en: 'The car or the domestic flights named on the route, the driver, the guide, park and site fees, and the lodges listed under “what is included”. Meals are named per route، most are breakfast only, the treks are full board.', ar: 'السيارة أو الرحلات الداخلية المذكورة في المسار، والسائق، والمرشد، ورسوم المنتزهات والمواقع، والنزل المذكورة في «ما يشمله السعر». الوجبات مذكورة لكل مسار، معظمها إفطار فقط، والمشي الجبلي بإقامة كاملة.' } },
   { q: { en: 'Do we travel with strangers?', ar: 'هل نسافر مع غرباء؟' }, a: { en: 'No. Every route on this page is a private departure: your group, your car, your guide. The seat count is how many places we can run on that date, not how many strangers join you.', ar: 'لا. كل مسار في هذه الصفحة انطلاقة خاصة: مجموعتك وسيارتك ومرشدك. عدد المقاعد هو عدد الأماكن التي نستطيع تشغيلها في ذلك التاريخ، لا عدد الغرباء الذين ينضمون إليك.' } },
   { q: { en: 'Do we drive or fly?', ar: 'هل نسافر بالسيارة أم بالطائرة؟' }, a: { en: 'Both, depending on the route. The Rift Valley and Bishoftu are road trips from Addis; Lalibela, Gondar, Axum, Arba Minch, Jinka and Semera start with a domestic flight. Driving hours are written into the plan so nothing is hidden in “transfer”.', ar: 'كلاهما، حسب المسار. الوادي المتصدّع وبيشوفتو رحلات برية من أديس؛ ولاليبيلا وغوندار وأكسوم وأربا منش وجينكا وسيميرا تبدأ برحلة داخلية. ساعات القيادة مكتوبة في الخطة حتى لا يختفي شيء تحت كلمة «تنقلات».' } },
   { q: { en: 'What deposit do you ask for?', ar: 'كم تطلبون مقدمًا؟' }, a: { en: 'Thirty per cent of the total holds the car and the rooms and starts the permits. The balance is due seven days before departure. Nothing is charged on this website.', ar: 'ثلاثون بالمئة من الإجمالي تحجز السيارة والغرف وتبدأ التصاريح. ويُسدَّد الباقي قبل سبعة أيام من الانطلاق. لا يُخصم شيء من هذا الموقع.' } },
   { q: { en: 'When is the best time to come?', ar: 'ما أفضل وقت للزيارة؟' }, a: { en: 'The dry season, October to March, for most of the country. The Danakil is only sensible between November and February; the Omo and the south are good from September. Each route card lists its own months.', ar: 'الموسم الجاف، من أكتوبر إلى مارس، لمعظم البلاد. والدناكل لا يُنصح به إلا بين نوفمبر وفبراير؛ والجنوب وأومو جيدان من سبتمبر. كل بطاقة مسار تذكر أشهرها.' } },
-  { q: { en: 'Can children come?', ar: 'هل يمكن أن يأتي الأطفال؟' }, a: { en: 'Yes on the road routes and the short flights — the lakes, Harar, Lalibela, Gondar and Axum all work with children. Not on the Simien trek or the Danakil, where the days are long and the altitude or the heat is the point.', ar: 'نعم في المسارات البرية والرحلات القصيرة — البحيرات وهرر ولاليبيلا وغوندار وأكسوم تناسب الأطفال. لا في مشي سِميِن ولا في الدناكل، حيث الأيام طويلة والارتفاع أو الحرارة هي جوهر الرحلة.' } },
+  { q: { en: 'Can children come?', ar: 'هل يمكن أن يأتي الأطفال؟' }, a: { en: 'Yes on the road routes and the short flights، the lakes, Harar, Lalibela, Gondar and Axum all work with children. Not on the Simien trek or the Danakil, where the days are long and the altitude or the heat is the point.', ar: 'نعم في المسارات البرية والرحلات القصيرة، البحيرات وهرر ولاليبيلا وغوندار وأكسوم تناسب الأطفال. لا في مشي سِميِن ولا في الدناكل، حيث الأيام طويلة والارتفاع أو الحرارة هي جوهر الرحلة.' } },
   { q: { en: 'Can you build a route for us?', ar: 'هل تبنيون لنا مسارًا خاصًا؟' }, a: { en: 'That is most of what we do. Send the dates, how many are travelling and the two or three places you will not skip; the office writes the route and sends a price, usually within a day.', ar: 'هذا معظم عملنا. أرسل التواريخ وعدد المسافرين والمكانين أو الثلاثة التي لا تريد تفويتها؛ ويكتب المكتب المسار ويرسل السعر، عادة في خلال يوم.' } },
 ];
 

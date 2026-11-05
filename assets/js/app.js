@@ -1,13 +1,15 @@
-/* Sekkenah — interface behaviour. Ethiopia tours only.
+/* Sekkenah, interface behaviour. Ethiopia tours only.
  *
  * Everything renders from data.js, so a language switch is a re-render rather than a
  * patch-up of half the page. The one piece of real state is the booking draft, which is
  * kept in memory while the wizard is open and written to localStorage only once the
- * visitor confirms — a half-finished booking should not survive a reload as if it were
+ * visitor confirms, a half-finished booking should not survive a reload as if it were
  * a reservation.
  */
 import { BRAND, REGIONS, LEVELS, TOURS, STAYS, CARS, SERVICES, STEPS, FAQS, EXTRAS } from './data.js';
 import { STR, MONTHS } from './i18n.js';
+import { FILMS, SHOTS } from './trips.js';
+import { apiReady, submitBooking, submitEnquiry } from './api.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -18,6 +20,10 @@ const usd = (n) => '$' + Math.round(n).toLocaleString('en-US');
 const etb = (n) => Math.round(n * BRAND.etbPerUsd).toLocaleString('en-US');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+// One id per attempt, so a retry after a dropped connection cannot book twice.
+const makeRequestId = () => (crypto.randomUUID
+  ? crypto.randomUUID()
+  : 'r-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8));
 const findTour = (id) => TOURS.find((x) => x.id === id);
 const regionOf = (id) => REGIONS.find((r) => r.id === id);
 
@@ -30,6 +36,8 @@ const state = {
   draft: null,
   step: 0,
   lastBooking: null,
+  sending: false,
+  bookingStored: false,
 };
 
 const LS = {
@@ -38,7 +46,7 @@ const LS = {
   enquiry: 'sekkenah.enquiries.v1',
 };
 
-/* ───────────────────────────── language ───────────────────────────── */
+/* language */
 
 function setLang(lang, { announce = true } = {}) {
   state.lang = lang === 'ar' ? 'ar' : 'en';
@@ -68,7 +76,7 @@ function setLang(lang, { announce = true } = {}) {
   if (announce) $('#langBtn').setAttribute('aria-label', t('nav.langLabel'));
 }
 
-/* ───────────────────────────── catalogue ───────────────────────────── */
+/* catalogue */
 
 function tourCard(p) {
   const low = p.seats <= 8;
@@ -151,7 +159,7 @@ function renderFilters() {
   const row = $('#tourFilters');
   if (!row) return;
   // The count sits in the chip because the first question a filter row gets is "what is
-  // in there" — five routes or two changes whether the click is worth it.
+  // in there", five routes or two changes whether the click is worth it.
   const chips = [{ id: 'all', label: { en: t('filters.all'), ar: t('filters.all') }, n: TOURS.length }, ...REGIONS];
   row.innerHTML = chips.map((r) => {
     const n = r.n ?? TOURS.filter((p) => p.region === r.id).length;
@@ -232,6 +240,7 @@ function renderAll() {
   renderSteps();
   renderServices();
   renderFaq();
+  renderTrips();
   renderMonths();
   renderRegions();
   $('#year').textContent = new Date().getFullYear();
@@ -240,7 +249,7 @@ function renderAll() {
   if (!$('#modal').hidden) renderStep();
 }
 
-/* ───────────────────────────── dates ───────────────────────────── */
+/* dates */
 
 function fmtDate(iso) {
   const d = new Date(iso + 'T00:00:00');
@@ -267,7 +276,7 @@ function paintCalendar() {
   }
 }
 
-/* ───────────────────────────── links ───────────────────────────── */
+/* links */
 
 const waHref = (text) => `https://wa.me/${BRAND.whatsapp}?text=${encodeURIComponent(text)}`;
 
@@ -281,7 +290,7 @@ function paintLinks() {
   $('#mapBtn').href = `https://www.google.com/maps/search/?api=1&query=${BRAND.mapQuery}`;
 }
 
-/* ───────────────────────────── reveal ───────────────────────────── */
+/* reveal */
 
 let io;
 function observe(root = document) {
@@ -292,7 +301,7 @@ function observe(root = document) {
   $$('.reveal:not(.in)', root).forEach((el) => io.observe(el));
 }
 
-/* ───────────────────────────── drawer ───────────────────────────── */
+/* drawer */
 
 let lastFocus = null;
 
@@ -405,7 +414,71 @@ function galleryBlock(images) {
   </div>`;
 }
 
-/* Best months read as a range when the route runs straight through the calendar — and
+/* past trips */
+
+/* Three films in phone frames. preload="none" means the page shows a poster and never
+ * fetches a 10 MB video on its own; the file is asked for when the visitor presses play,
+ * which is also the gesture that lets the browser start it with sound. */
+function filmCard(f, i) {
+  return `<figure class="film">
+    <div class="film__frame">
+      <video class="film__v" src="${f.src}" poster="${f.poster}" preload="none" playsinline></video>
+      <button class="film__play" type="button" data-play="${i}" aria-label="${esc(t('trips.play'))}: ${esc(tx(f.name))}">
+        <span class="film__tri" aria-hidden="true"></span>
+      </button>
+      <span class="film__len">${f.len}</span>
+    </div>
+    <figcaption class="film__cap">
+      <b>${esc(tx(f.name))}</b>
+      <span>${esc(tx(f.note))}</span>
+    </figcaption>
+  </figure>`;
+}
+
+function renderTrips() {
+  const row = $('#filmRow');
+  if (!row) return;
+  row.innerHTML = FILMS.map(filmCard).join('');
+  $('#tripGrid').innerHTML = SHOTS.map((s, i) => `
+    <button class="shot" type="button" data-shot="${i}">
+      <img src="${s.src}" alt="${esc(tx(s.cap))}" loading="lazy" decoding="async" width="1080" height="1350">
+      <span class="shot__cap">${esc(tx(s.cap))}</span>
+    </button>`).join('');
+}
+
+let shotAt = 0;
+let shotReturn = null;
+
+function paintShot(i) {
+  if (!SHOTS.length) return;
+  shotAt = (i + SHOTS.length) % SHOTS.length;
+  const s = SHOTS[shotAt];
+  const img = $('#lbImg');
+  img.src = s.big;
+  img.alt = tx(s.cap);
+  $('#lbCap').textContent = tx(s.cap);
+}
+
+function openShot(i) {
+  shotReturn = document.activeElement;
+  paintShot(i);
+  const lb = $('#lightbox');
+  lb.hidden = false;
+  document.body.classList.add('is-locked');
+  requestAnimationFrame(() => lb.classList.add('is-on'));
+  $('.lightbox__x').focus();
+}
+
+function closeShot() {
+  const lb = $('#lightbox');
+  if (lb.hidden) return;
+  lb.classList.remove('is-on');
+  document.body.classList.remove('is-locked');
+  setTimeout(() => { lb.hidden = true; }, 220);
+  if (shotReturn && shotReturn.focus) shotReturn.focus();
+}
+
+/* Best months read as a range when the route runs straight through the calendar, and
  * most Ethiopian seasons do, across the year boundary: October to March is one run, not
  * two. A single gap in the ring is a range; more than one is a list. */
 function bestMonths(p) {
@@ -416,7 +489,7 @@ function bestMonths(p) {
   if (ms.length > 2 && breaks.length === 1) {
     const start = ms[(breaks[0].i + 1) % ms.length];
     const end = ms[breaks[0].i];
-    return `${N[start - 1]}–${N[end - 1]}`;
+    return `${N[start - 1]} to ${N[end - 1]}`;
   }
   return ms.map((m) => N[m - 1]).join(', ');
 }
@@ -433,7 +506,7 @@ function closeDrawer() {
   if (lastFocus) lastFocus.focus();
 }
 
-/* ───────────────────────────── pricing ───────────────────────────── */
+/* pricing */
 
 const STAY_EXTRAS = ['transfer', 'insurance'];
 const isoIn = (days) => {
@@ -473,7 +546,7 @@ function priceLine() {
   return q.total ? `<b>${usd(q.total)}</b><small>${t('book.total')}</small>` : '';
 }
 
-/* ───────────────────────────── wizard ───────────────────────────── */
+/* wizard */
 
 function openBooking(packageId = null, { mode = 'tour', stayId = null } = {}) {
   lastFocus = document.activeElement;
@@ -499,6 +572,7 @@ function openBooking(packageId = null, { mode = 'tour', stayId = null } = {}) {
       adults: 2, children: 0, infants: 0, rooms: 1,
       travellers: [], extras: [], notes: '', stayId: null, checkIn: null, nights: null,
     };
+  state.draft.requestId = makeRequestId();
   $('#modal').hidden = false;
   document.body.classList.add('is-locked');
   requestAnimationFrame(() => $('#modal').classList.add('is-on'));
@@ -545,7 +619,7 @@ function renderStep() {
       <div class="form">
         <label class="field"><span>${t('book.route')}</span>
           <select id="wPkg">
-            ${TOURS.map((p) => `<option value="${p.id}"${p.id === d.packageId ? ' selected' : ''}>${esc(tx(p.name))} — ${usd(p.price)}</option>`).join('')}
+            ${TOURS.map((p) => `<option value="${p.id}"${p.id === d.packageId ? ' selected' : ''}>${esc(tx(p.name))}, ${usd(p.price)}</option>`).join('')}
           </select>
         </label>
         <label class="field"><span>${t('book.depart')}</span>
@@ -605,7 +679,7 @@ function renderStep() {
         ${state.trip.stays.length ? `<h3 class="drawer__h">${t('stays.title')}</h3>
         <ul class="ticks">${state.trip.stays.map((id) => {
           const s = STAYS.find((x) => x.id === id);
-          return s ? `<li>${esc(tx(s.name))} — ${usd(s.price)}/${t('stays.night')}</li>` : '';
+          return s ? `<li>${esc(tx(s.name))}, ${usd(s.price)}/${t('stays.night')}</li>` : '';
         }).join('')}</ul>` : ''}
       </div>`;
     $('#btnNext').textContent = t('book.next');
@@ -659,7 +733,7 @@ function renderStayStep() {
       <div class="form">
         <label class="field"><span>${t('book.lodge')}</span>
           <select id="wStay">
-            ${STAYS.map((x) => `<option value="${x.id}"${x.id === d.stayId ? ' selected' : ''}>${esc(tx(x.name))} — ${usd(x.price)}</option>`).join('')}
+            ${STAYS.map((x) => `<option value="${x.id}"${x.id === d.stayId ? ' selected' : ''}>${esc(tx(x.name))}, ${usd(x.price)}</option>`).join('')}
           </select>
         </label>
         <div class="row">
@@ -815,7 +889,7 @@ function collectStep2() {
   state.draft.extras = $$('[data-extra]').filter((el) => el.checked).map((el) => el.dataset.extra);
 }
 
-function nextStep() {
+async function nextStep() {
   const stay = state.draft.mode === 'stay';
   if (state.step === 0) { if (stay) collectStayDates(); else collectStep0(); }
   if (state.step === 1) {
@@ -823,7 +897,13 @@ function nextStep() {
     if (!(stay ? validateStayGuests() : validateStep1())) return;
   }
   if (state.step === 2) collectStep2();
-  if (state.step === 3) { confirmBooking(); return; }
+  if (state.step === 3) {
+    if (state.sending) return;
+    state.sending = true;
+    $('#btnNext').disabled = true;
+    try { await confirmBooking(); } finally { state.sending = false; $('#btnNext').disabled = false; }
+    return;
+  }
   state.step = Math.min(3, state.step + 1);
   renderStep();
   $('#modalBody').scrollTop = 0;
@@ -836,16 +916,63 @@ function prevStep() {
   renderStep();
 }
 
-function confirmBooking() {
+/* The request goes to the booking API first; the local copy and the WhatsApp handoff stay
+ * as the fallback, so a network failure never leaves the visitor with nothing. */
+function bookingPayload(d, q) {
+  const travellers = (d.travellers || []).filter((x) => x && (x.name || x.passport || x.phone || x.email));
+  const first = travellers[0] || {};
+  const stay = d.mode === 'stay' ? STAYS.find((s) => s.id === d.stayId) : null;
+  const tour = d.mode === 'tour' ? findTour(d.packageId) : null;
+  return {
+    requestId: d.requestId,
+    mode: d.mode,
+    tourId: tour ? tour.id : null,
+    tourName: tour ? tx(tour.name) : null,
+    stayId: stay ? stay.id : null,
+    stayName: stay ? tx(stay.name) : null,
+    depart: d.depart || null,
+    checkIn: d.checkIn || null,
+    nights: d.nights || 0,
+    rooms: d.rooms || 1,
+    adults: d.adults,
+    children: d.children,
+    infants: d.infants,
+    travellers,
+    extras: (d.extras || []).map((id) => {
+      const e = EXTRAS.find((x) => x.id === id);
+      return e ? tx(e.name) : id;
+    }),
+    notes: d.notes || '',
+    quote: q,
+    lang: state.lang,
+    name: first.name || '',
+    phone: first.phone || '',
+    email: first.email || '',
+  };
+}
+
+async function confirmBooking() {
   const d = state.draft;
   const q = quote();
-  const ref = 'SKN-' + Date.now().toString(36).slice(-6).toUpperCase();
-  state.lastBooking = { ref, ...structuredClone(d), quote: q, stays: [...state.trip.stays], at: new Date().toISOString() };
+  let ref = 'SKN-' + Date.now().toString(36).slice(-6).toUpperCase();
+  let stored = false;
+
+  if (apiReady()) {
+    try {
+      const res = await submitBooking(bookingPayload(d, q));
+      if (res && res.ref) { ref = res.ref; stored = true; }
+    } catch (err) {
+      stored = false;
+    }
+  }
+  state.bookingStored = stored;
+
+  state.lastBooking = { ref, ...structuredClone(d), quote: q, stays: [...state.trip.stays], at: new Date().toISOString(), stored };
   try {
     const all = JSON.parse(localStorage.getItem(LS.bookings) || '[]');
     all.push(state.lastBooking);
     localStorage.setItem(LS.bookings, JSON.stringify(all.slice(-40)));
-  } catch { /* storage full or blocked — the ticket on screen is still valid */ }
+  } catch { /* storage full or blocked, the ticket on screen is still valid */ }
   renderTicket();
 }
 
@@ -853,7 +980,7 @@ function waMessage(b) {
   const L = [];
   if (b.mode === 'stay') {
     const s = STAYS.find((x) => x.id === b.stayId);
-    L.push(isAr() ? 'طلب حجز نزل — سكينة' : 'Lodge booking request — Sekkenah');
+    L.push(isAr() ? 'طلب حجز نزل، سكينة' : 'Lodge booking request، Sekkenah');
     L.push(`${t('book.ref')}: ${b.ref}`);
     L.push(`${t('book.lodge')}: ${tx(s.name)}`);
     L.push(`${t('book.checkIn')}: ${fmtDate(b.checkIn)}`);
@@ -866,7 +993,7 @@ function waMessage(b) {
     return L.join('\n');
   }
   const p = findTour(b.packageId);
-  L.push(isAr() ? 'طلب جولة في إثيوبيا — سكينة' : 'Ethiopia tour request — Sekkenah');
+  L.push(isAr() ? 'طلب جولة في إثيوبيا، سكينة' : 'Ethiopia tour request، Sekkenah');
   L.push(`${t('book.ref')}: ${b.ref}`);
   L.push(`${t('book.package')}: ${tx(p.name)} (${fmtDate(b.depart)})`);
   L.push(`${t('book.adults')}: ${b.adults}  ${t('book.children')}: ${b.children}  ${t('book.infants')}: ${b.infants}`);
@@ -890,7 +1017,8 @@ function renderTicket() {
         <span class="ticket__ref">${t('book.ref')} <b>${b.ref}</b></span>
       </div>
       <h3 class="ticket__title">${t('book.doneTitle')}</h3>
-      <p class="ticket__body">${t('book.doneBody')}</p>
+      <p class="ticket__body">${t(b.stored ? 'book.doneBodyStored' : 'book.doneBody')}</p>
+      ${b.stored ? '' : `<p class="ticket__warn">${t('book.notStored')}</p>`}
       <div class="review__rows">
         <div><span>${b.mode === 'stay' ? t('book.lodge') : t('book.package')}</span><b>${esc(tx(p.name))}</b></div>
         ${b.mode === 'stay'
@@ -921,7 +1049,7 @@ function renderTicket() {
   $('#modalFoot').insertBefore(wa, $('#modalFoot').lastElementChild);
 }
 
-/* ───────────────────────────── misc UI ───────────────────────────── */
+/* misc UI */
 
 function toast(msg, ms = 2600) {
   const el = $('#toast');
@@ -936,10 +1064,12 @@ function toast(msg, ms = 2600) {
    the page behind it is the plainest accessibility failure an overlay can have. */
 function trackFocus() {
   document.addEventListener('keydown', (e) => {
-    const panel = !$('#modal').hidden ? $('#modal') : (!$('#drawer').hidden ? $('#drawer') : null);
+    const panel = !$('#modal').hidden ? $('#modal')
+      : (!$('#drawer').hidden ? $('#drawer') : (!$('#lightbox').hidden ? $('#lightbox') : null));
     if (e.key === 'Escape') {
       if (!$('#modal').hidden) closeBooking();
       else if (!$('#drawer').hidden) closeDrawer();
+      else if (!$('#lightbox').hidden) closeShot();
       return;
     }
     if (e.key !== 'Tab' || !panel) return;
@@ -953,7 +1083,7 @@ function trackFocus() {
   });
 }
 
-/* ───────────────────────────── events ───────────────────────────── */
+/* events */
 
 function bind() {
   // The header text is bone-coloured for the hero photograph; over the paper-coloured
@@ -1007,7 +1137,7 @@ function bind() {
     const bookCar = e.target.closest('[data-book-car]');
     if (bookCar) {
       const c = CARS.find((x) => x.id === bookCar.dataset.bookCar);
-      if (c) window.open(waHref(`${t('cars.waIntro')}\n${tx(c.title)} — ${usd(c.price)} ${tx(c.unit)}`), '_blank', 'noopener');
+      if (c) window.open(waHref(`${t('cars.waIntro')}\n${tx(c.title)}, ${usd(c.price)} ${tx(c.unit)}`), '_blank', 'noopener');
       return;
     }
 
@@ -1071,6 +1201,48 @@ function bind() {
     prevStep();
   });
 
+  /* One film at a time; the native controls appear only once a film has started. */
+  $('#filmRow').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-play]');
+    if (!b) return;
+    const card = b.closest('.film');
+    const v = $('.film__v', card);
+    $$('#filmRow .film').forEach((o) => {
+      if (o === card) return;
+      const other = $('.film__v', o);
+      other.pause();
+      other.controls = false;
+      o.classList.remove('is-playing');
+    });
+    card.classList.add('is-playing');
+    v.controls = true;
+    const p = v.play();
+    if (p && p.catch) p.catch(() => card.classList.remove('is-playing'));
+  });
+  // Media events do not bubble, so the end of a film is caught in the capture phase.
+  $('#filmRow').addEventListener('ended', (e) => {
+    const card = e.target.closest('.film');
+    if (!card) return;
+    card.classList.remove('is-playing');
+    e.target.controls = false;
+    e.target.currentTime = 0;
+  }, true);
+
+  $('#tripGrid').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-shot]');
+    if (b) openShot(Number(b.dataset.shot));
+  });
+  $('#lightbox').addEventListener('click', (e) => {
+    const step = e.target.closest('[data-lb-step]');
+    if (step) { paintShot(shotAt + Number(step.dataset.lbStep)); return; }
+    if (e.target.closest('[data-lb-close]') || e.target.id === 'lightbox') closeShot();
+  });
+  document.addEventListener('keydown', (e) => {
+    if ($('#lightbox').hidden) return;
+    if (e.key === 'ArrowRight') paintShot(shotAt + (isAr() ? -1 : 1));
+    if (e.key === 'ArrowLeft') paintShot(shotAt + (isAr() ? 1 : -1));
+  });
+
   $('#search').addEventListener('submit', (e) => {
     e.preventDefault();
     const region = $('#fRegion').value;
@@ -1096,14 +1268,18 @@ function bind() {
     e.preventDefault();
     const f = e.target;
     const data = { name: f.name.value.trim(), phone: f.phone.value.trim(), message: f.message.value.trim(), at: new Date().toISOString(), lang: state.lang };
+    if (apiReady()) {
+      // Fire and forget: the visitor should not wait on a form that also has WhatsApp.
+      submitEnquiry({ ...data, company: (f.company || {}).value || '' }).catch(() => {});
+    }
     try {
       const all = JSON.parse(localStorage.getItem(LS.enquiry) || '[]');
       all.push(data);
       localStorage.setItem(LS.enquiry, JSON.stringify(all.slice(-50)));
     } catch { /* ignore */ }
     const text = isAr()
-      ? `استفسار — ${data.name}\n${data.phone}\n${data.message}`
-      : `Enquiry — ${data.name}\n${data.phone}\n${data.message}`;
+      ? `استفسار، ${data.name}\n${data.phone}\n${data.message}`
+      : `Enquiry, ${data.name}\n${data.phone}\n${data.message}`;
     $('#enquiryWa').href = waHref(text);
     $('#enquiryDone').hidden = false;
     f.reset();
@@ -1115,7 +1291,7 @@ function bind() {
   onScroll();
 }
 
-/* ───────────────────────────── boot ───────────────────────────── */
+/* boot */
 
 function boot() {
   const q = new URLSearchParams(location.search).get('lang');

@@ -1,4 +1,4 @@
-# Sekkenah — Ethiopia tours, Addis Ababa
+# Sekkenah, Ethiopia tours, Addis Ababa
 
 A bilingual (English ⇄ Arabic) site for Sekkenah Tour & Travel, a tour operator at Jemo
 Michael in Addis Ababa. The whole site is about tours **inside Ethiopia**: fourteen routes
@@ -16,15 +16,17 @@ the URL was already in use; renaming it would break the shared link.
 | Hero + search | Region / month / traveller count, filters the tour grid and scrolls to it |
 | Why | One quote, guides who know the road, rates before you commit |
 | Tours | Fourteen routes, region chips with counts, duration and level on every card |
+| Past trips | One film per place (Wonchi, then the road to Butajira) and eight photographs shot on the client's own departures: phone-framed video that loads on click, a photo grid with a keyboard-driven lightbox |
 | Route drawer | Region and level, price, seats, the story of the road, what is included, the written day-by-day, how you get there, next departure, best months, two photographs |
 | How it works | Six steps from "tell us the dates" to "back in Addis" |
-| Lodges | Ten places on the water, in the crater and in the forest. Every card opens its own drawer — story, distance, rate, photographs — with **Add to trip** and **Book this room** |
+| Lodges | Ten places on the water, in the crater and in the forest. Every card opens its own drawer: story, distance, rate, photographs, with **Add to trip** and **Book this room** |
 | Cars & drivers | Airport transfer, day car, 4×4 and minibus with rates, reserved over WhatsApp |
 | Services | Routes, domestic flights, cars, lodges, permits, guides, groups, on-trip support |
 | Booking | Four steps → reference number → printable summary → WhatsApp handoff |
 | About / FAQ / contact | The office, seven real questions, both phone lines, map link, enquiry form |
 
-**Routes.** `assets/js/data.js` holds the fourteen tours, each with a region (`rift`,
+**Routes.** `assets/js/data.js` is generated from the client portal
+(`tools/sync-content.mjs`, see `../sekkenah-portal/`) and holds the fourteen tours, each with a region (`rift`,
 `north`, `south`, `wild`), a level (easy / moderate / demanding), `bestMonths` for the
 season filter, an explicit itinerary, and bilingual copy. Region chips are generated from
 `REGIONS`, so an empty region still reads as a place.
@@ -38,10 +40,15 @@ season filter, an explicit itinerary, and bilingual copy. Region chips are gener
   transfers and insurance. The step labels change to Stay / Guests, and guests need a name
   rather than a passport.
 
-Deposit is 30% either way. Confirmation stores the request in `localStorage`
-(`sekkenah.bookings.v1`), issues an `SKN-XXXXXX` reference, renders a printable summary, and
-builds a pre-filled WhatsApp message with every field — "Ethiopia tour request" or
-"Lodge booking request".
+Deposit is 30% either way. Confirmation posts the request to the booking API, which stores it,
+issues the `SKN-XXXXXX` reference and emails the office and the visitor. The same request is
+also written to `localStorage` (`sekkenah.bookings.v1`) and rendered as a printable summary
+with a pre-filled WhatsApp message. If the API is not configured or cannot be reached, the
+local copy and the WhatsApp handoff are the whole flow, exactly as before, with a line telling
+the visitor the office has not received it yet.
+
+Set the API endpoint once, in `index.html`: `<meta name="sekkenah-api" content="https://...">`.
+Empty means no network call is attempted.
 
 **Language.** Header, footer and `?lang=ar` all switch. The button glyph follows the
 language it switches *to* (`ع` on English, `E` on Arabic). Layout is written with logical
@@ -56,9 +63,13 @@ index.html            page
 credits.html          photo attribution (required by the licences)
 assets/css/site.css   the design system
 assets/js/data.js     tours, lodges, cars, services, steps, FAQs, extras
+assets/js/trips.js    past trips: the client's own films and photographs (hand-written)
 assets/js/i18n.js     interface strings, EN + AR
 assets/js/app.js      rendering, filters, drawer, booking wizard
+assets/js/api.js      booking and enquiry transport, with the offline fallback
+tools/sync-content.mjs  rebuilds data.js from the portal (generated file, do not hand-edit)
 assets/img/           route, lodge, gallery and editorial photography
+assets/video/         two web encodes (H.264 faststart, 1080x1920) with posters
 PHOTO-CREDITS.json    the same attribution as data
 serve.mjs             local preview (node serve.mjs 8910)
 ```
@@ -69,13 +80,13 @@ draft figure.
 ## Open items for the client
 
 1. Replace the draft prices, lodge rates and route dates with real inventory.
-2. Wire the booking flow to a backend (or a form service) — the WhatsApp handoff is a
-   stopgap, not a booking engine.
+2. Deploy `../sekkenah-api` and put its URL in `index.html`; the WhatsApp handoff stays as the
+   fallback. Online payment and per-date availability are still not built.
 3. Add a privacy note: the enquiry and booking forms collect names, phone numbers and
    passport numbers, and at present they only ever reach `localStorage` on the visitor's
    own device. Nothing is transmitted.
 4. Add analytics, and an Amharic / Afaan Oromo locale.
-5. Send a tours-specific social handle if there is one — the Umrah accounts
+5. Send a tours-specific social handle if there is one. The Umrah accounts
    (`@sekkenah.umra.serv`, `@sekinah.umrah`) are deliberately not linked from this site.
 
 ## Checks run

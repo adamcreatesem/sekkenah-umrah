@@ -591,5 +591,55 @@
     "author": "Tricholome",
     "licence": "CC BY-SA 4.0",
     "page": "https://commons.wikimedia.org/wiki/File:Wonchi_crater_lake.jpg"
+  },
+  {
+    "file": "assets/img/own-tour-6-wide.jpg",
+    "key": "own-tour-6-wide",
+    "px": "1600x900",
+    "kb": 142,
+    "title": "On horseback down the crater rim, Wonchi",
+    "author": "Sekkenah Tour & Travel",
+    "licence": "Client supplied",
+    "page": ""
+  },
+  {
+    "file": "assets/img/own-tour-8-wide.jpg",
+    "key": "own-tour-8-wide",
+    "px": "1600x900",
+    "kb": 233,
+    "title": "At the falls below the rim, Wonchi",
+    "author": "Sekkenah Tour & Travel",
+    "licence": "Client supplied",
+    "page": ""
+  },
+  {
+    "file": "assets/img/own-tour-9-wide.jpg",
+    "key": "own-tour-9-wide",
+    "px": "1600x900",
+    "kb": 134,
+    "title": "Looking out over the crater, Wonchi",
+    "author": "Sekkenah Tour & Travel",
+    "licence": "Client supplied",
+    "page": ""
+  },
+  {
+    "file": "assets/img/own-tour-11-wide.jpg",
+    "key": "own-tour-11-wide",
+    "px": "1600x900",
+    "kb": 213,
+    "title": "At the spring below the lodge, Wonchi",
+    "author": "Sekkenah Tour & Travel",
+    "licence": "Client supplied",
+    "page": ""
+  },
+  {
+    "file": "assets/img/own-tour-3-wide.jpg",
+    "key": "own-tour-3-wide",
+    "px": "1600x900",
+    "kb": 184,
+    "title": "The team and the van, start of the trip",
+    "author": "Sekkenah Tour & Travel",
+    "licence": "Client supplied",
+    "page": ""
   }
 ]

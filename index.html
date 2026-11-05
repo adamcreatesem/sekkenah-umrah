@@ -3,14 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sekkenah — Ethiopia tours from Addis Ababa</title>
-<meta name="description" content="Guided tours across Ethiopia from Addis Ababa: the Rift Valley lakes, Lalibela and the historic north, the Omo valley, Bale and the Danakil — with a car, a driver and a guide.">
+<title>Sekkenah: Ethiopia tours from Addis Ababa</title>
+<meta name="description" content="Guided tours across Ethiopia from Addis Ababa: the Rift Valley lakes, Lalibela and the historic north, the Omo valley, Bale and the Danakil, with a car, a driver and a guide.">
 <meta name="theme-color" content="#0d1512">
+<!-- Empty until the booking API is deployed; then put its URL here. -->
+<meta name="sekkenah-api" content="">
 <link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Sekkenah — Ethiopia tours from Addis Ababa">
+<meta property="og:title" content="Sekkenah: Ethiopia tours from Addis Ababa">
 <meta property="og:description" content="Fourteen routes out of Addis Ababa, with a car, a driver and a guide who knows the road.">
-<meta property="og:image" content="assets/img/hero-plateau.jpg">
+<!-- Absolute URLs: a relative og:image is ignored by every scraper, so the card had no picture. -->
+<meta property="og:image" content="https://adamcreatesem.github.io/sekkenah-umrah/assets/img/hero-plateau.jpg">
+<meta property="og:url" content="https://adamcreatesem.github.io/sekkenah-umrah/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://adamcreatesem.github.io/sekkenah-umrah/">
 <link rel="preload" href="assets/fonts/Fraunces-latin-2.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/InstrumentSans-latin-4.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
@@ -23,7 +29,7 @@
   "telephone": "+251 95 960 7070",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Jemo Michael, Megbira Mall, 4th floor",
+    "streetAddress": "Jemo Michael, Megfira Mall, 4th floor",
     "addressLocality": "Addis Ababa",
     "addressCountry": "ET"
   },
@@ -35,7 +41,7 @@
 
 <a class="skip" href="#main" data-i18n="common.skip">Skip to content</a>
 
-<!-- ─────────────────────────────── header ─────────────────────────────── -->
+<!-- header -->
 <header class="head" id="head">
   <div class="topline">
     <div class="shell topline__in">
@@ -57,6 +63,7 @@
 
       <nav class="nav__links" aria-label="Primary">
         <a href="#tours" data-i18n="nav.tours">Tours</a>
+        <a href="#trips" data-i18n="nav.trips">Past trips</a>
         <a href="#stays" data-i18n="nav.stays">Lodges</a>
         <a href="#cars" data-i18n="nav.cars">Cars</a>
         <a href="#about" data-i18n="nav.about">About</a>
@@ -77,6 +84,7 @@
 
     <div class="mobile" id="mobileMenu" hidden>
       <a href="#tours" data-i18n="nav.tours">Tours</a>
+      <a href="#trips" data-i18n="nav.trips">Past trips</a>
       <a href="#stays" data-i18n="nav.stays">Lodges</a>
       <a href="#cars" data-i18n="nav.cars">Cars</a>
       <a href="#about" data-i18n="nav.about">About</a>
@@ -88,7 +96,7 @@
 
 <main id="main">
 
-  <!-- ─────────────────────────────── hero ─────────────────────────────── -->
+  <!-- hero -->
   <section class="hero" id="top">
     <div class="hero__media">
       <img src="assets/img/hero-plateau.jpg" alt="A horse on the Sanetti plateau in the Bale Mountains, Ethiopia." fetchpriority="high" width="2400" height="1350">
@@ -102,7 +110,7 @@
         <span class="reveal" data-i18n="hero.line1">The country,</span>
         <span class="reveal reveal--2"><em data-i18n="hero.line2">at your own pace.</em></span>
       </h1>
-      <p class="hero__sub reveal reveal--3" data-i18n="hero.sub">Fourteen routes out of Addis Ababa — the Rift Valley lakes, the rock churches of the north, the Omo, Bale and the Danakil — with a car, a driver and a guide who knows the road.</p>
+      <p class="hero__sub reveal reveal--3" data-i18n="hero.sub">Fourteen routes out of Addis Ababa: the Rift Valley lakes, the rock churches of the north, the Omo, Bale and the Danakil, with a car, a driver and a guide who knows the road.</p>
       <div class="hero__actions reveal reveal--4">
         <a class="btn btn--solid" href="#tours" data-i18n="hero.cta">Find a route</a>
         <a class="btn btn--ghost" id="heroWa" href="#" target="_blank" rel="noopener" data-i18n="hero.cta2">Talk to us on WhatsApp</a>
@@ -138,7 +146,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── why ─────────────────────────────── -->
+  <!-- why -->
   <section class="sec why" id="why">
     <div class="shell">
       <div class="sec__head">
@@ -154,7 +162,7 @@
         <li class="why__item reveal reveal--2">
           <span class="why__num">02</span>
           <h3 class="h3" data-i18n="why.b.title">Guides who know the road</h3>
-          <p data-i18n="why.b.body">Amharic, Afaan Oromo, English and Arabic — and the same guide with you from the first morning to the last.</p>
+          <p data-i18n="why.b.body">Amharic, Afaan Oromo, English and Arabic. The same guide stays with you from the first morning to the last.</p>
         </li>
         <li class="why__item reveal reveal--3">
           <span class="why__num">03</span>
@@ -165,7 +173,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── tours ─────────────────────────────── -->
+  <!-- tours -->
   <section class="sec tours" id="tours">
     <div class="shell">
       <div class="sec__head sec__head--row">
@@ -182,7 +190,26 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── path ─────────────────────────────── -->
+  <!-- past trips -->
+  <section class="sec trips" id="trips">
+    <div class="shell">
+      <div class="trips__top">
+        <div class="trips__intro">
+          <p class="eyebrow reveal" data-i18n="trips.kicker">Past trips</p>
+          <h2 class="h2 reveal" data-i18n="trips.title">The trips we have already run.</h2>
+          <p class="lede reveal" data-i18n="trips.sub">Our own film and photographs, from departures we ran this year: the Wonchi crater, the lodge on the rim, and the road south to Butajira. Nothing here is stock.</p>
+          <p class="trips__meta reveal" data-i18n="trips.meta">June 2026 · Wonchi · Butajira</p>
+        </div>
+        <div class="films" id="filmRow"></div>
+      </div>
+
+      <div class="shots" id="tripGrid"></div>
+
+      <p class="foot-note" data-i18n="trips.foot">Filmed and photographed on our own departures. Sekkenah Tour &amp; Travel.</p>
+    </div>
+  </section>
+
+  <!-- path -->
   <section class="path" id="path">
     <div class="path__bg" aria-hidden="true"><img src="assets/img/road-simien.jpg" alt="" loading="lazy" width="2000" height="1125"></div>
     <div class="shell path__in">
@@ -194,7 +221,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── lodges ─────────────────────────────── -->
+  <!-- lodges -->
   <section class="sec lodges" id="stays">
     <div class="shell">
       <div class="sec__head sec__head--row">
@@ -209,7 +236,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── cars ─────────────────────────────── -->
+  <!-- cars -->
   <section class="sec cars" id="cars">
     <div class="shell">
       <div class="sec__head">
@@ -221,7 +248,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── services ─────────────────────────────── -->
+  <!-- services -->
   <section class="sec services" id="services">
     <div class="shell">
       <div class="sec__head">
@@ -233,7 +260,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── build ─────────────────────────────── -->
+  <!-- build -->
   <section class="build">
     <div class="build__media" aria-hidden="true"><img src="assets/img/band-omo.jpg" alt="" loading="lazy" width="1900" height="1050"></div>
     <div class="shell build__in">
@@ -244,7 +271,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── about ─────────────────────────────── -->
+  <!-- about -->
   <section class="sec about" id="about">
     <div class="shell about__in">
       <div class="about__media">
@@ -254,7 +281,7 @@
       <div class="about__text">
         <p class="eyebrow reveal" data-i18n="about.kicker">About us</p>
         <h2 class="h2 reveal" data-i18n="about.title">An Ethiopian office, on Ethiopian roads.</h2>
-        <p class="reveal" data-i18n="about.p1">Sekkenah is a tour operator at Jemo Michael in Addis Ababa. We run routes across the country — the Rift Valley lakes, the historic north, the Omo, Bale and the Danakil — with our own cars, our own drivers and guides we have travelled with.</p>
+        <p class="reveal" data-i18n="about.p1">Sekkenah is a tour operator at Jemo Michael in Addis Ababa. We run routes across the country: the Rift Valley lakes, the historic north, the Omo, Bale and the Danakil, with our own cars, our own drivers and guides we have travelled with.</p>
         <p class="reveal" data-i18n="about.p2">The work is small on purpose. One office answers the phone, the same guide stays with you for the whole route, and nothing is handed to a number you have never called.</p>
         <ul class="pillars reveal">
           <li data-i18n="about.pillar1">Addis Ababa office</li>
@@ -269,7 +296,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── faq ─────────────────────────────── -->
+  <!-- faq -->
   <section class="sec faq" id="faq">
     <div class="shell faq__in">
       <div class="sec__head faq__head">
@@ -280,7 +307,7 @@
     </div>
   </section>
 
-  <!-- ─────────────────────────────── contact ─────────────────────────────── -->
+  <!-- contact -->
   <section class="sec contact" id="contact">
     <div class="shell contact__in">
       <div class="contact__text">
@@ -291,7 +318,7 @@
         <dl class="details reveal">
           <div><dt data-i18n="contact.phones">Phone</dt><dd><a href="tel:+251959607070" dir="ltr">+251 95 960 7070</a><br><a href="tel:+251959608080" dir="ltr">+251 95 960 8080</a></dd></div>
           <div><dt data-i18n="contact.office">Office</dt><dd data-brand="address">Jemo Michael, Megfira Mall, 4th floor, Addis Ababa</dd></div>
-          <div><dt data-i18n="contact.hours">Hours</dt><dd data-i18n="contact.hoursVal">Mon–Sat, 9:00 – 18:00 (EAT)</dd></div>
+          <div><dt data-i18n="contact.hours">Hours</dt><dd data-i18n="contact.hoursVal">Mon to Sat, 9:00 to 18:00 (EAT)</dd></div>
         </dl>
 
         <div class="contact__actions reveal">
@@ -305,9 +332,12 @@
         <label class="field"><span data-i18n="contact.name">Your name</span><input name="name" required autocomplete="name"></label>
         <label class="field"><span data-i18n="contact.phone">Phone number</span><input name="phone" type="tel" required autocomplete="tel" dir="ltr"></label>
         <label class="field"><span data-i18n="contact.message">What do you need?</span><textarea name="message" rows="3" required></textarea></label>
+        <!-- Bot trap. Clipped rather than pushed off-canvas: a -9999px offset counts as
+             scrollable width in Arabic, which gave the RTL page a 10,000px horizontal scroll. -->
+        <input name="company" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;overflow:hidden;clip-path:inset(50%)">
         <button class="btn btn--brass" type="submit" data-i18n="contact.send">Send enquiry</button>
         <p class="enquiry__done" id="enquiryDone" role="status" aria-live="polite" hidden>
-          <span data-i18n="contact.sent">Saved. We will call you back — or send it now on WhatsApp.</span>
+          <span data-i18n="contact.sent">Saved. We will call you back, or send it now on WhatsApp.</span>
           <a class="link" id="enquiryWa" href="#" target="_blank" rel="noopener" data-i18n="contact.sendWa">Send on WhatsApp</a>
         </p>
       </form>
@@ -315,7 +345,7 @@
   </section>
 </main>
 
-<!-- ─────────────────────────────── footer ─────────────────────────────── -->
+<!-- footer -->
 <footer class="foot">
   <div class="shell foot__in">
     <div class="foot__brand">
@@ -329,6 +359,7 @@
     <nav class="foot__col" aria-label="Explore">
       <h4 data-i18n="footer.explore">Explore</h4>
       <a href="#tours" data-i18n="nav.tours">Tours</a>
+      <a href="#trips" data-i18n="nav.trips">Past trips</a>
       <a href="#stays" data-i18n="nav.stays">Lodges</a>
       <a href="#cars" data-i18n="nav.cars">Cars</a>
       <a href="#about" data-i18n="nav.about">About</a>
@@ -355,7 +386,7 @@
   </div>
 </footer>
 
-<!-- ─────────────────────────────── drawer: route ─────────────────────────────── -->
+<!-- drawer: route -->
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" hidden>
   <div class="drawer__bar">
@@ -365,7 +396,7 @@
   <div class="drawer__body" id="drawerBody"></div>
 </aside>
 
-<!-- ─────────────────────────────── booking modal ─────────────────────────────── -->
+<!-- booking modal -->
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
   <div class="modal__panel">
     <div class="modal__head">
@@ -390,6 +421,23 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- trip photographs: lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-labelledby="lbCap" hidden>
+  <button class="lightbox__x" type="button" data-lb-close aria-label="Close" data-i18n-aria="trips.close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
+  </button>
+  <button class="lightbox__nav lightbox__nav--prev" type="button" data-lb-step="-1" aria-label="Previous" data-i18n-aria="trips.prev">
+    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>
+  </button>
+  <figure class="lightbox__fig">
+    <img id="lbImg" src="" alt="" width="1600" height="900">
+    <figcaption id="lbCap"></figcaption>
+  </figure>
+  <button class="lightbox__nav lightbox__nav--next" type="button" data-lb-step="1" aria-label="Next" data-i18n-aria="trips.next">
+    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+  </button>
+</div>
 
 <script type="module" src="assets/js/app.js"></script>
 </body>

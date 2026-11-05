@@ -1,20 +1,21 @@
-/* Sekkenah — interface strings.
+/* Sekkenah, interface strings.
  *
  * One flat dictionary, two languages, no fallback guessing: if a key is missing the
  * audit fails, so the Arabic page can never ship with an English sentence left sitting
- * in it. Content that is data rather than interface — routes, lodges, cars, services,
- * FAQs — is bilingual in data.js instead.
+ * in it. Content that is data rather than interface, routes, lodges, cars, services,
+ * FAQs, is bilingual in data.js instead.
  */
 
 export const LANGS = ['en', 'ar'];
 
 export const STR = {
   en: {
-    'meta.title': 'Sekkenah — Ethiopia tours from Addis Ababa',
-    'meta.desc': 'Guided tours across Ethiopia from Addis Ababa: the Rift Valley lakes, Lalibela and the historic north, the Omo valley, Bale and the Danakil — with a car, a driver and a guide.',
+    'meta.title': 'Sekkenah: Ethiopia tours from Addis Ababa',
+    'meta.desc': 'Guided tours across Ethiopia from Addis Ababa: the Rift Valley lakes, Lalibela and the historic north, the Omo valley, Bale and the Danakil, with a car, a driver and a guide.',
 
     'brand.tag': 'Ethiopia tours · Addis Ababa',
     'nav.tours': 'Tours',
+    'nav.trips': 'Past trips',
     'nav.stays': 'Lodges',
     'nav.cars': 'Cars',
     'nav.about': 'About',
@@ -27,7 +28,7 @@ export const STR = {
     'hero.kicker': 'Ethiopia, on the road · Addis Ababa',
     'hero.line1': 'The country,',
     'hero.line2': 'at your own pace.',
-    'hero.sub': 'Fourteen routes out of Addis Ababa — the Rift Valley lakes, the rock churches of the north, the Omo, Bale and the Danakil — with a car, a driver and a guide who knows the road.',
+    'hero.sub': 'Fourteen routes out of Addis Ababa: the Rift Valley lakes, the rock churches of the north, the Omo, Bale and the Danakil, with a car, a driver and a guide who knows the road.',
     'hero.cta': 'Find a route',
     'hero.cta2': 'Talk to us on WhatsApp',
     'hero.scroll': 'Scroll',
@@ -40,14 +41,14 @@ export const STR = {
     'search.travellers': 'Travellers',
     'search.go': 'Search',
     'search.results': 'routes found',
-    'search.none': 'Nothing runs that combination. Call us — we build private routes every week.',
+    'search.none': 'Nothing runs that combination. Call us. We build private routes every week.',
 
     'why.kicker': 'Why Sekkenah',
     'why.title': 'One office in Addis, and the whole country beyond it.',
     'why.a.title': 'One quote, one file',
     'why.a.body': 'Car, driver, guide, permits and lodges on a single page with a single price, written before you pay.',
     'why.b.title': 'Guides who know the road',
-    'why.b.body': 'Amharic, Afaan Oromo, English and Arabic — and the same guide with you from the first morning to the last.',
+    'why.b.body': 'Amharic, Afaan Oromo, English and Arabic. The same guide stays with you from the first morning to the last.',
     'why.c.title': 'Rates before you commit',
     'why.c.body': 'Every route carries its price per person and the list of what is in it. No “from” that turns into something else at the office.',
 
@@ -77,7 +78,7 @@ export const STR = {
     'pkg.close': 'Close',
     'pkg.priceNote': 'Indicative price per person sharing a vehicle. Final invoice in ETB at the day’s rate.',
     'pkg.depart': 'Next departure',
-    'pkg.private': 'Private departure — you choose the date',
+    'pkg.private': 'Private departure, you choose the date',
     'pkg.choose': 'Continue to booking',
 
     'stays.kicker': 'Sleep',
@@ -98,7 +99,7 @@ export const STR = {
     'cars.title': 'Cars & drivers',
     'cars.sub': 'A car for the airport, a driver for the day, or a 4×4 for the Rift Valley and the south. Fuel and driver included, the route agreed before you pay.',
     'cars.reserve': 'Reserve',
-    'cars.waIntro': 'Car reservation — Sekkenah',
+    'cars.waIntro': 'Car reservation · Sekkenah',
 
     'path.kicker': 'How it works',
     'path.title': 'Six steps, no surprises.',
@@ -114,7 +115,7 @@ export const STR = {
 
     'about.kicker': 'About us',
     'about.title': 'An Ethiopian office, on Ethiopian roads.',
-    'about.p1': 'Sekkenah is a tour operator at Jemo Michael in Addis Ababa. We run routes across the country — the Rift Valley lakes, the historic north, the Omo, Bale and the Danakil — with our own cars, our own drivers and guides we have travelled with.',
+    'about.p1': 'Sekkenah is a tour operator at Jemo Michael in Addis Ababa. We run routes across the country: the Rift Valley lakes, the historic north, the Omo, Bale and the Danakil, with our own cars, our own drivers and guides we have travelled with.',
     'about.p2': 'The work is small on purpose. One office answers the phone, the same guide stays with you for the whole route, and nothing is handed to a number you have never called.',
     'about.pillar1': 'Addis Ababa office',
     'about.pillar2': 'Private departures',
@@ -131,7 +132,7 @@ export const STR = {
     'contact.office': 'Office',
     'contact.phones': 'Phone',
     'contact.hours': 'Hours',
-    'contact.hoursVal': 'Mon–Sat, 9:00 – 18:00 (EAT)',
+    'contact.hoursVal': 'Mon to Sat, 9:00 to 18:00 (EAT)',
     'contact.map': 'Open in Maps',
     'contact.whatsapp': 'WhatsApp',
     'contact.formTitle': 'Or send a message',
@@ -139,7 +140,7 @@ export const STR = {
     'contact.phone': 'Phone number',
     'contact.message': 'What do you need?',
     'contact.send': 'Send enquiry',
-    'contact.sent': 'Saved. We will call you back — or send it now on WhatsApp.',
+    'contact.sent': 'Saved. We will call you back, or send it now on WhatsApp.',
     'contact.sendWa': 'Send on WhatsApp',
 
     'book.title': 'Build your route',
@@ -160,7 +161,7 @@ export const STR = {
     'book.checkIn': 'Check-in',
     'book.nights': 'Nights',
     'book.adults': 'Adults',
-    'book.children': 'Children (2–11)',
+    'book.children': 'Children (2 to 11)',
     'book.infants': 'Infants (under 2)',
     'book.rooms': 'Rooms',
     'book.stayNote': 'The rate is per room per night. The office confirms availability and the final invoice.',
@@ -181,6 +182,8 @@ export const STR = {
     'book.ref': 'Reference',
     'book.doneTitle': 'Request received.',
     'book.doneBody': 'We have your details. Send them to us on WhatsApp and the office will confirm the car and the rooms today.',
+    'book.doneBodyStored': 'The office has your request and will confirm the car and the rooms on WhatsApp today.',
+    'book.notStored': 'We could not reach the office server just now. This request is saved on this device only, so send it on WhatsApp below to make sure the office has it.',
     'book.donePrint': 'Print summary',
     'book.doneNew': 'Start another',
     'book.required': 'Please complete the highlighted fields.',
@@ -194,15 +197,26 @@ export const STR = {
     'footer.credits': 'Photography credits',
     'footer.demo': 'Design preview. Prices and lodge rates are draft figures.',
 
+    'trips.kicker': 'Past trips',
+    'trips.title': 'The trips we have already run.',
+    'trips.sub': 'Our own film and photographs, from departures we ran this year: the Wonchi crater, the lodge on the rim, and the road south to Butajira. Nothing here is stock.',
+    'trips.meta': 'June 2026 · Wonchi · Butajira',
+    'trips.play': 'Play film',
+    'trips.close': 'Close',
+    'trips.prev': 'Previous photograph',
+    'trips.next': 'Next photograph',
+    'trips.foot': 'Filmed and photographed on our own departures. Sekkenah Tour & Travel.',
+
     'common.skip': 'Skip to content',
   },
 
   ar: {
-    'meta.title': 'سكينة — جولات إثيوبيا من أديس أبابا',
-    'meta.desc': 'جولات مرشدة في إثيوبيا من أديس أبابا: بحيرات الوادي المتصدّع، ولاليبيلا والشمال التاريخي، ووادي أومو، وبالي، والدناكل — بسيارة وسائق ومرشد.',
+    'meta.title': 'سكينة: جولات إثيوبيا من أديس أبابا',
+    'meta.desc': 'جولات مرشدة في إثيوبيا من أديس أبابا: بحيرات الوادي المتصدّع، ولاليبيلا والشمال التاريخي، ووادي أومو، وبالي، والدناكل، بسيارة وسائق ومرشد.',
 
     'brand.tag': 'جولات إثيوبيا · أديس أبابا',
     'nav.tours': 'الجولات',
+    'nav.trips': 'رحلات سابقة',
     'nav.stays': 'النزل',
     'nav.cars': 'السيارات',
     'nav.about': 'من نحن',
@@ -215,7 +229,7 @@ export const STR = {
     'hero.kicker': 'إثيوبيا على الطريق · أديس أبابا',
     'hero.line1': 'البلد كله،',
     'hero.line2': 'على وتيرتك.',
-    'hero.sub': 'أربعة عشر مسارًا من أديس أبابا — بحيرات الوادي المتصدّع، وكنائس الشمال المنحوتة في الصخر، وأومو، وبالي، والدناكل — بسيارة وسائق ومرشد يعرف الطريق.',
+    'hero.sub': 'أربعة عشر مسارًا من أديس أبابا: بحيرات الوادي المتصدّع، وكنائس الشمال المنحوتة في الصخر، وأومو، وبالي، والدناكل، بسيارة وسائق ومرشد يعرف الطريق.',
     'hero.cta': 'اعثر على مسار',
     'hero.cta2': 'تواصل معنا على واتساب',
     'hero.scroll': 'انزل',
@@ -228,14 +242,14 @@ export const STR = {
     'search.travellers': 'المسافرون',
     'search.go': 'ابحث',
     'search.results': 'مسار متاح',
-    'search.none': 'لا شيء بهذا الاختيار. اتصل بنا — نبني مسارات خاصة كل أسبوع.',
+    'search.none': 'لا شيء بهذا الاختيار. اتصل بنا. نبني مسارات خاصة كل أسبوع.',
 
     'why.kicker': 'لماذا سكينة',
     'why.title': 'مكتب واحد في أديس، والبلد كله بعده.',
     'why.a.title': 'عرض واحد، ملف واحد',
     'why.a.body': 'السيارة والسائق والمرشد والتصاريح والنزل في صفحة واحدة وبسعر واحد، مكتوبة قبل أن تدفع.',
     'why.b.title': 'مرشدون يعرفون الطريق',
-    'why.b.body': 'الأمهرية والأورومية والإنجليزية والعربية — والمرشد نفسه معك من أول صباح إلى آخر يوم.',
+    'why.b.body': 'الأمهرية والأورومية والإنجليزية والعربية. المرشد نفسه يبقى معك من أول صباح إلى آخر يوم.',
     'why.c.title': 'أسعار قبل الالتزام',
     'why.c.body': 'كل مسار يحمل سعره للشخص وقائمة ما يشمله. لا «تبدأ من» تتحول إلى شيء آخر في المكتب.',
 
@@ -265,7 +279,7 @@ export const STR = {
     'pkg.close': 'إغلاق',
     'pkg.priceNote': 'سعر إرشادي للشخص في سيارة مشتركة. الفاتورة النهائية بالبر الإثيوبي بحسب سعر اليوم.',
     'pkg.depart': 'أقرب انطلاق',
-    'pkg.private': 'انطلاقة خاصة — التاريخ تختاره أنت',
+    'pkg.private': 'انطلاقة خاصة، التاريخ تختاره أنت',
     'pkg.choose': 'متابعة الحجز',
 
     'stays.kicker': 'الإقامة',
@@ -286,7 +300,7 @@ export const STR = {
     'cars.title': 'سيارات وسائقون',
     'cars.sub': 'سيارة للمطار، أو سائق ليوم كامل، أو دفع رباعي للوادي المتصدّع والجنوب. الوقود والسائق مشمولان، والمسار يُتفق عليه قبل الدفع.',
     'cars.reserve': 'احجز',
-    'cars.waIntro': 'طلب سيارة — سكينة',
+    'cars.waIntro': 'طلب سيارة · سكينة',
 
     'path.kicker': 'كيف تسير الأمور',
     'path.title': 'ست خطوات، بلا مفاجآت.',
@@ -302,7 +316,7 @@ export const STR = {
 
     'about.kicker': 'من نحن',
     'about.title': 'مكتب إثيوبي، على الطرق الإثيوبية.',
-    'about.p1': 'سكينة مشغّل جولات في جيمو ميخائيل بأديس أبابا. نعمل مسارات في أنحاء البلاد — بحيرات الوادي المتصدّع، والشمال التاريخي، وأومو، وبالي، والدناكل — بسياراتنا وسائقينا ومرشدين سافرنا معهم.',
+    'about.p1': 'سكينة مشغّل جولات في جيمو ميخائيل بأديس أبابا. نعمل مسارات في أنحاء البلاد: بحيرات الوادي المتصدّع، والشمال التاريخي، وأومو، وبالي، والدناكل، بسياراتنا وسائقينا ومرشدين سافرنا معهم.',
     'about.p2': 'العمل صغير عن قصد. مكتب واحد يجيب على الهاتف، والمرشد نفسه يبقى معك طوال المسار، ولا شيء يُسلَّم إلى رقم لم تتصل به قط.',
     'about.pillar1': 'مكتب في أديس أبابا',
     'about.pillar2': 'انطلاقات خاصة',
@@ -319,7 +333,7 @@ export const STR = {
     'contact.office': 'المكتب',
     'contact.phones': 'الهاتف',
     'contact.hours': 'الوقت',
-    'contact.hoursVal': 'الاثنين–السبت، ٩:٠٠ – ١٨:٠٠ (بتوقيت شرق إفريقيا)',
+    'contact.hoursVal': 'الاثنين إلى السبت، ٩:٠٠ إلى ١٨:٠٠ (بتوقيت شرق إفريقيا)',
     'contact.map': 'افتح في الخرائط',
     'contact.whatsapp': 'واتساب',
     'contact.formTitle': 'أو أرسل رسالة',
@@ -327,7 +341,7 @@ export const STR = {
     'contact.phone': 'رقم الهاتف',
     'contact.message': 'ماذا تحتاج؟',
     'contact.send': 'أرسل الطلب',
-    'contact.sent': 'حُفظ. سنتصل بك — أو أرسله الآن على واتساب.',
+    'contact.sent': 'حُفظ. سنتصل بك، أو أرسله الآن على واتساب.',
     'contact.sendWa': 'أرسل على واتساب',
 
     'book.title': 'ابنِ مسارك',
@@ -348,7 +362,7 @@ export const STR = {
     'book.checkIn': 'تاريخ الوصول',
     'book.nights': 'الليالي',
     'book.adults': 'بالغون',
-    'book.children': 'أطفال (٢–١١)',
+    'book.children': 'أطفال (٢ إلى ١١)',
     'book.infants': 'رضّع (أقل من ٢)',
     'book.rooms': 'الغرف',
     'book.stayNote': 'السعر للغرفة في الليلة. ويؤكد المكتب التوافر والفاتورة النهائية.',
@@ -369,6 +383,8 @@ export const STR = {
     'book.ref': 'الرقم المرجعي',
     'book.doneTitle': 'وصل طلبك.',
     'book.doneBody': 'لدينا بياناتك. أرسلها إلينا على واتساب ويؤكد المكتب السيارة والغرف اليوم.',
+    'book.doneBodyStored': 'وصل طلبك إلى المكتب وسيؤكد السيارة والغرف على واتساب اليوم.',
+    'book.notStored': 'تعذّر الوصول إلى خادم المكتب الآن. طلبك محفوظ على هذا الجهاز فقط، فأرسله على واتساب أدناه ليصل إلى المكتب.',
     'book.donePrint': 'طباعة الملخص',
     'book.doneNew': 'حجز آخر',
     'book.required': 'يرجى إكمال الحقول المعلّمة.',
@@ -381,6 +397,16 @@ export const STR = {
     'footer.rights': 'جميع الحقوق محفوظة.',
     'footer.credits': 'مصادر الصور',
     'footer.demo': 'نسخة تصميمية. الأسعار وأسعار النزل أرقام مبدئية.',
+
+    'trips.kicker': 'رحلات سابقة',
+    'trips.title': 'رحلات نفّذناها بالفعل.',
+    'trips.sub': 'تصويرنا وصورنا من انطلاقات هذا العام: فوهة ونتشي، والنزل على الحافة، والطريق جنوبًا إلى بوتاجيرا. لا شيء هنا من مكتبات الصور.',
+    'trips.meta': 'يونيو ٢٠٢٦ · ونتشي · بوتاجيرا',
+    'trips.play': 'شغّل الفيلم',
+    'trips.close': 'إغلاق',
+    'trips.prev': 'الصورة السابقة',
+    'trips.next': 'الصورة التالية',
+    'trips.foot': 'صُوّر على رحلاتنا. سكينة للسياحة والسفر.',
 
     'common.skip': 'تجاوز إلى المحتوى',
   },
