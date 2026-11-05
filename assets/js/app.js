@@ -10,6 +10,7 @@ import { BRAND, REGIONS, LEVELS, TOURS, STAYS, CARS, SERVICES, STEPS, FAQS, EXTR
 import { STR, MONTHS } from './i18n.js';
 import { FILMS, SHOTS } from './trips.js';
 import { apiReady, submitBooking, submitEnquiry } from './api.js';
+import { loadCatalogue } from './content.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1311,4 +1312,22 @@ function boot() {
   document.body.classList.add('is-ready');
 }
 
-boot();
+/* A published catalogue replaces the shipped one in place, because the imports are live
+ * bindings onto mutable arrays and objects. Any failure leaves data.js untouched. */
+function applyCatalogue(c) {
+  if (Array.isArray(c.tours) && c.tours.length) { TOURS.length = 0; TOURS.push(...c.tours); }
+  if (Array.isArray(c.stays) && c.stays.length) { STAYS.length = 0; STAYS.push(...c.stays); }
+  const s = c.settings || {};
+  if (s.brand) Object.assign(BRAND, s.brand);
+  for (const [key, target] of [['regions', REGIONS], ['extras', EXTRAS], ['cars', CARS], ['services', SERVICES], ['steps', STEPS], ['faqs', FAQS]]) {
+    if (Array.isArray(s[key]) && s[key].length) { target.length = 0; target.push(...s[key]); }
+  }
+}
+
+async function start() {
+  const published = await loadCatalogue();
+  if (published) applyCatalogue(published);
+  boot();
+}
+
+start();
