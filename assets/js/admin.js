@@ -27,6 +27,7 @@ let token = '';
 let catalogue = null;
 let bookings = [];
 let enquiries = [];
+let versions = [];
 
 /* ---------- transport ---------- */
 
@@ -232,16 +233,27 @@ function field(label, path, value, opts = {}) {
       ${opts.options.map((o) => `<option value="${esc(o.value)}"${String(o.value) === String(v) ? ' selected' : ''}>${esc(o.label)}</option>`).join('')}
     </select></div>`;
   }
-  return `<div class="field${wide}"><label>${esc(label)}</label><input type="${type}" data-path="${esc(path)}" value="${esc(v)}"${opts.step ? ` step="${opts.step}"` : ''}></div>`;
+  const hint = opts.hint ? `<span class="muted" style="font-size:12px">${esc(opts.hint)}</span>` : '';
+  return `<div class="field${wide}"><label>${esc(label)}</label><input type="${type}" data-path="${esc(path)}" value="${esc(v)}"${opts.step ? ` step="${opts.step}"` : ''}>${hint}</div>`;
 }
 
-function imageField(path, value) {
-  return `<div class="field wide"><label>Photo</label>
+function imageField(path, value, label = 'Photo') {
+  return `<div class="field wide"><label>${esc(label)}</label>
     <div class="imgrow">
       <img class="thumb" src="${esc(value || '')}" alt="" loading="lazy" data-preview="${esc(path)}">
       <input data-path="${esc(path)}" value="${esc(value || '')}" spellcheck="false">
     </div>
     <span class="muted" style="font-size:12px">A path inside the site, like assets/img/tour-wonchi.jpg, or a full web address.</span>
+  </div>`;
+}
+
+function videoField(path, value, posterPath, poster) {
+  return `<div class="field wide"><label>Film (MP4 address)</label>
+    <div class="imgrow">
+      <img class="thumb" src="${esc(poster || '')}" alt="" loading="lazy" data-preview="${esc(posterPath)}">
+      <input data-path="${esc(path)}" value="${esc(value || '')}" spellcheck="false" placeholder="assets/video/wonchi-15s.mp4">
+    </div>
+    <span class="muted" style="font-size:12px">The film that plays when a visitor presses play. It must be an MP4 that is already on the site, or a full web address to one. The picture you see here is the poster, the frame shown before play.</span>
   </div>`;
 }
 
@@ -307,22 +319,100 @@ function renderSettings() {
       ${field('Email', 'settings.brand.email', b.email)}
       ${field('Address, English', 'settings.brand.address.en', b.address?.en, { wide: true })}
       ${field('Address, Arabic', 'settings.brand.address.ar', b.address?.ar, { wide: true })}
-      ${field('Shillings per US dollar', 'settings.brand.etbPerUsd', b.etbPerUsd, { type: 'number' })}
+      ${field('Birr per US dollar', 'settings.brand.etbPerUsd', b.etbPerUsd, { type: 'number', hint: 'Every price on the site is quoted in US dollars, because that is what the guest pays. This rate is only used for the approximate ETB figure shown beside the invoice and in the WhatsApp summary, for example 1 dollar = 154 birr. It is not a price and nothing is charged in birr.' })}
     </div>
   </div></div>`;
+}
+
+function renderTrips() {
+  const films = catalogue.films || [];
+  const shots = catalogue.shots || [];
+  $('#trips-body').innerHTML = `
+    <h3 class="sub">Films</h3>
+    <p class="muted" style="font-size:13px;margin:-2px 0 12px">Each film on the Past trips strip. The address is where the file sits, so a new film is uploaded to the site folder first and then named here.</p>
+    ${films.map((f, i) => `
+      <details class="card">
+        <summary>
+          <span class="name">${esc(f.name?.en || f.id || 'Film')}</span>
+          <span class="meta">${esc(f.len || '')} · ${esc(f.src || 'no film')}</span>
+        </summary>
+        <div class="body"><div class="fields">
+          ${videoField(`films.${i}.src`, f.src, `films.${i}.poster`, f.poster)}
+          ${imageField(`films.${i}.poster`, f.poster, 'Poster, the still shown before play')}
+          ${field('Length, as shown on the card', `films.${i}.len`, f.len)}
+          ${field('Name, English', `films.${i}.name.en`, f.name?.en)}
+          ${field('Name, Arabic', `films.${i}.name.ar`, f.name?.ar)}
+          ${field('Caption, English', `films.${i}.note.en`, f.note?.en, { type: 'textarea', wide: true })}
+          ${field('Caption, Arabic', `films.${i}.note.ar`, f.note?.ar, { type: 'textarea', wide: true })}
+        </div></div>
+      </details>`).join('') || '<p class="empty">This catalogue has no films yet. Publish once from the current site copy to bring them in.</p>'}
+    <h3 class="sub">Photographs</h3>
+    <p class="muted" style="font-size:13px;margin:-2px 0 12px">The eight frames in the grid. The small file is the tile, the large file opens when a visitor clicks it.</p>
+    ${shots.map((s, i) => `
+      <details class="card">
+        <summary>
+          <span class="name">${esc(s.cap?.en || 'Photo ' + (i + 1))}</span>
+          <span class="meta">${esc(s.src || '')}</span>
+        </summary>
+        <div class="body"><div class="fields">
+          ${imageField(`shots.${i}.src`, s.src, 'Tile, the 4:5 photograph')}
+          ${imageField(`shots.${i}.big`, s.big, 'Large file, opened on click')}
+          ${field('Caption, English', `shots.${i}.cap.en`, s.cap?.en)}
+          ${field('Caption, Arabic', `shots.${i}.cap.ar`, s.cap?.ar)}
+        </div></div>
+      </details>`).join('') || '<p class="empty">This catalogue has no photographs yet.</p>'}`;
+}
+
+function renderHistory() {
+  const body = $('#history-body');
+  if (!versions.length) {
+    body.innerHTML = '<p class="empty">No history yet. The first publish after this was added stores the copy that was live at that moment, so there is always something to go back to.</p>';
+    return;
+  }
+  body.innerHTML = `<table><thead><tr><th>#</th><th>Was live</th><th>Contents</th><th>Note</th><th></th></tr></thead><tbody>
+    ${versions.map((v) => `<tr>
+      <td data-l="Version"><span class="ref">${v.id}</span></td>
+      <td data-l="Was live"><span class="small">${esc(when(v.created_at))}</span></td>
+      <td data-l="Contents"><span class="small">${v.tours} routes · ${v.stays} lodges · ${Math.round(v.bytes / 1024)} KB</span></td>
+      <td data-l="Note"><span class="small">${esc(v.note || '')}</span></td>
+      <td data-l=""><button class="btn" type="button" data-restore="${v.id}">Put this back</button></td>
+    </tr>`).join('')}
+  </tbody></table>
+  <p class="muted" style="font-size:12.5px;margin-top:10px">The last fifty publishes are kept. Putting one back publishes it again, so the site updates within a minute, and the copy you replace is itself kept, so a restore can be undone.</p>`;
+}
+
+async function loadVersions() {
+  const res = await call('/api/content/versions');
+  if (!res.ok) { toast('Could not load the history.', true); return; }
+  versions = (await res.json()).versions || [];
+  renderHistory();
+}
+
+async function restoreVersion(id) {
+  const res = await call('/api/content/versions/' + Number(id) + '/restore', { method: 'POST', body: '{}' });
+  if (!res.ok) { toast('Could not put that back.', true); return; }
+  const data = await res.json().catch(() => ({}));
+  toast('Put back. The site updates within a minute.');
+  $('#saved-at').textContent = data.updated_at ? 'Published ' + when(data.updated_at) : 'Published';
+  await Promise.all([loadCatalogue(), loadVersions()]);
 }
 
 async function loadCatalogue() {
   const res = await fetch(API + '/api/content', { headers: { accept: 'application/json' } }).catch(() => null);
   const data = res && res.ok ? await res.json().catch(() => null) : null;
+  const shipped = await import('./data.js');
+  const shippedTrips = await import('./trips.js');
   if (data?.content?.tours?.length) {
     catalogue = data.content;
+    if (!Array.isArray(catalogue.films)) catalogue.films = shippedTrips.FILMS.map((f) => ({ ...f }));
+    if (!Array.isArray(catalogue.shots)) catalogue.shots = shippedTrips.SHOTS.map((s) => ({ ...s }));
     $('#saved-at').textContent = data.updated_at ? 'Published ' + when(data.updated_at) : '';
   } else {
-    const shipped = await import('./data.js');
     catalogue = {
       tours: shipped.TOURS,
       stays: shipped.STAYS,
+      films: shippedTrips.FILMS.map((f) => ({ ...f })),
+      shots: shippedTrips.SHOTS.map((s) => ({ ...s })),
       settings: { brand: shipped.BRAND, regions: shipped.REGIONS, extras: shipped.EXTRAS, cars: shipped.CARS, services: shipped.SERVICES, steps: shipped.STEPS, faqs: shipped.FAQS },
     };
     $('#saved-at').textContent = 'Showing the shipped catalogue';
@@ -330,6 +420,7 @@ async function loadCatalogue() {
   renderRoutes();
   renderLodges();
   renderSettings();
+  renderTrips();
 }
 
 async function publish() {
@@ -337,13 +428,21 @@ async function publish() {
   buttons.forEach((b) => { b.disabled = true; });
   const res = await call('/api/content', {
     method: 'PUT',
-    body: JSON.stringify({ tours: catalogue.tours, stays: catalogue.stays, settings: catalogue.settings }),
+    body: JSON.stringify({
+      tours: catalogue.tours,
+      stays: catalogue.stays,
+      settings: catalogue.settings,
+      films: catalogue.films || [],
+      shots: catalogue.shots || [],
+      note: 'Published from the office page',
+    }),
   }).catch(() => null);
   buttons.forEach((b) => { b.disabled = false; });
   if (res && res.ok) {
     const body = await res.json().catch(() => ({}));
     $('#saved-at').textContent = body.updated_at ? 'Published ' + when(body.updated_at) : 'Published';
     toast('Published. The site shows it within a minute.');
+    loadVersions();
   } else {
     toast('Not published. Check the price and photo fields.', true);
   }
@@ -365,7 +464,7 @@ function wireEditors() {
       if (summary && tour) summary.textContent = `${money(tour.price)} · ${tour.seats} seats · ${tour.days} days`;
     }
     const preview = document.querySelector(`[data-preview="${CSS.escape(el.dataset.path)}"]`);
-    if (preview && el.dataset.path.endsWith('.image')) preview.src = el.value;
+    if (preview) preview.src = el.value;
   });
 }
 
@@ -420,8 +519,25 @@ async function boot() {
   });
 
   for (const b of document.querySelectorAll('nav.tabs button')) {
-    b.addEventListener('click', () => showTab(b.dataset.tab));
+    b.addEventListener('click', () => {
+      showTab(b.dataset.tab);
+      if (b.dataset.tab === 'history') loadVersions();
+    });
   }
+
+  $('#history-refresh').addEventListener('click', async () => { await loadVersions(); toast('Refreshed.'); });
+
+  $('#history-body').addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-restore]');
+    if (!btn) return;
+    const id = Number(btn.dataset.restore);
+    const v = versions.find((x) => x.id === id);
+    const label = v ? when(v.created_at) : 'that version';
+    if (!confirm(`Put back the copy that was live on ${label}? The site updates within a minute.`)) return;
+    btn.disabled = true;
+    await restoreVersion(id);
+    btn.disabled = false;
+  });
   for (const b of document.querySelectorAll('[data-save="catalogue"]')) {
     b.addEventListener('click', publish);
   }

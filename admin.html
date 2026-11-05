@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta name="sekkenah-api" content="https://sekkenah-api.adjoining-quartz-f37.workers.dev">
+<meta name="sekkenah-api" content="https://sekkenah-api.fern-aura.workers.dev">
 <title>Sekkenah · Office</title>
 <link rel="icon" href="assets/img/mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,6 +78,8 @@ td .small{font-size:12.5px;color:var(--muted)}
 .pill.travelled{color:var(--muted)}
 .pill.cancelled{color:var(--bad);border-color:rgba(140,47,42,.35)}
 .empty{padding:34px 6px;color:var(--muted);font-size:14px}
+#trips-body h3.sub{margin:26px 0 6px;font-family:var(--f-display);font-size:16px}
+#trips-body h3.sub:first-child{margin-top:0}
 
 /* detail */
 .detail{border:1px solid var(--line);background:#fff;padding:20px;margin-top:16px}
@@ -146,7 +148,9 @@ td .small{font-size:12.5px;color:var(--muted)}
       <button role="tab" data-tab="enquiries" aria-selected="false">Enquiries<span class="count" id="c-enquiries"></span></button>
       <button role="tab" data-tab="routes" aria-selected="false">Routes</button>
       <button role="tab" data-tab="lodges" aria-selected="false">Lodges</button>
+      <button role="tab" data-tab="trips" aria-selected="false">Past trips</button>
       <button role="tab" data-tab="settings" aria-selected="false">Site settings</button>
+      <button role="tab" data-tab="history" aria-selected="false">History</button>
     </nav>
   </header>
 
@@ -186,13 +190,31 @@ td .small{font-size:12.5px;color:var(--muted)}
       <div id="lodges-body"><div class="loading">Loading…</div></div>
     </section>
 
+    <section id="tab-trips" hidden>
+      <div class="head">
+        <h2>Past trips</h2>
+        <p>The films and photographs from your own departures. Change a film, a still, or a caption.</p>
+        <div class="right"><button class="btn primary" type="button" data-save="catalogue">Publish changes</button></div>
+      </div>
+      <div id="trips-body"><div class="loading">Loading…</div></div>
+    </section>
+
     <section id="tab-settings" hidden>
       <div class="head">
         <h2>Site settings</h2>
-        <p>Phones, address, the WhatsApp number and the shilling rate.</p>
+        <p>Phones, address, the WhatsApp number and the birr rate used for the approximate figure.</p>
         <div class="right"><button class="btn primary" type="button" data-save="catalogue">Publish changes</button></div>
       </div>
       <div id="settings-body"><div class="loading">Loading…</div></div>
+    </section>
+
+    <section id="tab-history" hidden>
+      <div class="head">
+        <h2>History</h2>
+        <p>Every publish keeps the copy it replaced. Put an older one back if a change was wrong.</p>
+        <div class="right"><button class="btn" type="button" id="history-refresh">Refresh</button></div>
+      </div>
+      <div id="history-body"><div class="loading">Loading…</div></div>
     </section>
   </main>
 </div>

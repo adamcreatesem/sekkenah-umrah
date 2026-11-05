@@ -1317,6 +1317,8 @@ function boot() {
 function applyCatalogue(c) {
   if (Array.isArray(c.tours) && c.tours.length) { TOURS.length = 0; TOURS.push(...c.tours); }
   if (Array.isArray(c.stays) && c.stays.length) { STAYS.length = 0; STAYS.push(...c.stays); }
+  if (Array.isArray(c.films) && c.films.length) { FILMS.length = 0; FILMS.push(...c.films); }
+  if (Array.isArray(c.shots) && c.shots.length) { SHOTS.length = 0; SHOTS.push(...c.shots); }
   const s = c.settings || {};
   if (s.brand) Object.assign(BRAND, s.brand);
   for (const [key, target] of [['regions', REGIONS], ['extras', EXTRAS], ['cars', CARS], ['services', SERVICES], ['steps', STEPS], ['faqs', FAQS]]) {
