@@ -41,28 +41,39 @@
 
 <a class="skip" href="#main" data-i18n="common.skip">Skip to content</a>
 
-<!-- The first question a visitor answers. Two desks, two marks, and the rest of the page
-     follows the answer. Hidden by the script once a choice is stored. -->
+<!-- First screen. Hidden by the script once a choice is stored. -->
 <div class="choose" id="choose" hidden>
-  <div class="choose__card" role="dialog" aria-modal="true" aria-labelledby="chooseTitle">
-    <p class="choose__kicker" data-i18n="choose.kicker">Sekkenah Tour &amp; Travel</p>
-    <h2 class="choose__title" id="chooseTitle" data-i18n="choose.title">Where are you going?</h2>
-    <p class="choose__sub" data-i18n="choose.sub">Two desks, one office.</p>
+  <div class="choose__inner" role="dialog" aria-modal="true" aria-labelledby="chooseTitle">
+    <div class="choose__head">
+      <p class="choose__kicker" data-i18n="choose.kicker">Sekkenah Tour &amp; Travel</p>
+      <h2 class="choose__title" id="chooseTitle" data-i18n="choose.title">Where are you going?</h2>
+    </div>
     <div class="choose__grid">
       <button class="choose__opt" type="button" data-track-pick="ethiopia">
-        <img class="choose__mark" src="assets/img/mark.svg" data-track-pick-logo="ethiopia" alt="" width="88" height="88">
-        <span class="choose__name" data-i18n="choose.ethiopia">Tours inside Ethiopia</span>
-        <span class="choose__desc" data-i18n="choose.ethiopiaDesc">Lalibela, the Rift Valley, the Omo and the Danakil.</span>
-        <span class="choose__go"><span data-i18n="choose.go">Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+        <img class="choose__photo" src="assets/img/band-omo.jpg" alt="" width="1900" height="1050">
+        <span class="choose__panel">
+          <img class="choose__mark" src="assets/img/mark.svg" data-track-pick-logo="ethiopia" alt="" width="96" height="96">
+          <span class="choose__body">
+            <span class="choose__rule" aria-hidden="true"></span>
+            <span class="choose__name" data-i18n="choose.ethiopia">Tours inside Ethiopia</span>
+            <span class="choose__meta" data-i18n="choose.countEthiopia">17 routes · 10 lodges</span>
+            <span class="choose__go"><span data-i18n="choose.go">Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+          </span>
+        </span>
       </button>
       <button class="choose__opt" type="button" data-track-pick="umrah">
-        <img class="choose__mark" src="assets/img/mark.svg" data-track-pick-logo="umrah" alt="" width="88" height="88">
-        <span class="choose__name" data-i18n="choose.umrah">Umrah and Hajj</span>
-        <span class="choose__desc" data-i18n="choose.umrahDesc">Rounds from Addis with the flights, the visa and the rooms.</span>
-        <span class="choose__go"><span data-i18n="choose.go">Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+        <img class="choose__photo" src="assets/img/kaaba-day.jpg" alt="" width="1600" height="1000">
+        <span class="choose__panel">
+          <img class="choose__mark" src="assets/img/mark.svg" data-track-pick-logo="umrah" alt="" width="96" height="96">
+          <span class="choose__body">
+            <span class="choose__rule" aria-hidden="true"></span>
+            <span class="choose__name" data-i18n="choose.umrah">Umrah and Hajj</span>
+            <span class="choose__meta" data-i18n="choose.countUmrah">3 routes from Addis</span>
+            <span class="choose__go"><span data-i18n="choose.go">Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+          </span>
+        </span>
       </button>
     </div>
-    <p class="choose__note" data-i18n="choose.note">You can change this at any time from the header.</p>
   </div>
 </div>
 

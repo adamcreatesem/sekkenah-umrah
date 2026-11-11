@@ -15,7 +15,7 @@ the URL was already in use; renaming it would break the shared link.
 |---|---|
 | Hero + search | Region / month / traveller count, filters the tour grid and scrolls to it |
 | Why | One quote, guides who know the road, rates before you commit |
-| Tours | Fourteen routes, region chips with counts, duration and level on every card |
+| Tours | Seventeen routes, region chips with counts, duration and level on every card |
 | Past trips | One film per place (Wonchi, then the road to Butajira) and eight photographs shot on the client's own departures: phone-framed video that loads on click, a photo grid with a keyboard-driven lightbox |
 | Route drawer | Region and level, price, seats, the story of the road, what is included, the written day-by-day, how you get there, next departure, best months, two photographs |
 | How it works | Six steps from "tell us the dates" to "back in Addis" |
@@ -26,7 +26,7 @@ the URL was already in use; renaming it would break the shared link.
 | About / FAQ / contact | The office, seven real questions, both phone lines, map link, enquiry form |
 
 **Routes.** `assets/js/data.js` is generated from the client portal
-(`tools/sync-content.mjs`, see `../sekkenah-portal/`) and holds the fourteen tours, each with a region (`rift`,
+(`tools/sync-content.mjs`, see `../sekkenah-portal/`) and holds the seventeen tours, each with a region (`rift`,
 `north`, `south`, `wild`), a level (easy / moderate / demanding), `bestMonths` for the
 season filter, an explicit itinerary, and bilingual copy. Region chips are generated from
 `REGIONS`, so an empty region still reads as a place.
@@ -116,7 +116,7 @@ changed from the header. Each desk has its own mark, its own hero copy and its o
 
 | Desk | Mark | Routes |
 |---|---|---|
-| Ethiopia tours | `assets/img/brand-ethiopia.png`, falling back to `mark.svg` | the fourteen routes in `TOURS` |
+| Ethiopia tours | `assets/img/brand-ethiopia.png`, falling back to `mark.svg` | the seventeen routes in `TOURS` |
 | Umrah and Hajj | `assets/img/brand-umrah.png`, falling back to `kaaba-night.jpg` | the three in `UMRAH_TOURS` |
 
 Both marks are the client's own artwork, cut from the two files sent over Telegram. Each one

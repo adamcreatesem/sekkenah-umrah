@@ -926,28 +926,33 @@ html[lang='ar'] .film__len { letter-spacing: 0; font-size: 0.74rem; }
 .head.is-scrolled .track-switch:hover { background: rgba(12, 19, 16, 0.05); }
 html[lang='ar'] .track-switch { letter-spacing: 0; font-size: 0.8rem; }
 
-.choose { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px; overflow: auto; background: radial-gradient(120% 90% at 50% 0%, #16241d 0%, #0b120f 60%, #080d0b 100%); color: var(--bone); }
+.choose { position: fixed; inset: 0; z-index: 200; display: grid; overflow: auto; background: #0a100e; color: var(--bone); }
 .choose[hidden] { display: none; }
-.choose__card { inline-size: min(820px, 100%); }
-.choose__kicker { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(217, 184, 120, 0.85); }
-.choose__title { font-family: var(--f-display); font-size: clamp(1.9rem, 5vw, 2.9rem); line-height: 1.05; margin-block: 10px 10px; }
-.choose__sub { color: rgba(244, 239, 228, 0.66); font-size: 0.94rem; max-inline-size: 52ch; }
-.choose__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-block-start: 26px; }
-.choose__opt {
-  display: grid; justify-items: start; gap: 10px; text-align: start;
-  border: 1px solid rgba(244, 239, 228, 0.16); padding: 22px;
-  background: rgba(244, 239, 228, 0.03); color: inherit;
-  transition: border-color 300ms var(--ease), background 300ms var(--ease), transform 300ms var(--ease);
+.choose__inner { display: grid; grid-template-rows: auto 1fr; min-block-size: 100%; }
+.choose__head { padding: clamp(20px, 3.6vw, 44px) clamp(20px, 5vw, 60px) 0; }
+.choose__kicker { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(217, 184, 120, 0.9); }
+.choose__title { font-family: var(--f-display); font-size: clamp(2.1rem, 5.4vw, 3.5rem); line-height: 1.02; margin-block-start: 10px; }
+.choose__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(244, 239, 228, 0.18); margin-block-start: clamp(18px, 3vw, 34px); }
+.choose__opt { position: relative; display: block; border: 0; padding: 0; text-align: start; background: #0d1512; color: inherit; overflow: hidden; cursor: pointer; min-block-size: clamp(340px, 56vh, 660px); }
+.choose__photo { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; opacity: 0.92; filter: saturate(1.04); transform: scale(1.02); transition: opacity 600ms var(--ease), transform 1400ms var(--ease); }
+.choose__opt:hover .choose__photo, .choose__opt:focus-visible .choose__photo { opacity: 1; transform: scale(1.07); }
+.choose__panel { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; block-size: 100%; padding: clamp(20px, 3.2vw, 40px); background: linear-gradient(to top, rgba(5, 9, 8, 0.94) 0%, rgba(5, 9, 8, 0.78) 26%, rgba(5, 9, 8, 0.24) 52%, rgba(5, 9, 8, 0) 76%); }
+.choose__mark { align-self: start; inline-size: clamp(48px, 5vw, 62px); block-size: clamp(48px, 5vw, 62px); object-fit: contain; }
+.choose__mark[src$='.png'] { padding: 7px; border-radius: 50%; background: var(--bone); box-shadow: 0 0 0 1px rgba(217, 184, 120, 0.5); }
+.choose__body { display: grid; justify-items: start; gap: 9px; }
+.choose__rule { inline-size: 46px; block-size: 2px; background: var(--brass-2); }
+.choose__name { font-family: var(--f-display); font-size: clamp(1.7rem, 2.9vw, 2.6rem); line-height: 1.03; }
+.choose__meta { font-size: 0.74rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(244, 239, 228, 0.72); }
+.choose__go { display: inline-flex; align-items: center; gap: 9px; margin-block-start: 2px; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brass-2); }
+.choose__go svg { inline-size: 17px; block-size: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; transition: transform 320ms var(--ease); }
+.choose__opt:hover .choose__go svg, .choose__opt:focus-visible .choose__go svg { transform: translateX(5px); }
+@media (max-width: 780px) {
+  .choose__grid { grid-template-columns: 1fr; }
+  .choose__opt { min-block-size: 42vh; }
+  .choose__mark { inline-size: 46px; block-size: 46px; }
 }
-.choose__opt:hover, .choose__opt:focus-visible { border-color: rgba(217, 184, 120, 0.7); background: rgba(244, 239, 228, 0.06); transform: translateY(-2px); }
-.choose__mark { inline-size: 64px; block-size: 64px; object-fit: contain; }
-.choose__mark[src$='.png'] { padding: 7px; border-radius: 50%; background: var(--bone); }
-.choose__name { font-family: var(--f-display); font-size: 1.28rem; }
-.choose__desc { font-size: 0.86rem; color: rgba(244, 239, 228, 0.62); line-height: 1.55; }
-.choose__go { display: inline-flex; align-items: center; gap: 8px; margin-block-start: 6px; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass-2); }
-.choose__go svg { inline-size: 16px; block-size: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
-.choose__note { margin-block-start: 18px; font-size: 0.72rem; color: rgba(244, 239, 228, 0.42); }
-html[lang='ar'] .choose__kicker, html[lang='ar'] .choose__go { letter-spacing: 0; text-transform: none; }
+html[lang='ar'] .choose__kicker, html[lang='ar'] .choose__meta, html[lang='ar'] .choose__go { letter-spacing: 0; text-transform: none; }
+html[lang='ar'] .choose__opt:hover .choose__go svg, html[lang='ar'] .choose__opt:focus-visible .choose__go svg { transform: translateX(-5px) rotate(180deg); }
 
 /* The Ethiopia desk owns lodges, cars and past trips. The Umrah desk is flights, rooms and
  * the two cities, so those three sections would be empty promises on it. */

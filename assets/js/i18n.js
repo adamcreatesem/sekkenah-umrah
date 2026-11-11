@@ -230,13 +230,11 @@ export const STR = {
     'track.switch.ethiopia': 'Ethiopia tours',
     'choose.kicker': 'Sekkenah Tour & Travel',
     'choose.title': 'Where are you going?',
-    'choose.sub': 'Two desks, one office. Choose the journey you are planning and the site shows only that, with its own mark and its own routes.',
     'choose.ethiopia': 'Tours inside Ethiopia',
-    'choose.ethiopiaDesc': 'Lalibela, the Rift Valley lakes, the Omo, Bale and the Danakil, with a car, a driver and a guide.',
     'choose.umrah': 'Umrah and Hajj',
-    'choose.umrahDesc': 'Rounds from Addis with the flights, the visa and rooms near the Haram.',
     'choose.go': 'Open',
-    'choose.note': 'You can change this at any time from the header.',
+    'choose.countEthiopia': '17 routes · 10 lodges',
+    'choose.countUmrah': '3 routes from Addis',
   },
 
   ar: {
@@ -460,13 +458,11 @@ export const STR = {
     'track.switch.ethiopia': 'جولات إثيوبيا',
     'choose.kicker': 'سكينة للسياحة والسفر',
     'choose.title': 'إلى أين تسافر؟',
-    'choose.sub': 'مكتبان في مكان واحد. اختر الرحلة التي تخطّط لها، ويعرض الموقع تلك فقط، بشعارها ومساراتها.',
     'choose.ethiopia': 'جولات داخل إثيوبيا',
-    'choose.ethiopiaDesc': 'لاليبيلا، وبحيرات الوادي المتصدّع، وأومو، وبالي، والدناكل، بسيارة وسائق ومرشد.',
     'choose.umrah': 'العمرة والحج',
-    'choose.umrahDesc': 'رحلات من أديس مع الطيران والتأشيرة وغرف قرب الحرم.',
     'choose.go': 'افتح',
-    'choose.note': 'يمكنك تغيير هذا في أي وقت من أعلى الصفحة.',
+    'choose.countEthiopia': '17 مساراً · 10 أماكن إقامة',
+    'choose.countUmrah': '3 مسارات من أديس',
   },
 };
 
