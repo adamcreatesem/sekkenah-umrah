@@ -13,10 +13,10 @@
 <meta property="og:title" content="Sekkenah: Ethiopia tours from Addis Ababa">
 <meta property="og:description" content="Fourteen routes out of Addis Ababa, with a car, a driver and a guide who knows the road.">
 <!-- Absolute URLs: a relative og:image is ignored by every scraper, so the card had no picture. -->
-<meta property="og:image" content="https://adamcreatesem.github.io/sekkenah-umrah/assets/img/hero-plateau.jpg">
-<meta property="og:url" content="https://adamcreatesem.github.io/sekkenah-umrah/">
+<meta property="og:image" content="https://sekkenah.pages.dev/assets/img/hero-plateau.jpg">
+<meta property="og:url" content="https://sekkenah.pages.dev/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://adamcreatesem.github.io/sekkenah-umrah/">
+<link rel="canonical" href="https://sekkenah.pages.dev/">
 <link rel="preload" href="assets/fonts/Fraunces-latin-2.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/InstrumentSans-latin-4.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
@@ -41,22 +41,47 @@
 
 <a class="skip" href="#main" data-i18n="common.skip">Skip to content</a>
 
+<!-- The first question a visitor answers. Two desks, two marks, and the rest of the page
+     follows the answer. Hidden by the script once a choice is stored. -->
+<div class="choose" id="choose" hidden>
+  <div class="choose__card" role="dialog" aria-modal="true" aria-labelledby="chooseTitle">
+    <p class="choose__kicker" data-i18n="choose.kicker">Sekkenah Tour &amp; Travel</p>
+    <h2 class="choose__title" id="chooseTitle" data-i18n="choose.title">Where are you going?</h2>
+    <p class="choose__sub" data-i18n="choose.sub">Two desks, one office.</p>
+    <div class="choose__grid">
+      <button class="choose__opt" type="button" data-track-pick="ethiopia">
+        <img class="choose__mark" src="assets/img/mark.svg" data-track-pick-logo="ethiopia" alt="" width="88" height="88">
+        <span class="choose__name" data-i18n="choose.ethiopia">Tours inside Ethiopia</span>
+        <span class="choose__desc" data-i18n="choose.ethiopiaDesc">Lalibela, the Rift Valley, the Omo and the Danakil.</span>
+        <span class="choose__go"><span data-i18n="choose.go">Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      </button>
+      <button class="choose__opt" type="button" data-track-pick="umrah">
+        <img class="choose__mark" src="assets/img/mark.svg" data-track-pick-logo="umrah" alt="" width="88" height="88">
+        <span class="choose__name" data-i18n="choose.umrah">Umrah and Hajj</span>
+        <span class="choose__desc" data-i18n="choose.umrahDesc">Rounds from Addis with the flights, the visa and the rooms.</span>
+        <span class="choose__go"><span data-i18n="choose.go">Open</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      </button>
+    </div>
+    <p class="choose__note" data-i18n="choose.note">You can change this at any time from the header.</p>
+  </div>
+</div>
+
 <!-- header -->
 <header class="head" id="head">
   <div class="topline">
     <div class="shell topline__in">
-      <span class="topline__item"><svg class="i i--pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg><span data-brand="address">Jemo Michael, Megfira Mall, 4th floor, Addis Ababa</span></span>
+      <span class="topline__item"><svg class="i i--pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg><span data-brand="address" data-edit-brand="address">Jemo Michael, Megfira Mall, 4th floor, Addis Ababa</span></span>
       <span class="topline__item topline__cal" id="calDate"></span>
-      <span class="topline__phones"><a href="tel:+251959607070" dir="ltr">+251 95 960 7070</a><span class="dot">·</span><a href="tel:+251959608080" dir="ltr">+251 95 960 8080</a></span>
+      <span class="topline__phones"><a href="tel:+251959607070" dir="ltr" data-edit-phone="0">+251 95 960 7070</a><span class="dot">·</span><a href="tel:+251959608080" dir="ltr" data-edit-phone="1">+251 95 960 8080</a></span>
     </div>
   </div>
 
   <div class="nav">
     <div class="shell nav__in">
       <a class="brand" href="#top" aria-label="Sekkenah">
-        <img class="brand__mark" src="assets/img/mark.svg" alt="" width="40" height="40">
+        <img class="brand__mark" id="brandMark" src="assets/img/mark.svg" alt="" width="40" height="40">
         <span class="brand__text">
-          <span class="brand__word" data-brand="name">Sekkenah</span>
+          <span class="brand__word" data-brand="name" data-edit-brand="name">Sekkenah</span>
           <span class="brand__tag" data-i18n="brand.tag">Ethiopia tours · Addis Ababa</span>
         </span>
       </a>
@@ -68,9 +93,11 @@
         <a href="#cars" data-i18n="nav.cars">Cars</a>
         <a href="#about" data-i18n="nav.about">About</a>
         <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <a class="nav__manage" href="manage.html" data-i18n="nav.manage">My booking</a>
       </nav>
 
       <div class="nav__actions">
+        <button class="track-switch" id="trackSwitch" type="button" data-i18n="track.switch.umrah">Umrah &amp; Hajj</button>
         <button class="lang" id="langBtn" type="button" aria-label="Switch language" data-i18n-aria="nav.langLabel">
           <span class="lang__glyph" id="langGlyph" aria-hidden="true">ع</span>
           <span class="lang__label" data-i18n="nav.lang">العربية</span>
@@ -89,6 +116,7 @@
       <a href="#cars" data-i18n="nav.cars">Cars</a>
       <a href="#about" data-i18n="nav.about">About</a>
       <a href="#contact" data-i18n="nav.contact">Contact</a>
+      <a href="manage.html" data-i18n="nav.manage">My booking</a>
       <button class="btn btn--solid" type="button" data-open-book data-i18n="nav.plan">Plan a trip</button>
     </div>
   </div>
@@ -99,20 +127,20 @@
   <!-- hero -->
   <section class="hero" id="top">
     <div class="hero__media">
-      <img src="assets/img/hero-plateau.jpg" alt="A horse on the Sanetti plateau in the Bale Mountains, Ethiopia." fetchpriority="high" width="2400" height="1350">
+      <img src="assets/img/hero-plateau.jpg" id="heroImg" alt="A horse on the Sanetti plateau in the Bale Mountains, Ethiopia." fetchpriority="high" width="2400" height="1350" data-photo="hero" data-photo-panel>
       <div class="hero__veil"></div>
       <div class="hero__grain" aria-hidden="true"></div>
     </div>
 
     <div class="shell hero__inner">
-      <p class="eyebrow eyebrow--light reveal" data-i18n="hero.kicker">Ethiopia, on the road · Addis Ababa</p>
+      <p class="eyebrow eyebrow--light reveal" id="heroKicker" data-i18n="hero.kicker">Ethiopia, on the road · Addis Ababa</p>
       <h1 class="hero__title">
-        <span class="reveal" data-i18n="hero.line1">The country,</span>
-        <span class="reveal reveal--2"><em data-i18n="hero.line2">at your own pace.</em></span>
+        <span class="reveal" id="heroLine1" data-i18n="hero.line1">The country,</span>
+        <span class="reveal reveal--2"><em id="heroLine2" data-i18n="hero.line2">at your own pace.</em></span>
       </h1>
-      <p class="hero__sub reveal reveal--3" data-i18n="hero.sub">Fourteen routes out of Addis Ababa: the Rift Valley lakes, the rock churches of the north, the Omo, Bale and the Danakil, with a car, a driver and a guide who knows the road.</p>
+      <p class="hero__sub reveal reveal--3" id="heroSub" data-i18n="hero.sub">Fourteen routes out of Addis Ababa: the Rift Valley lakes, the rock churches of the north, the Omo, Bale and the Danakil, with a car, a driver and a guide who knows the road.</p>
       <div class="hero__actions reveal reveal--4">
-        <a class="btn btn--solid" href="#tours" data-i18n="hero.cta">Find a route</a>
+        <a class="btn btn--solid" href="#tours" id="heroCta" data-i18n="hero.cta">Find a route</a>
         <a class="btn btn--ghost" id="heroWa" href="#" target="_blank" rel="noopener" data-i18n="hero.cta2">Talk to us on WhatsApp</a>
       </div>
     </div>
@@ -316,8 +344,8 @@
         <p class="lede reveal" data-i18n="contact.sub">We answer the phone during office hours and the WhatsApp line later than that.</p>
 
         <dl class="details reveal">
-          <div><dt data-i18n="contact.phones">Phone</dt><dd><a href="tel:+251959607070" dir="ltr">+251 95 960 7070</a><br><a href="tel:+251959608080" dir="ltr">+251 95 960 8080</a></dd></div>
-          <div><dt data-i18n="contact.office">Office</dt><dd data-brand="address">Jemo Michael, Megfira Mall, 4th floor, Addis Ababa</dd></div>
+          <div><dt data-i18n="contact.phones">Phone</dt><dd><a href="tel:+251959607070" dir="ltr" data-edit-phone="0">+251 95 960 7070</a><br><a href="tel:+251959608080" dir="ltr" data-edit-phone="1">+251 95 960 8080</a></dd></div>
+          <div><dt data-i18n="contact.office">Office</dt><dd data-brand="address" data-edit-brand="address">Jemo Michael, Megfira Mall, 4th floor, Addis Ababa</dd></div>
           <div><dt data-i18n="contact.hours">Hours</dt><dd data-i18n="contact.hoursVal">Mon to Sat, 9:00 to 18:00 (EAT)</dd></div>
         </dl>
 
@@ -351,7 +379,7 @@
     <div class="foot__brand">
       <a class="brand brand--foot" href="#top">
         <img class="brand__mark" src="assets/img/mark.svg" alt="" width="40" height="40">
-        <span class="brand__text"><span class="brand__word" data-brand="name">Sekkenah</span></span>
+        <span class="brand__text"><span class="brand__word" data-brand="name" data-edit-brand="name">Sekkenah</span></span>
       </a>
       <p data-i18n="footer.tagline">Ethiopia tours from Addis Ababa. Journey with trust.</p>
     </div>
@@ -367,21 +395,23 @@
 
     <div class="foot__col">
       <h4 data-i18n="footer.contact">Contact</h4>
-      <a href="tel:+251959607070" dir="ltr">+251 95 960 7070</a>
-      <a href="tel:+251959608080" dir="ltr">+251 95 960 8080</a>
-      <span data-brand="address">Jemo Michael, Megfira Mall, 4th floor, Addis Ababa</span>
+      <a href="tel:+251959607070" dir="ltr" data-edit-phone="0">+251 95 960 7070</a>
+      <a href="tel:+251959608080" dir="ltr" data-edit-phone="1">+251 95 960 8080</a>
+      <span data-brand="address" data-edit-brand="address">Jemo Michael, Megfira Mall, 4th floor, Addis Ababa</span>
     </div>
 
     <div class="foot__col">
       <h4 data-i18n="footer.support">Support</h4>
       <a href="#faq" data-i18n="faq.kicker">Questions</a>
+      <a href="manage.html" data-i18n="footer.manage">Manage a booking</a>
+      <a href="privacy.html" data-i18n="footer.legal">Privacy and booking terms</a>
       <a href="credits.html" data-i18n="footer.credits">Photography credits</a>
       <button class="link link--btn" type="button" data-lang-toggle data-i18n="nav.lang">العربية</button>
     </div>
   </div>
 
   <div class="shell foot__base">
-    <span>© <span id="year">2026</span> <span data-brand="legal">Sekkenah Tour &amp; Travel</span>. <span data-i18n="footer.rights">All rights reserved.</span></span>
+    <span>© <span id="year">2026</span> <span data-brand="legal" data-edit-brand="legal">Sekkenah Tour &amp; Travel</span>. <span data-i18n="footer.rights">All rights reserved.</span></span>
     <span class="foot__demo" data-i18n="footer.demo">Design preview. Prices and lodge rates are draft figures.</span>
   </div>
 </footer>

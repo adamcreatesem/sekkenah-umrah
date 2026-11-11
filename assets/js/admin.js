@@ -5,11 +5,13 @@
  * and the catalogue write needs the same key. The published catalogue is read by the
  * site, so a price changed here is live after the next page load.
  *
- * The key lives in sessionStorage, so closing the tab ends the session.
+ * Two people sign in: the manager, who also owns the website copy and the settings, and the
+ * staff, who own the desk. The password is exchanged for a signed token that expires after
+ * twelve hours; the token lives in sessionStorage, so closing the tab ends the session.
  */
 
 const API = (document.querySelector('meta[name="sekkenah-api"]')?.content || '').replace(/\/+$/, '');
-const KEY_STORE = 'sekkenah.staff.key';
+const SESSION_STORE = 'sekkenah.session.v2';
 const STATUSES = ['new', 'confirmed', 'deposit', 'travelled', 'cancelled'];
 const STATUS_LABEL = { new: 'New', confirmed: 'Confirmed', deposit: 'Deposit paid', travelled: 'Travelled', cancelled: 'Cancelled' };
 
@@ -24,6 +26,7 @@ const when = (iso) => {
 };
 
 let token = '';
+let role = '';
 let catalogue = null;
 let bookings = [];
 let enquiries = [];
@@ -36,7 +39,8 @@ async function call(path, options = {}) {
     ...options,
     headers: { 'content-type': 'application/json', authorization: `Bearer ${token}`, ...(options.headers || {}) },
   });
-  if (res.status === 401) { signOut('The key was refused.'); throw new Error('unauthorised'); }
+  if (res.status === 401) { signOut('The session ended. Sign in again.'); throw new Error('unauthorised'); }
+  if (res.status === 403) { toast('That part belongs to the manager.', true); throw new Error('forbidden'); }
   return res;
 }
 
@@ -54,11 +58,30 @@ function toast(message, bad = false) {
 
 function signOut(reason) {
   token = '';
-  try { sessionStorage.removeItem(KEY_STORE); } catch { /* ignore */ }
+  role = '';
+  try { sessionStorage.removeItem(SESSION_STORE); } catch { /* ignore */ }
   $('#shell').classList.remove('on');
   $('#gate').style.display = '';
   $('#gate-err').textContent = reason || '';
-  $('#key').value = '';
+  $('#gate-user').value = '';
+  $('#gate-pass').value = '';
+  $('#who-role').textContent = '';
+}
+
+function currentTab() {
+  const on = document.querySelector('nav.tabs button[aria-selected="true"]');
+  return on ? on.dataset.tab : 'bookings';
+}
+
+/* What the staff desk may not see. The server refuses these anyway; hiding them stops a
+ * person spending five minutes on a form that will be rejected at the end. */
+function applyRole(value) {
+  role = value === 'manager' ? 'manager' : 'staff';
+  $('#who-role').textContent = role === 'manager' ? 'Manager' : 'Staff';
+  for (const el of document.querySelectorAll('[data-manager]')) el.hidden = role !== 'manager';
+  if (role !== 'manager' && ['edit', 'routes', 'lodges', 'trips', 'settings', 'history'].includes(currentTab())) {
+    showTab('bookings');
+  }
 }
 
 function showTab(name) {
@@ -68,6 +91,7 @@ function showTab(name) {
   for (const s of document.querySelectorAll('main > section')) {
     s.hidden = s.id !== 'tab-' + name;
   }
+  if (name === 'edit') bindFrame();
 }
 
 /* ---------- bookings ---------- */
@@ -152,6 +176,10 @@ async function openBooking(ref) {
         <label>&nbsp;</label>
         <a class="btn" href="https://wa.me/${esc(String(b.contact_phone || '').replace(/[^\d]/g, ''))}" target="_blank" rel="noopener" style="text-align:center">WhatsApp the guest</a>
       </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn" type="button" id="d-delete" style="color:#8a2b2b">Delete forever</button>
+      </div>
     </div>`;
   const row = document.querySelector(`tr[data-ref="${CSS.escape(ref)}"]`);
   if (row) row.after(wrap); else $('#bookings-body').append(wrap);
@@ -159,6 +187,21 @@ async function openBooking(ref) {
   $('#close-detail')?.addEventListener('click', () => {
     wrap.remove();
     row?.classList.remove('open');
+  });
+  // A traveller can ask for their details to be removed. This is the button that does it, and
+  // it is deliberately separate from Cancel: cancelled bookings still keep passports for the
+  // office record, deletion does not.
+  $('#d-delete')?.addEventListener('click', async () => {
+    if (!confirm(`Delete ${ref} and every passport in it? This cannot be undone.`)) return;
+    const res3 = await call('/api/bookings/' + encodeURIComponent(ref), { method: 'DELETE' });
+    if (res3.ok) {
+      toast('Deleted for good.');
+      wrap.remove();
+      row?.classList.remove('open');
+      await loadBookings();
+    } else {
+      toast('Could not delete that booking.', true);
+    }
   });
   $('#d-save')?.addEventListener('click', async () => {
     const btn = $('#d-save');
@@ -434,6 +477,8 @@ async function publish() {
       settings: catalogue.settings,
       films: catalogue.films || [],
       shots: catalogue.shots || [],
+      text: catalogue.text || {},
+      images: catalogue.images || {},
       note: 'Published from the office page',
     }),
   }).catch(() => null);
@@ -443,9 +488,590 @@ async function publish() {
     $('#saved-at').textContent = body.updated_at ? 'Published ' + when(body.updated_at) : 'Published';
     toast('Published. The site shows it within a minute.');
     loadVersions();
-  } else {
-    toast('Not published. Check the price and photo fields.', true);
+    return true;
   }
+  toast('Not published. Check the price and photo fields.', true);
+  return false;
+}
+
+/* ---------- the website, editable in place ----------
+ *
+ * The tab shows the real page in an iframe, which is same origin, so this script can reach
+ * into it. Every line of wording on that page already carries a data-i18n name, and the
+ * Arabic version carries the same names, so a change is saved against that name rather than
+ * against a position on a screen. Pictures are read from the catalogue instead: a tour card
+ * knows its id, a film its place in the row.
+ *
+ * Nothing is written to the server until Save changes, and the old copy is kept by the same
+ * snapshot that every publish makes, so History can put it back.
+ */
+
+const editor = {
+  frame: null,
+  pending: new Map(), // "lang|key" -> new wording, kept across a language switch
+  fields: new Map(), // "catalogue path|lang" -> wording for tour, lodge, film and caption lines
+  base: new Map(), // the wording that was there before this sitting first touched it
+  pictures: 0,
+  typing: false, // a line is open and has been changed, but not committed yet
+  lang: 'en',
+};
+
+const editDirty = () => editor.pending.size + editor.fields.size + editor.pictures + (editor.typing ? 1 : 0);
+
+function updateEditBar() {
+  const n = editDirty();
+  const el = $('#edit-dirty');
+  if (!el) return;
+  el.textContent = n ? `${n} unsaved change${n === 1 ? '' : 's'}` : 'No changes yet';
+  el.classList.toggle('work', n > 0);
+  $('#edit-save').disabled = !n;
+}
+
+function frameDoc() {
+  if (!editor.frame) editor.frame = $('#edit-frame');
+  return editor.frame && editor.frame.contentDocument;
+}
+
+/* The line of wording under the pointer, if there is one. Boxes are tested rather than the
+ * elements the browser reports under the pointer, so wording that sits on a photograph is
+ * found even when a veil or a wrapper is what the pointer technically touches. The smallest
+ * box wins, which is the innermost line: a word inside a paragraph opens the paragraph, not
+ * the section around it. */
+const EDITABLE_SELECTOR = '[data-i18n],[data-edit],[data-edit-brand],[data-edit-phone]';
+
+function editableAt(doc, x, y) {
+  let best = null;
+  let bestArea = Infinity;
+  const win = doc.defaultView;
+  for (const el of doc.querySelectorAll(EDITABLE_SELECTOR)) {
+    const r = el.getBoundingClientRect();
+    if (!r.width || !r.height) continue;
+    if (x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
+    if (el.closest('[hidden]')) continue;
+    const cs = win.getComputedStyle(el);
+    if (cs.visibility === 'hidden' || cs.display === 'none') continue;
+    const area = r.width * r.height;
+    if (area < bestArea) { best = el; bestArea = area; }
+  }
+  return best;
+}
+
+/* The picture under the pointer, if the pointer is on one. Anything that is a control, a line
+ * of wording or a panel in front of the photograph stops the search, so a click in the empty
+ * space of a section can never land on a picture that is not there. */
+function mediaAt(doc, x, y) {
+  const stack = doc.elementsFromPoint ? doc.elementsFromPoint(x, y) : [];
+  for (const node of stack) {
+    if (!node || !node.tagName) continue;
+    const tag = node.tagName;
+    if (tag === 'IMG' || tag === 'VIDEO') return mediaTarget(node);
+    if (tag === 'A' || tag === 'BUTTON') {
+      // The play triangle on a film is part of the frame, not page furniture, so a click on
+      // the middle of a film still reaches the film. A control with wording of its own is
+      // left alone: that wording is edited, and the control does not act in this preview.
+      const box = node.closest && node.closest('[data-photo],[data-tour],[data-stay],[data-shot],.film');
+      if (box && !node.textContent.trim()) return mediaTarget(box.querySelector('img,video') || node);
+      return null;
+    }
+    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return null;
+    if (tag === 'FORM' || tag === 'HEADER' || tag === 'FOOTER' || tag === 'NAV') return null;
+    if (node.ownerSVGElement || tag.toLowerCase() === 'svg') return null;
+    if (hasOwnText(node)) return null;
+  }
+  return null;
+}
+
+function bindFrame() {
+  const doc = frameDoc();
+  if (!doc || !doc.body) return;
+  if (doc.defaultView.__sekBound) return;
+  doc.defaultView.__sekBound = true;
+
+  const style = doc.createElement('style');
+  style.textContent = `
+    [data-i18n]:hover,[data-edit]:hover,[data-edit-brand]:hover,[data-edit-phone]:hover{outline:1px dashed #b8935a;outline-offset:3px;cursor:text}
+    .sek-edit{outline:2px solid #b8935a !important;outline-offset:3px;background:rgba(184,147,90,.09)}
+    [data-tour] .card__media:hover,[data-stay] .stay__media:hover,.film__frame:hover,[data-shot] figure:hover{outline:2px dashed #b8935a;outline-offset:-3px;cursor:copy}
+  `;
+  doc.head.appendChild(style);
+
+  /* Text wins over pictures everywhere, and a picture only takes the click where the pointer
+   * is really on it. A panel, a form, a menu or a control laid over a photograph is not a way
+   * into that photograph, and neither is the empty part of a section. */
+  doc.addEventListener('click', (e) => {
+    // While a line is open for typing, let the browser place the caret and handle a
+    // double click to select a word. Re-running the picker here would select all again.
+    if (e.target.closest && e.target.closest('.sek-edit')) return;
+    // The page is a preview, not a working website: no chip, drawer, lightbox or form may
+    // act underneath the editor.
+    e.preventDefault();
+    e.stopPropagation();
+    const line = editableAt(doc, e.clientX, e.clientY);
+    if (line) { startEdit(line); return; }
+    const picture = mediaAt(doc, e.clientX, e.clientY);
+    if (picture) pickPicture(picture);
+  }, true);
+
+  doc.addEventListener('input', (e) => {
+    if (!e.target.closest || !e.target.closest('.sek-edit')) return;
+    editor.typing = true;
+    updateEditBar();
+  }, true);
+
+  doc.addEventListener('keydown', (e) => {
+    const el = e.target.closest && e.target.closest('.sek-edit');
+    if (!el) return;
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      el.textContent = el.dataset.sekDisplay || el.dataset.sekOriginal || '';
+      delete el.dataset.sekDisplay;
+      el.classList.remove('sek-edit');
+      el.removeAttribute('contenteditable');
+      editor.typing = false;
+      updateEditBar();
+      el.blur();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      el.blur();
+    }
+  }, true);
+
+  doc.addEventListener('focusout', (e) => {
+    const el = e.target.closest && e.target.closest('.sek-edit');
+    if (el) commitEdit(el);
+  }, true);
+
+  doc.addEventListener('submit', (e) => e.preventDefault(), true);
+
+  // The preview fetches the published catalogue, which does not know about lines changed
+  // and pictures replaced in this sitting. Push the working copy in once it is ready.
+  editor.pushToken = (editor.pushToken || 0) + 1;
+  clearTimeout(editor.pushTimer);
+  pushDraftToFrame(0, editor.pushToken);
+}
+
+function pushDraftToFrame(attempt = 0, token = editor.pushToken) {
+  if (token !== editor.pushToken) return;
+  const win = editor.frame && editor.frame.contentWindow;
+  const ready = win && catalogue && win.document.body.classList.contains('is-ready')
+    && typeof win.__sekApplyCatalogue === 'function';
+  if (!ready) {
+    if (attempt < 60) editor.pushTimer = setTimeout(() => pushDraftToFrame(attempt + 1, token), 150);
+    return;
+  }
+  const text = {};
+  for (const lang of ['en', 'ar']) text[lang] = { ...((catalogue.text || {})[lang] || {}) };
+  for (const [composite, value] of editor.pending) {
+    const cut = composite.indexOf('|');
+    const lang = composite.slice(0, cut);
+    text[lang] = text[lang] || {};
+    text[lang][composite.slice(cut + 1)] = value;
+  }
+  const previewSeats = {};
+  for (const { spec, value } of editor.fields.values()) {
+    if (spec && isSeatField(spec)) previewSeats[spec.slice(spec.indexOf(':') + 1, spec.lastIndexOf(':'))] = value;
+  }
+  win.__sekApplyCatalogue({ ...catalogue, text, previewSeats });
+}
+
+/* The same line appears in the desktop and the mobile navigation; the same address appears
+ * in the header and the footer. Repaint every copy as soon as one is committed. */
+function repaintSame(el, value) {
+  let selector = null;
+  if (el.dataset.i18n) selector = `[data-i18n="${CSS.escape(el.dataset.i18n)}"]`;
+  else if (el.dataset.editBrand) selector = `[data-edit-brand="${CSS.escape(el.dataset.editBrand)}"]`;
+  else if (el.dataset.edit) selector = `[data-edit="${CSS.escape(el.dataset.edit)}"]`;
+  if (!selector) return;
+  el.ownerDocument.querySelectorAll(selector).forEach((other) => {
+    if (other !== el && !other.classList.contains('sek-edit')) other.textContent = value;
+  });
+}
+
+function finishOpenEdit() {
+  const doc = frameDoc();
+  const el = doc && doc.querySelector('.sek-edit');
+  if (el) commitEdit(el);
+}
+
+function hasOwnText(node) {
+  if (!node || node.nodeType !== 1) return false;
+  for (const child of node.childNodes) {
+    if (child.nodeType === 3 && child.textContent.trim()) return true;
+  }
+  return false;
+}
+
+function startEdit(el) {
+  if (el.classList.contains('sek-edit')) return;
+  const lang = el.ownerDocument.documentElement.lang === 'ar' ? 'ar' : 'en';
+  const spec = el.dataset.edit;
+  const target = spec ? fieldTarget(spec) : null;
+  // Money, seats and dates are stored as values but painted with formatting: "$420",
+  // "12 seats left", "13 Nov 2026". Open the raw value so the office edits a number or an
+  // ISO date, then paint the formatted line back when it is committed.
+  if (target && (isMoneyField(spec) || isSeatField(spec) || isDateField(spec))) {
+    el.dataset.sekDisplay = el.textContent;
+    el.textContent = String(fieldValue(target.item, target.field, lang) ?? '');
+  } else {
+    delete el.dataset.sekDisplay;
+  }
+  el.dataset.sekOriginal = el.textContent;
+  el.classList.add('sek-edit');
+  try { el.setAttribute('contenteditable', 'plaintext-only'); } catch { el.setAttribute('contenteditable', 'true'); }
+  el.focus();
+  const range = el.ownerDocument.createRange();
+  range.selectNodeContents(el);
+  const sel = el.ownerDocument.defaultView.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+/* A tour card, a lodge, a film or a still carries its wording in the catalogue rather than
+ * in the interface dictionary, so an edit there is written back to the object the card was
+ * rendered from. "tour:<id>:name" is the whole address; the id survives a filtered grid. */
+function fieldTarget(spec) {
+  if (!catalogue || !spec) return null;
+  const cut = spec.indexOf(':');
+  const kind = spec.slice(0, cut);
+  const rest = spec.slice(cut + 1);
+  const last = rest.lastIndexOf(':');
+  const key = rest.slice(0, last);
+  const field = rest.slice(last + 1);
+  const settings = catalogue.settings || {};
+  const byId = kind === 'tour' || kind === 'stay' || kind === 'service' || kind === 'car' || kind === 'region';
+  const list = kind === 'tour' ? catalogue.tours
+    : kind === 'stay' ? catalogue.stays
+      : kind === 'film' ? catalogue.films
+        : kind === 'shot' ? catalogue.shots
+          : kind === 'service' ? settings.services
+            : kind === 'car' ? settings.cars
+              : kind === 'step' ? settings.steps
+                : kind === 'faq' ? settings.faqs
+                  : kind === 'region' ? settings.regions
+                    : null;
+  if (!Array.isArray(list)) return null;
+  const item = byId ? list.find((x) => x.id === key) : list[Number(key)];
+  return item ? { item, field } : null;
+}
+
+function brandTarget(key) {
+  const brand = catalogue && catalogue.settings && catalogue.settings.brand;
+  return brand && key ? brand : null;
+}
+
+function fieldValue(holder, field, lang) {
+  const value = holder && holder[field];
+  if (typeof value === 'string' || typeof value === 'number') return value;
+  return (value && value[lang]) || '';
+}
+
+const isMoneyField = (spec) => /:price$/.test(spec || '');
+const isSeatField = (spec) => /:seats$/.test(spec || '');
+const isDateField = (spec) => /:depart$/.test(spec || '');
+
+function numberFrom(text) {
+  const match = String(text).replace(/,/g, '').match(/-?\d+(?:\.\d+)?/);
+  return match ? Number(match[0]) : NaN;
+}
+
+function moneyText(value) {
+  return '$' + Math.round(value).toLocaleString('en-US');
+}
+
+function numberInText(text, value) {
+  return /\d/.test(text) ? text.replace(/\d[\d,]*/, String(value)) : String(value);
+}
+
+function isoDateFrom(text) {
+  const raw = String(text).trim();
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? new Date(raw + 'T00:00:00') : new Date(raw);
+  if (!d || Number.isNaN(d.getTime())) return null;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function dateText(iso, lang) {
+  const d = new Date(iso + 'T00:00:00');
+  try {
+    return d.toLocaleDateString(lang === 'ar' ? 'ar-ET' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch { return iso; }
+}
+
+function repaintPhones(index, value) {
+  const doc = frameDoc();
+  if (!doc) return;
+  doc.querySelectorAll(`[data-edit-phone="${index}"]`).forEach((a) => {
+    a.textContent = value;
+    if (a.tagName === 'A') a.href = 'tel:' + value.replace(/[^\d+]/g, '');
+  });
+}
+
+function commitEdit(el) {
+  editor.typing = false;
+  const lang = el.ownerDocument.documentElement.lang === 'ar' ? 'ar' : 'en';
+  const originalText = el.dataset.sekOriginal || '';
+  const displayBefore = el.dataset.sekDisplay || originalText;
+  const before = originalText.replace(/\s+/g, ' ').trim();
+  const after = el.textContent.replace(/\s+/g, ' ').trim();
+  el.classList.remove('sek-edit');
+  el.removeAttribute('contenteditable');
+
+  const restore = () => {
+    el.textContent = displayBefore;
+    delete el.dataset.sekDisplay;
+    updateEditBar();
+  };
+  const refuse = (message) => {
+    restore();
+    toast(message, true);
+  };
+
+  if (!after || after === before) { restore(); return; }
+
+  const spec = el.dataset.edit;
+  const phoneIndex = el.dataset.editPhone;
+  const brandKey = el.dataset.editBrand;
+  if (spec) {
+    const target = fieldTarget(spec);
+    if (!target) { refuse('That line could not be saved. Reload the office page and try again.'); return; }
+    const { item, field } = target;
+    let value = after;
+    let display = after;
+
+    if (isMoneyField(spec)) {
+      const n = numberFrom(after);
+      if (!Number.isFinite(n) || n < 0) { refuse('That price is not a number. Try 420.'); return; }
+      value = Math.round(n);
+      display = moneyText(value);
+    } else if (isSeatField(spec)) {
+      const n = numberFrom(after);
+      if (!Number.isFinite(n) || n < 0) { refuse('That seat count is not a number. Try 12.'); return; }
+      value = Math.round(n);
+      display = numberInText(displayBefore, value);
+    } else if (isDateField(spec)) {
+      const iso = isoDateFrom(after);
+      if (!iso) { refuse('That date could not be read. Use 2026-11-13.'); return; }
+      value = iso;
+      display = dateText(iso, lang);
+    }
+
+    const dirtyKey = spec + '|' + lang;
+    if (!editor.base.has(dirtyKey)) editor.base.set(dirtyKey, fieldValue(item, field, lang));
+    const current = item[field];
+    if (typeof current === 'number' || typeof value === 'number') item[field] = value;
+    else if (typeof current === 'string') item[field] = value;
+    else {
+      if (!current || typeof current !== 'object') item[field] = {};
+      item[field][lang] = value;
+    }
+    if (String(value) === String(editor.base.get(dirtyKey))) editor.fields.delete(dirtyKey);
+    else editor.fields.set(dirtyKey, { spec, lang, value });
+    el.textContent = display;
+    repaintSame(el, display);
+  } else if (phoneIndex != null) {
+    const brand = catalogue && catalogue.settings && catalogue.settings.brand;
+    const phones = brand && brand.phones;
+    const index = Number(phoneIndex);
+    if (!Array.isArray(phones) || typeof phones[index] !== 'string') {
+      refuse('The phone number could not be loaded. Reload the office page and try again.');
+      return;
+    }
+    if (!/\d/.test(after)) { refuse('That does not look like a phone number.'); return; }
+    const dirtyKey = 'phone:' + index;
+    if (!editor.base.has(dirtyKey)) editor.base.set(dirtyKey, phones[index]);
+    phones[index] = after;
+    if (after === editor.base.get(dirtyKey)) editor.fields.delete(dirtyKey);
+    else editor.fields.set(dirtyKey, { phone: index, value: after });
+    repaintPhones(index, after);
+  } else if (brandKey) {
+    const brand = brandTarget(brandKey);
+    if (!brand) { refuse('The site settings could not be loaded. Reload the office page and try again.'); return; }
+    const dirtyKey = 'brand:' + brandKey + '|' + lang;
+    if (!editor.base.has(dirtyKey)) editor.base.set(dirtyKey, fieldValue(brand, brandKey, lang));
+    const value = brand[brandKey];
+    if (typeof value === 'string') brand[brandKey] = after;
+    else {
+      if (!value || typeof value !== 'object') brand[brandKey] = {};
+      brand[brandKey][lang] = after;
+    }
+    if (after === editor.base.get(dirtyKey)) editor.fields.delete(dirtyKey);
+    else editor.fields.set(dirtyKey, { brand: brandKey, lang, value: after });
+    el.textContent = after;
+    repaintSame(el, after);
+  } else {
+    const dirtyKey = lang + '|' + el.dataset.i18n;
+    if (!editor.base.has(dirtyKey)) editor.base.set(dirtyKey, before);
+    if (after === editor.base.get(dirtyKey)) editor.pending.delete(dirtyKey);
+    else editor.pending.set(dirtyKey, after);
+    el.textContent = after;
+    repaintSame(el, after);
+  }
+  delete el.dataset.sekDisplay;
+  updateEditBar();
+}
+
+/* Which catalogue field an image belongs to. Returns null for pictures that are part of the
+ * design rather than content, such as the small icons. */
+function mediaTarget(media) {
+  if (!media || typeof media.closest !== 'function') return null;
+  const photo = media.closest('[data-photo]');
+  // A photograph that fills a whole section behind the page content is replaced from the
+  // button in the editor bar. Every click on that section belongs to the wording or the form
+  // in front of it, so the picture is not reachable by clicking the page itself.
+  if (photo) {
+    if (photo.hasAttribute('data-photo-panel')) return null;
+    return { kind: 'photo', key: photo.dataset.photo, el: media };
+  }
+  const tour = media.closest('[data-tour]');
+  if (tour) return { kind: 'tour', id: tour.dataset.tour, el: media };
+  const stay = media.closest('[data-stay]');
+  if (stay) return { kind: 'stay', id: stay.dataset.stay, el: media };
+  const film = media.closest('.film');
+  if (film) {
+    const row = [...film.parentElement.children].indexOf(film);
+    return { kind: 'film', index: row, el: media };
+  }
+  const shot = media.closest('[data-shot]');
+  if (shot) return { kind: 'shot', index: Number(shot.dataset.shot), el: media };
+  return null;
+}
+
+let picker;
+function pickPicture(target) {
+  if (!picker) {
+    picker = document.createElement('input');
+    picker.type = 'file';
+    picker.accept = 'image/jpeg,image/png,image/webp,image/avif';
+    // A display:none input does not open the file chooser in some browsers, so it is kept
+    // in the page but out of sight instead.
+    picker.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0';
+    document.body.appendChild(picker);
+  }
+  picker.onchange = async () => {
+    const file = picker.files && picker.files[0];
+    picker.value = '';
+    if (!file) return;
+    toast('Uploading ' + file.name + '…');
+    const res = await call('/api/upload', {
+      method: 'POST',
+      headers: { 'content-type': file.type },
+      body: file,
+    }).catch(() => null);
+    if (!res || !res.ok) {
+      toast('That file was not accepted. Use a JPG, PNG, WebP or AVIF picture.', true);
+      return;
+    }
+    const { url } = await res.json();
+    applyPicture(target, url);
+    toast('Picture replaced. Press Save changes to publish it.');
+  };
+  picker.click();
+}
+
+function applyPicture(target, url) {
+  if (target.kind === 'photo') {
+    catalogue.images = catalogue.images || {};
+    catalogue.images[target.key] = url;
+  } else if (target.kind === 'tour') {
+    const t = (catalogue.tours || []).find((x) => x.id === target.id);
+    if (t) t.image = url;
+  } else if (target.kind === 'stay') {
+    const s = (catalogue.stays || []).find((x) => x.id === target.id);
+    if (s) s.image = url;
+  } else if (target.kind === 'film') {
+    const f = (catalogue.films || [])[target.index];
+    if (f) f.poster = url;
+  } else if (target.kind === 'shot') {
+    const p = (catalogue.shots || [])[target.index];
+    if (p) { p.src = url; p.big = url; }
+  }
+  if (target.el.tagName === 'VIDEO') target.el.setAttribute('poster', url);
+  else target.el.src = url;
+  editor.pictures += 1;
+  updateEditBar();
+}
+
+function reloadFrame() {
+  if (!editor.frame) editor.frame = $('#edit-frame');
+  if (!editor.frame) return;
+  const lang = editor.lang === 'ar' ? 'ar' : 'en';
+  editor.frame.src = 'index.html?edit=1&lang=' + lang;
+}
+
+async function saveEditor() {
+  finishOpenEdit();
+  if (!editDirty()) return;
+  catalogue.text = catalogue.text || {};
+  for (const [composite, value] of editor.pending) {
+    const cut = composite.indexOf('|');
+    const lang = composite.slice(0, cut);
+    const key = composite.slice(cut + 1);
+    catalogue.text[lang] = catalogue.text[lang] || {};
+    if (value) catalogue.text[lang][key] = value;
+    else delete catalogue.text[lang][key];
+  }
+  const btn = $('#edit-save');
+  btn.textContent = 'Saving…';
+  const ok = await publish();
+  btn.textContent = 'Save changes';
+  if (!ok) return;
+  editor.pending.clear();
+  editor.fields.clear();
+  editor.base.clear();
+  editor.pictures = 0;
+  updateEditBar();
+  reloadFrame();
+}
+
+async function discardEditor() {
+  finishOpenEdit();
+  if (!editDirty()) { toast('Nothing to discard.'); return; }
+  if (!confirm('Throw away the changes you have not saved?')) return;
+  editor.pending.clear();
+  editor.fields.clear();
+  editor.base.clear();
+  editor.pictures = 0;
+  updateEditBar();
+  await loadCatalogue();
+  reloadFrame();
+}
+
+function showEditLang(lang) {
+  finishOpenEdit();
+  editor.lang = lang === 'ar' ? 'ar' : 'en';
+  for (const b of document.querySelectorAll('[data-edit-lang]')) {
+    b.setAttribute('aria-pressed', String(b.dataset.editLang === editor.lang));
+  }
+  reloadFrame();
+}
+
+function wireEditor() {
+  const frame = $('#edit-frame');
+  if (!frame) return;
+  editor.frame = frame;
+  frame.addEventListener('load', bindFrame);
+  bindFrame();
+  for (const b of document.querySelectorAll('[data-edit-lang]')) {
+    b.addEventListener('click', () => showEditLang(b.dataset.editLang));
+  }
+  $('#edit-save').addEventListener('click', saveEditor);
+  $('#edit-discard').addEventListener('click', discardEditor);
+  // The top photograph sits under the headline, so a click on it usually lands on the words.
+  // This button is the way to reach it without moving the text out of the way first.
+  const heroBtn = $('#edit-hero');
+  if (heroBtn) {
+    heroBtn.addEventListener('click', () => {
+      const doc = editor.frame && editor.frame.contentDocument;
+      const el = doc && doc.querySelector('[data-photo="hero"]');
+      pickPicture({ kind: 'photo', key: 'hero', el: el || document.createElement('img') });
+    });
+  }
+  updateEditBar();
+  window.addEventListener('beforeunload', (e) => {
+    if (!editDirty()) return;
+    e.preventDefault();
+    e.returnValue = '';
+  });
 }
 
 /* ---------- wiring ---------- */
@@ -469,6 +1095,7 @@ function wireEditors() {
 }
 
 async function openOffice() {
+  applyRole(role);
   $('#gate').style.display = 'none';
   $('#shell').classList.add('on');
   await Promise.all([loadBookings(), loadEnquiries(), loadCatalogue()]);
@@ -479,21 +1106,35 @@ async function boot() {
     $('#gate-err').textContent = 'This page has no API address configured.';
     return;
   }
-  try { token = sessionStorage.getItem(KEY_STORE) || ''; } catch { token = ''; }
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(SESSION_STORE) || 'null');
+    token = saved && saved.token ? saved.token : '';
+    role = saved && saved.role ? saved.role : '';
+  } catch { token = ''; role = ''; }
 
   $('#gate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const value = $('#key').value.trim();
-    if (!value) return;
+    const user = $('#gate-user').value.trim();
+    const password = $('#gate-pass').value;
+    if (!user || !password) return;
     $('#gate-err').textContent = '';
-    token = value;
-    const res = await fetch(API + '/api/bookings?limit=1', { headers: { authorization: `Bearer ${value}` } }).catch(() => null);
-    if (!res || !res.ok) {
-      token = '';
-      $('#gate-err').textContent = res && res.status === 401 ? 'That key was refused.' : 'Could not reach the office server.';
+    const res = await fetch(API + '/api/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ user, password }),
+    }).catch(() => null);
+    if (!res) { $('#gate-err').textContent = 'Could not reach the office server.'; return; }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      $('#gate-err').textContent = res.status === 429
+        ? 'Too many attempts. Wait fifteen minutes.'
+        : 'That user and password were refused.';
       return;
     }
-    try { sessionStorage.setItem(KEY_STORE, value); } catch { /* ignore */ }
+    token = data.token;
+    role = data.role;
+    try { sessionStorage.setItem(SESSION_STORE, JSON.stringify({ token, role })); } catch { /* ignore */ }
+    $('#gate-pass').value = '';
     openOffice();
   });
 
@@ -542,11 +1183,17 @@ async function boot() {
     b.addEventListener('click', publish);
   }
   wireEditors();
+  wireEditor();
 
   if (token) {
-    const res = await fetch(API + '/api/bookings?limit=1', { headers: { authorization: `Bearer ${token}` } }).catch(() => null);
-    if (res && res.ok) openOffice();
-    else signOut(res && res.status === 401 ? 'The saved key was refused. Enter it again.' : 'Could not reach the office server.');
+    const res = await fetch(API + '/api/me', { headers: { authorization: `Bearer ${token}` } }).catch(() => null);
+    if (res && res.ok) {
+      const me = await res.json().catch(() => ({}));
+      role = me.role || role;
+      openOffice();
+    } else {
+      signOut(res && res.status === 401 ? 'The saved session expired. Sign in again.' : 'Could not reach the office server.');
+    }
   }
 }
 

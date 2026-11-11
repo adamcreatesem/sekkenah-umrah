@@ -16,7 +16,8 @@
   --sand: #e6dbc8;
   --brass: #b8935a;
   --brass-2: #d9b878;
-  --muted: #6c766f;
+  /* 5.2:1 on the lightest surface: axe flagged the old grey at 4.1, which older eyes feel. */
+  --muted: #5c665e;
   --line: rgba(12, 19, 16, 0.13);
   --line-dark: rgba(244, 239, 228, 0.16);
 
@@ -174,6 +175,9 @@ html[lang='ar'] .btn--sm { font-size: 0.8rem; }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; margin-inline-end: auto; }
 .brand__mark { inline-size: 38px; block-size: 38px; fill: none; stroke: currentColor; stroke-width: 1.1; }
+/* The client's emblems are dark green on cream, so they get a cream disc here rather than
+   disappearing into the hero photograph. The SVG mark keeps its plain outline. */
+.brand__mark[src$='.png'] { padding: 3px; border-radius: 50%; background: var(--bone); }
 .brand__mark circle { fill: none; }
 .brand__text { display: flex; flex-direction: column; line-height: 1.1; }
 .brand__word { font-family: var(--f-display); font-size: 1.32rem; letter-spacing: 0.01em; }
@@ -191,6 +195,8 @@ html[lang='ar'] .nav__links { letter-spacing: 0; text-transform: none; font-size
 }
 .nav__links a:hover { opacity: 1; }
 .nav__links a:hover::after { transform: scaleX(1); }
+.nav__manage { display: none; }
+@media (min-width: 1240px) { .nav__manage { display: inline-block; } }
 
 .nav__actions { display: flex; align-items: center; gap: 14px; }
 .lang {
@@ -333,9 +339,10 @@ html[lang='ar'] .chip { letter-spacing: 0; text-transform: none; font-size: 0.84
 .chip.is-on { background: var(--ink); border-color: var(--ink); color: var(--bone); }
 
 .grid { display: grid; gap: clamp(18px, 2.4vw, 30px); }
-.grid--tours { grid-template-columns: repeat(3, 1fr); }
-.grid--stays { grid-template-columns: repeat(4, 1fr); }
-.grid--services { grid-template-columns: repeat(4, 1fr); gap: 0; border-block-start: 1px solid var(--line); }
+.grid > * { min-inline-size: 0; }
+.grid--tours { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid--stays { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid--services { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-block-start: 1px solid var(--line); }
 .empty { padding: 40px 0; color: var(--muted); }
 
 /* why */
@@ -373,7 +380,7 @@ html[lang='ar'] .card__meta { letter-spacing: 0; text-transform: none; font-size
 .card__title { font-family: var(--f-display); font-weight: 400; font-size: 1.5rem; letter-spacing: -0.015em; margin-block: 8px 8px; }
 html[lang='ar'] .card__title { font-size: 1.42rem; line-height: 1.35; }
 .card__blurb { color: var(--muted); font-size: 0.9rem; flex: 1; }
-.card__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-block-start: 20px; padding-block-start: 16px; border-block-start: 1px solid var(--line); }
+.card__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-block-start: 20px; padding-block-start: 16px; border-block-start: 1px solid var(--line); }
 .price { display: inline-flex; align-items: baseline; gap: 6px; }
 .price b { font-family: var(--f-display); font-size: 1.28rem; font-weight: 500; letter-spacing: -0.01em; }
 .price small { font-size: 0.66rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
@@ -509,7 +516,11 @@ html[lang='ar'] .details dt { letter-spacing: 0; text-transform: none; font-size
 .field { display: grid; gap: 6px; }
 .field > span { font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 html[lang='ar'] .field > span { letter-spacing: 0; text-transform: none; font-size: 0.8rem; }
+/* A text input has an intrinsic width of about twenty characters. Without these two lines
+   that width is also the grid track's minimum, so two fields side by side push past the
+   right edge on a phone. */
 .field input, .field select, .field textarea {
+  inline-size: 100%; min-inline-size: 0;
   border: 1px solid var(--line); background: var(--paper); padding: 12px 14px;
   border-radius: var(--r); font-size: 0.92rem; transition: border-color 240ms, background 240ms;
 }
@@ -521,7 +532,7 @@ html[lang='ar'] .field > span { letter-spacing: 0; text-transform: none; font-si
 /* footer */
 .foot { background: var(--ink); color: var(--bone); padding-block: clamp(50px, 7vw, 84px) 30px; }
 .foot__in { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
-.foot__brand p { color: rgba(244, 239, 228, 0.55); font-size: 0.9rem; margin-block-start: 16px; max-width: 30ch; }
+.foot__brand p { color: rgba(244, 239, 228, 0.74); font-size: 0.9rem; margin-block-start: 16px; max-width: 30ch; }
 .brand--foot { margin: 0; }
 .foot__col { display: grid; gap: 10px; align-content: start; font-size: 0.88rem; color: rgba(244, 239, 228, 0.68); }
 .foot__col h4 { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brass-2); margin-block-end: 6px; font-weight: 500; }
@@ -531,7 +542,7 @@ html[lang='ar'] .foot__col h4 { letter-spacing: 0; text-transform: none; font-si
 .foot__base {
   display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
   margin-block-start: 50px; padding-block-start: 22px; border-block-start: 1px solid var(--line-dark);
-  font-size: 0.72rem; color: rgba(244, 239, 228, 0.42);
+  font-size: 0.72rem; color: rgba(244, 239, 228, 0.68);
 }
 
 /* drawer */
@@ -635,7 +646,8 @@ html[lang='ar'] .modal__price small { letter-spacing: 0; text-transform: none; }
 .track.is-done .track__n { background: var(--ink); border-color: var(--ink); color: var(--bone); }
 
 .form { display: grid; gap: 16px; }
-.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr)); gap: 12px; }
+.row > * { min-inline-size: 0; }
 .form__note { font-size: 0.74rem; color: var(--muted); }
 .field--num .stepper { display: flex; align-items: stretch; border: 1px solid var(--line); background: var(--paper); }
 .stepper button { inline-size: 34px; font-size: 1rem; color: var(--muted); }
@@ -684,6 +696,7 @@ html[lang='ar'] .traveller legend { letter-spacing: 0; text-transform: none; fon
 .ticket__title { font-size: 1.5rem; }
 .ticket__body { font-size: 0.9rem; color: var(--muted); }
 .ticket__foot { font-size: 0.72rem; color: var(--muted); border-block-start: 1px dashed var(--line); padding-block-start: 12px; }
+.ticket__manage { margin-block-start: 14px; font-size: 0.82rem; }
 .ticket__warn { font-size: 0.8rem; color: #8a2f1c; background: #fbeee9; border-inline-start: 3px solid #b4462b; padding: 10px 12px; }
 
 .toast {
@@ -901,3 +914,47 @@ html[lang='ar'] .film__len { letter-spacing: 0; font-size: 0.74rem; }
   .reveal { opacity: 1; transform: none; }
   .hero__media img { animation: none; transform: none; }
 }
+
+/* ---------- two desks ---------- */
+
+.track-switch {
+  border: 1px solid currentColor; border-radius: 999px; padding: 7px 13px;
+  font-size: 0.72rem; letter-spacing: 0.06em; opacity: 0.9;
+  transition: opacity 300ms, background 300ms;
+}
+.track-switch:hover { opacity: 1; background: rgba(255, 255, 255, 0.08); }
+.head.is-scrolled .track-switch:hover { background: rgba(12, 19, 16, 0.05); }
+html[lang='ar'] .track-switch { letter-spacing: 0; font-size: 0.8rem; }
+
+.choose { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px; overflow: auto; background: radial-gradient(120% 90% at 50% 0%, #16241d 0%, #0b120f 60%, #080d0b 100%); color: var(--bone); }
+.choose[hidden] { display: none; }
+.choose__card { inline-size: min(820px, 100%); }
+.choose__kicker { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(217, 184, 120, 0.85); }
+.choose__title { font-family: var(--f-display); font-size: clamp(1.9rem, 5vw, 2.9rem); line-height: 1.05; margin-block: 10px 10px; }
+.choose__sub { color: rgba(244, 239, 228, 0.66); font-size: 0.94rem; max-inline-size: 52ch; }
+.choose__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-block-start: 26px; }
+.choose__opt {
+  display: grid; justify-items: start; gap: 10px; text-align: start;
+  border: 1px solid rgba(244, 239, 228, 0.16); padding: 22px;
+  background: rgba(244, 239, 228, 0.03); color: inherit;
+  transition: border-color 300ms var(--ease), background 300ms var(--ease), transform 300ms var(--ease);
+}
+.choose__opt:hover, .choose__opt:focus-visible { border-color: rgba(217, 184, 120, 0.7); background: rgba(244, 239, 228, 0.06); transform: translateY(-2px); }
+.choose__mark { inline-size: 64px; block-size: 64px; object-fit: contain; }
+.choose__mark[src$='.png'] { padding: 7px; border-radius: 50%; background: var(--bone); }
+.choose__name { font-family: var(--f-display); font-size: 1.28rem; }
+.choose__desc { font-size: 0.86rem; color: rgba(244, 239, 228, 0.62); line-height: 1.55; }
+.choose__go { display: inline-flex; align-items: center; gap: 8px; margin-block-start: 6px; font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass-2); }
+.choose__go svg { inline-size: 16px; block-size: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.choose__note { margin-block-start: 18px; font-size: 0.72rem; color: rgba(244, 239, 228, 0.42); }
+html[lang='ar'] .choose__kicker, html[lang='ar'] .choose__go { letter-spacing: 0; text-transform: none; }
+
+/* The Ethiopia desk owns lodges, cars and past trips. The Umrah desk is flights, rooms and
+ * the two cities, so those three sections would be empty promises on it. */
+body[data-track='umrah'] #stays,
+body[data-track='umrah'] #cars,
+body[data-track='umrah'] #trips,
+body[data-track='umrah'] nav a[href='#stays'],
+body[data-track='umrah'] nav a[href='#cars'],
+body[data-track='umrah'] nav a[href='#trips'],
+body[data-track='umrah'] .search__field:nth-of-type(1) { display: none; }

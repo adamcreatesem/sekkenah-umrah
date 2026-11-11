@@ -35,3 +35,18 @@ async function post(path, payload) {
 
 export const submitBooking = (payload) => post('/api/bookings', payload);
 export const submitEnquiry = (payload) => post('/api/enquiries', payload);
+
+/* How many places are actually left on a route and date. Null means the server could not be
+ * reached, in which case the site shows the catalogue figure and the server still guards the
+ * booking itself. */
+export async function availability(tourId, depart) {
+  if (!ENDPOINT) return null;
+  const q = new URLSearchParams();
+  if (tourId) q.set('tourId', tourId);
+  if (depart) q.set('depart', depart);
+  const res = await fetch(ENDPOINT + '/api/availability' + (q.toString() ? '?' + q.toString() : ''), {
+    signal: AbortSignal.timeout ? AbortSignal.timeout(6000) : undefined,
+  });
+  if (!res.ok) return null;
+  return res.json().catch(() => null);
+}

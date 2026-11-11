@@ -30,12 +30,52 @@ export const REGIONS = [
   { id: 'north', label: { en: 'Historic north', ar: 'الشمال التاريخي' } },
   { id: 'south', label: { en: 'South & east', ar: 'الجنوب والشرق' } },
   { id: 'wild', label: { en: 'Wild Ethiopia', ar: 'إثيوبيا البرية' } },
+  { id: 'umrah', label: { en: 'Umrah & Hajj', ar: 'العمرة والحج' } },
 ];
 
 export const LEVELS = {
   easy: { en: 'Easy', ar: 'سهل' },
   moderate: { en: 'Moderate', ar: 'متوسط' },
   demanding: { en: 'Demanding', ar: 'شاق' },
+};
+
+/* Two desks under one office, and the visitor picks one on the way in.
+ *
+ * `logo` is the brand mark for that desk and `fallbackLogo` is what the page shows until the
+ * file is in place, so a missing picture never leaves a broken image. The hero copy lives in
+ * the dictionary under the keys named here, which is what makes it follow the language switch
+ * instead of freezing in whichever language was on screen when the desk was chosen. */
+export const TRACKS = {
+  ethiopia: {
+    id: 'ethiopia',
+    logo: 'assets/img/brand-ethiopia.png',
+    fallbackLogo: 'assets/img/mark.svg',
+    hero: 'assets/img/hero-plateau.jpg',
+    name: { en: 'Sekkenah', ar: 'سكينة' },
+    tag: 'brand.tag',
+    copy: {
+      kicker: 'hero.kicker',
+      line1: 'hero.line1',
+      line2: 'hero.line2',
+      sub: 'hero.sub',
+      cta: 'hero.cta',
+    },
+  },
+  umrah: {
+    id: 'umrah',
+    logo: 'assets/img/brand-umrah.png',
+    fallbackLogo: 'assets/img/kaaba-night.jpg',
+    hero: 'assets/img/kaaba-night.jpg',
+    name: { en: 'Sekkenah Umrah', ar: 'سكينة للعمرة' },
+    tag: 'brand.tag.umrah',
+    copy: {
+      kicker: 'hero.umrah.kicker',
+      line1: 'hero.umrah.line1',
+      line2: 'hero.umrah.line2',
+      sub: 'hero.umrah.sub',
+      cta: 'hero.umrah.cta',
+    },
+  },
 };
 
 /* A route is priced per person and includes the car, the driver and the guide; the
@@ -462,6 +502,119 @@ export const TOURS = [
 
 /* Ethiopian lodges and resorts. The badge is a place on the map rather than a distance,
  * and the rate is per room per night. Draft figures, confirmed when the room is held. */
+/* The Umrah desk, kept in its own block so the Ethiopia catalogue stays readable. Prices and
+ * dates are draft figures like the rest of this preview: the office replaces them wholesale.
+ * Everything else, the card, the drawer and the booking wizard, already works on a route of
+ * this shape, so nothing new had to be built to sell them. */
+export const UMRAH_TOURS = [
+  {
+    id: 'umrah-ten-nights',
+    track: 'umrah',
+    name: { en: 'Umrah, ten nights', ar: 'عمرة، عشر ليالٍ' },
+    tag: { en: 'Umrah · Makkah & Madinah', ar: 'عمرة · مكة والمدينة' },
+    region: 'umrah', level: 'easy', days: 10, nights: 9, price: 1290, seats: 20,
+    depart: '2026-12-05', bestMonths: [11, 12, 1, 2, 3],
+    image: 'assets/img/kaaba-night.jpg',
+    gallery: ['assets/img/kaaba-day.jpg', 'assets/img/dome-dusk.jpg'],
+    getting: {
+      en: 'Direct flight from Addis to Jeddah, then the Haramain train to Madinah.',
+      ar: 'رحلة مباشرة من أديس إلى جدة، ثم قطار الحرمين إلى المدينة.',
+    },
+    story: {
+      en: 'Ten nights is the unhurried round: four in Makkah first, the Umrah performed while you are still fresh, then Madinah for the rest, with a day in between for the historical sites. The hotel in Makkah is inside the ring road, ten minutes on foot from the Haram; in Madinah it is two streets from the mosque gate. A guide travels with the group from Addis and stays with it, and the visa, the insurance and the ziyarah are handled before you fly.',
+      ar: 'عشر ليالٍ هي الرحلة غير المستعجلة: أربع في مكة أولًا، وتؤدّى العمرة وأنت ما زلت نشيطًا، ثم المدينة لبقية المدة، ويوم بينهما للمواقع التاريخية. الفندق في مكة داخل الطريق الدائري، على عشر دقائق سيرًا من الحرم؛ وفي المدينة على شارعين من باب المسجد. ويسافر مرشد مع المجموعة من أديس ويبقى معها، وتُنجَز التأشيرة والتأمين والزيارة قبل السفر.',
+    },
+    blurb: {
+      en: 'Four nights in Makkah, five in Madinah, both hotels within walking distance of the Haram, with the visa, the flights and a guide from Addis.',
+      ar: 'أربع ليالٍ في مكة وخمس في المدينة، والفندقان على مسافة مشي من الحرم، مع التأشيرة والطيران ومرشد من أديس.',
+    },
+    includes: [
+      { en: 'Return flights Addis Ababa to Jeddah', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا إلى جدة' },
+      { en: 'Umrah visa and insurance', ar: 'تأشيرة العمرة والتأمين' },
+      { en: 'Nine nights, hotels near the Haram', ar: 'تسع ليالٍ في فنادق قريبة من الحرم' },
+      { en: 'Haramain train between the two cities', ar: 'قطار الحرمين بين المدينتين' },
+      { en: 'Guide from Addis throughout', ar: 'مرشد من أديس طوال الرحلة' },
+      { en: 'Ziyarah in Makkah and Madinah', ar: 'الزيارة في مكة والمدينة' },
+    ],
+    daysList: [
+      { t: { en: 'Addis → Jeddah → Makkah', ar: 'أديس ← جدة ← مكة' }, b: { en: 'Morning flight, the road to Makkah, and the first Umrah after the evening prayer.', ar: 'رحلة صباحية، والطريق إلى مكة، وأول عمرة بعد صلاة العشاء.' } },
+      { t: { en: 'Makkah', ar: 'مكة' }, b: { en: 'Four days at the Haram, with the ziyarah on the second morning.', ar: 'أربعة أيام في الحرم، والزيارة في الصباح الثاني.' } },
+      { t: { en: 'Makkah → Madinah', ar: 'مكة ← المدينة' }, b: { en: 'The Haramain train north, and the mosque at Maghrib.', ar: 'قطار الحرمين شمالًا، والمسجد عند المغرب.' } },
+      { t: { en: 'Madinah → Addis', ar: 'المدينة ← أديس' }, b: { en: 'Five nights in Madinah, then the flight home from Jeddah.', ar: 'خمس ليالٍ في المدينة، ثم العودة من جدة.' } },
+    ],
+  },
+  {
+    id: 'umrah-seven-nights',
+    track: 'umrah',
+    name: { en: 'Umrah, seven nights', ar: 'عمرة، سبع ليالٍ' },
+    tag: { en: 'Umrah · short round', ar: 'عمرة · رحلة قصيرة' },
+    region: 'umrah', level: 'easy', days: 7, nights: 6, price: 1090, seats: 24,
+    depart: '2027-01-16', bestMonths: [11, 12, 1, 2],
+    image: 'assets/img/dome-dusk.jpg',
+    gallery: ['assets/img/piazza.jpg', 'assets/img/towers.jpg'],
+    getting: {
+      en: 'Direct flight from Addis to Jeddah, coach to Makkah, train to Madinah.',
+      ar: 'رحلة مباشرة من أديس إلى جدة، وحافلة إلى مكة، وقطار إلى المدينة.',
+    },
+    story: {
+      en: 'The round most people take when the leave is short: three nights in Makkah and three in Madinah, with the same hotels as the longer package and the same guide. Nothing is cut except the free days, so it suits a first Umrah taken between work and the school term.',
+      ar: 'الرحلة التي يختارها أكثر الناس حين تكون الإجازة قصيرة: ثلاث ليالٍ في مكة وثلاث في المدينة، بالفنادق نفسها والمرشد نفسه. لا يُحذف شيء سوى الأيام الحرة، لذا تناسب العمرة الأولى بين العمل والفصل الدراسي.',
+    },
+    blurb: {
+      en: 'Three nights in each city, the visa and flights from Addis, and the same hotels as the ten-night round.',
+      ar: 'ثلاث ليالٍ في كل مدينة، مع التأشيرة والطيران من أديس، والفنادق نفسها في رحلة العشر ليالٍ.',
+    },
+    includes: [
+      { en: 'Return flights Addis Ababa to Jeddah', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا إلى جدة' },
+      { en: 'Umrah visa and insurance', ar: 'تأشيرة العمرة والتأمين' },
+      { en: 'Six nights near the Haram', ar: 'ست ليالٍ قرب الحرم' },
+      { en: 'Haramain train and all transfers', ar: 'قطار الحرمين وجميع التنقلات' },
+      { en: 'Guide from Addis throughout', ar: 'مرشد من أديس طوال الرحلة' },
+    ],
+    daysList: [
+      { t: { en: 'Addis → Makkah', ar: 'أديس ← مكة' }, b: { en: 'Flight and transfer, Umrah the same evening.', ar: 'الطيران والتنقل، والعمرة في المساء نفسه.' } },
+      { t: { en: 'Makkah → Madinah', ar: 'مكة ← المدينة' }, b: { en: 'Three nights in Makkah, then the train north.', ar: 'ثلاث ليالٍ في مكة، ثم القطار شمالًا.' } },
+      { t: { en: 'Madinah → Addis', ar: 'المدينة ← أديس' }, b: { en: 'Three nights in Madinah and the flight home.', ar: 'ثلاث ليالٍ في المدينة والعودة.' } },
+    ],
+  },
+  {
+    id: 'umrah-family',
+    track: 'umrah',
+    name: { en: 'Umrah for families', ar: 'عمرة للعائلات' },
+    tag: { en: 'Umrah · families', ar: 'عمرة · عائلات' },
+    region: 'umrah', level: 'easy', days: 8, nights: 7, price: 980, seats: 18,
+    depart: '2027-02-06', bestMonths: [12, 1, 2, 3],
+    image: 'assets/img/kaaba-day.jpg',
+    gallery: ['assets/img/kaaba-night.jpg', 'assets/img/crowd-gold.jpg'],
+    getting: {
+      en: 'Direct flight from Addis to Jeddah, with a family room and a coach that waits.',
+      ar: 'رحلة مباشرة من أديس إلى جدة، بغرفة عائلية وحافلة تنتظر.',
+    },
+    story: {
+      en: 'Built around children and older parents: a family room rather than two singles, a coach that waits at each stop, and a slower programme with the ziyarah in the morning when it is cooler. The guide carries a phone that the whole group has, and the office in Addis keeps the passport numbers so a lost document is a phone call rather than a week.',
+      ar: 'مصمّمة حول الأطفال والوالدين الكبار: غرفة عائلية بدل غرفتين فرديتين، وحافلة تنتظر في كل محطة، وبرنامج أهدأ مع الزيارة صباحًا حين يكون الجو أبرد. ويحمل المرشد هاتفًا تعرفه المجموعة كلها، ويحفظ المكتب في أديس أرقام الجوازات، فضياع وثيقة يصير مكالمة لا أسبوعًا.',
+    },
+    blurb: {
+      en: 'Family rooms, a slower programme and a coach that waits, with the visa and flights from Addis.',
+      ar: 'غرف عائلية وبرنامج أهدأ وحافلة تنتظر، مع التأشيرة والطيران من أديس.',
+    },
+    includes: [
+      { en: 'Return flights Addis Ababa to Jeddah', ar: 'تذاكر طيران ذهابًا وإيابًا أديس أبابا إلى جدة' },
+      { en: 'Umrah visa and insurance for the family', ar: 'تأشيرة العمرة والتأمين للعائلة' },
+      { en: 'Seven nights in family rooms', ar: 'سبع ليالٍ في غرف عائلية' },
+      { en: 'Private coach and all transfers', ar: 'حافلة خاصة وجميع التنقلات' },
+      { en: 'Guide and ziyarah', ar: 'مرشد وزيارة' },
+    ],
+    daysList: [
+      { t: { en: 'Addis → Makkah', ar: 'أديس ← مكة' }, b: { en: 'Flight, transfer and the Umrah with the group.', ar: 'الطيران والتنقل والعمرة مع المجموعة.' } },
+      { t: { en: 'Makkah', ar: 'مكة' }, b: { en: 'Four nights, with the ziyarah in the cool of the morning.', ar: 'أربع ليالٍ، والزيارة في برودة الصباح.' } },
+      { t: { en: 'Madinah → Addis', ar: 'المدينة ← أديس' }, b: { en: 'Three nights in Madinah, then home.', ar: 'ثلاث ليالٍ في المدينة، ثم العودة.' } },
+    ],
+  },
+];
+
+TOURS.push(...UMRAH_TOURS);
+
 export const STAYS = [
   { id: 'sabana-langano', area: { en: 'Lake Langano shore', ar: 'ضفة بحيرة لانغانو' }, name: { en: 'Sabana Beach Resort', ar: 'منتجع سابانا بيتش' }, stars: 4, price: 95, image: 'assets/img/stay-langano-sabana.jpg',
     gallery: ['assets/img/g-sabana-langano-1.jpg'],

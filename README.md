@@ -60,6 +60,7 @@ with `Intl` (`ethiopic`), not a hardcoded string.
 
 ```
 index.html            page
+admin.html            the staff office: bookings, enquiries, routes, lodges, settings
 credits.html          photo attribution (required by the licences)
 assets/css/site.css   the design system
 assets/js/data.js     tours, lodges, cars, services, steps, FAQs, extras
@@ -67,6 +68,8 @@ assets/js/trips.js    past trips: the client's own films and photographs (hand-w
 assets/js/i18n.js     interface strings, EN + AR
 assets/js/app.js      rendering, filters, drawer, booking wizard
 assets/js/api.js      booking and enquiry transport, with the offline fallback
+assets/js/content.js  fetches the published catalogue, falls back to the shipped one
+assets/js/admin.js    the office page logic
 tools/sync-content.mjs  rebuilds data.js from the portal (generated file, do not hand-edit)
 assets/img/           route, lodge, gallery and editorial photography
 assets/video/         two web encodes (H.264 faststart, 1080x1920) with posters
@@ -80,11 +83,11 @@ draft figure.
 ## Open items for the client
 
 1. Replace the draft prices, lodge rates and route dates with real inventory.
-2. Deploy `../sekkenah-api` and put its URL in `index.html`; the WhatsApp handoff stays as the
-   fallback. Online payment and per-date availability are still not built.
+2. Claim the Cloudflare account the API was deployed into, or Cloudflare deletes it. Online
+   payment and per-date availability are still not built. See `../sekkenah-portal/HANDOVER.md`.
 3. Add a privacy note: the enquiry and booking forms collect names, phone numbers and
-   passport numbers, and at present they only ever reach `localStorage` on the visitor's
-   own device. Nothing is transmitted.
+   passport numbers, and they are now stored on a server so the office can work them. The
+   site does not say so yet.
 4. Add analytics, and an Amharic / Afaan Oromo locale.
 5. Send a tours-specific social handle if there is one. The Umrah accounts
    (`@sekkenah.umra.serv`, `@sekinah.umrah`) are deliberately not linked from this site.
@@ -104,3 +107,49 @@ is covered too. Layout measured at 390 / 768 / 1440 px in both languages: no hor
 overflow, 1 / 2 / 3 tour columns, 4 lodge columns.
 
 Photography: 62 frames, all Wikimedia Commons, all credited on `credits.html`.
+
+## Two desks, two marks
+
+The visitor is asked once, on the way in, whether they are travelling inside Ethiopia or for
+Umrah. The choice is stored (`sekkenah.track`), can be linked (`?track=umrah`), and can be
+changed from the header. Each desk has its own mark, its own hero copy and its own routes:
+
+| Desk | Mark | Routes |
+|---|---|---|
+| Ethiopia tours | `assets/img/brand-ethiopia.png`, falling back to `mark.svg` | the fourteen routes in `TOURS` |
+| Umrah and Hajj | `assets/img/brand-umrah.png`, falling back to `kaaba-night.jpg` | the three in `UMRAH_TOURS` |
+
+Both marks are the client's own artwork, cut from the two files sent over Telegram. Each one
+arrived as a full lockup (emblem, wordmark, tagline and a row of service icons) on a cream
+background, which is unusable at the 38px the header allots. So for each desk the emblem was
+keyed off its background to transparency, cropped square around its own ink, and exported at
+384px for a 128px display: no cream rectangle, no halo, and it renders on the dark hero as
+well as on cream paper. The header and the chooser put it on a cream disc, because the
+Ethiopia emblem is dark green and would otherwise vanish into the photograph. The original
+lockups are kept in `tmp/logos-out/lockup-*.png` if the office ever needs them in print.
+
+The Ethiopia desk keeps the lodges, cars and past-trips sections. The Umrah desk hides them
+(`body[data-track='umrah']` in `site.css`), because rooms and flights carry that journey, not
+a lodge on Lake Langano.
+
+## The office: manager and staff
+
+`admin.html` takes a user and a password, and the API returns a signed token that expires
+after twelve hours.
+
+| Role | Can do |
+|---|---|
+| Manager | everything: bookings, enquiries, the page editor, routes, lodges, trips, settings, history, uploads, backups, the spreadsheet |
+| Staff | the desk: read bookings and enquiries, change a status, write an office note |
+
+Deleting a booking is manager-only, because it is the one desk action the page cannot undo.
+Signing in needs three secrets on the Worker, and the test suite covers the split:
+
+```
+npx wrangler secret put MANAGER_PASSWORD
+npx wrangler secret put STAFF_PASSWORD
+npx wrangler secret put SESSION_SECRET
+```
+
+`MANAGER_USER` and `STAFF_USER` are plain vars in `wrangler.toml`. `ADMIN_TOKEN` still works
+and counts as the manager, so the seed and export scripts keep running.

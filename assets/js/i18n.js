@@ -21,6 +21,7 @@ export const STR = {
     'nav.about': 'About',
     'nav.contact': 'Contact',
     'nav.plan': 'Plan a trip',
+    'nav.manage': 'My booking',
     'nav.lang': 'العربية',
     'nav.langLabel': 'Switch language',
     'nav.menu': 'Menu',
@@ -187,14 +188,24 @@ export const STR = {
     'book.donePrint': 'Print summary',
     'book.doneNew': 'Start another',
     'book.required': 'Please complete the highlighted fields.',
+    'book.checkDetails': 'Something in the booking did not go through. Please check the details and try once more.',
+    'book.pickDate': 'Choose a date from today onwards.',
+    'book.checking': 'Checking places…',
+    'book.seatsFull': 'That date is full. Choose another date or call the office.',
+    'book.soldOut': 'Not enough places left on that date. Choose another date or call the office.',
+    'book.consentLead': 'By sending this request you agree to our',
+    'book.consentLink': 'privacy notice and booking terms',
     'book.summaryNote': 'This is a reservation request, not a payment. The route is held on confirmation from the office.',
+    'book.manage': 'Look up or cancel this booking',
 
     'footer.tagline': 'Ethiopia tours from Addis Ababa. Journey with trust.',
     'footer.explore': 'Explore',
+    'footer.manage': 'Manage a booking',
     'footer.support': 'Support',
     'footer.contact': 'Contact',
     'footer.rights': 'All rights reserved.',
     'footer.credits': 'Photography credits',
+    'footer.legal': 'Privacy and booking terms',
     'footer.demo': 'Design preview. Prices and lodge rates are draft figures.',
 
     'trips.kicker': 'Past trips',
@@ -208,6 +219,24 @@ export const STR = {
     'trips.foot': 'Filmed and photographed on our own departures. Sekkenah Tour & Travel.',
 
     'common.skip': 'Skip to content',
+
+    'brand.tag.umrah': 'Umrah & Hajj · Addis Ababa',
+    'hero.umrah.kicker': 'Umrah, from Addis · Makkah and Madinah',
+    'hero.umrah.line1': 'Two cities,',
+    'hero.umrah.line2': 'one quiet road.',
+    'hero.umrah.sub': 'Rounds from Addis Ababa with the flights, the visa and a room within walking distance of the Haram, and a guide who has made the journey before.',
+    'hero.umrah.cta': 'See the rounds',
+    'track.switch.umrah': 'Umrah & Hajj',
+    'track.switch.ethiopia': 'Ethiopia tours',
+    'choose.kicker': 'Sekkenah Tour & Travel',
+    'choose.title': 'Where are you going?',
+    'choose.sub': 'Two desks, one office. Choose the journey you are planning and the site shows only that, with its own mark and its own routes.',
+    'choose.ethiopia': 'Tours inside Ethiopia',
+    'choose.ethiopiaDesc': 'Lalibela, the Rift Valley lakes, the Omo, Bale and the Danakil, with a car, a driver and a guide.',
+    'choose.umrah': 'Umrah and Hajj',
+    'choose.umrahDesc': 'Rounds from Addis with the flights, the visa and rooms near the Haram.',
+    'choose.go': 'Open',
+    'choose.note': 'You can change this at any time from the header.',
   },
 
   ar: {
@@ -222,6 +251,7 @@ export const STR = {
     'nav.about': 'من نحن',
     'nav.contact': 'اتصل بنا',
     'nav.plan': 'خطّط رحلة',
+    'nav.manage': 'حجزي',
     'nav.lang': 'English',
     'nav.langLabel': 'تغيير اللغة',
     'nav.menu': 'القائمة',
@@ -388,14 +418,24 @@ export const STR = {
     'book.donePrint': 'طباعة الملخص',
     'book.doneNew': 'حجز آخر',
     'book.required': 'يرجى إكمال الحقول المعلّمة.',
+    'book.checkDetails': 'لم يكتمل إرسال الحجز. يرجى مراجعة البيانات والمحاولة مرة أخرى.',
+    'book.pickDate': 'اختر تاريخاً من اليوم أو بعده.',
+    'book.checking': 'جارٍ التحقق من المقاعد…',
+    'book.seatsFull': 'هذا التاريخ مكتمل. اختر تاريخاً آخر أو اتصل بالمكتب.',
+    'book.soldOut': 'لا توجد مقاعد كافية في هذا التاريخ. اختر تاريخاً آخر أو اتصل بالمكتب.',
+    'book.consentLead': 'بإرسال هذا الطلب فإنك توافق على',
+    'book.consentLink': 'إشعار الخصوصية وشروط الحجز',
     'book.summaryNote': 'هذا طلب حجز، لا دفعة. يُحفظ المسار بعد تأكيد المكتب.',
+    'book.manage': 'مراجعة الحجز أو إلغاؤه',
 
     'footer.tagline': 'جولات إثيوبيا من أديس أبابا. سافر بثقة.',
     'footer.explore': 'استكشف',
+    'footer.manage': 'إدارة الحجز',
     'footer.support': 'الدعم',
     'footer.contact': 'التواصل',
     'footer.rights': 'جميع الحقوق محفوظة.',
     'footer.credits': 'مصادر الصور',
+    'footer.legal': 'الخصوصية وشروط الحجز',
     'footer.demo': 'نسخة تصميمية. الأسعار وأسعار النزل أرقام مبدئية.',
 
     'trips.kicker': 'رحلات سابقة',
@@ -409,8 +449,48 @@ export const STR = {
     'trips.foot': 'صُوّر على رحلاتنا. سكينة للسياحة والسفر.',
 
     'common.skip': 'تجاوز إلى المحتوى',
+
+    'brand.tag.umrah': 'العمرة والحج · أديس أبابا',
+    'hero.umrah.kicker': 'عمرة من أديس · مكة والمدينة',
+    'hero.umrah.line1': 'مدينتان،',
+    'hero.umrah.line2': 'وطريق واحد هادئ.',
+    'hero.umrah.sub': 'رحلات من أديس أبابا مع الطيران والتأشيرة وغرفة على مسافة مشي من الحرم، ومرشد سبق له السفر.',
+    'hero.umrah.cta': 'شاهد الرحلات',
+    'track.switch.umrah': 'العمرة والحج',
+    'track.switch.ethiopia': 'جولات إثيوبيا',
+    'choose.kicker': 'سكينة للسياحة والسفر',
+    'choose.title': 'إلى أين تسافر؟',
+    'choose.sub': 'مكتبان في مكان واحد. اختر الرحلة التي تخطّط لها، ويعرض الموقع تلك فقط، بشعارها ومساراتها.',
+    'choose.ethiopia': 'جولات داخل إثيوبيا',
+    'choose.ethiopiaDesc': 'لاليبيلا، وبحيرات الوادي المتصدّع، وأومو، وبالي، والدناكل، بسيارة وسائق ومرشد.',
+    'choose.umrah': 'العمرة والحج',
+    'choose.umrahDesc': 'رحلات من أديس مع الطيران والتأشيرة وغرف قرب الحرم.',
+    'choose.go': 'افتح',
+    'choose.note': 'يمكنك تغيير هذا في أي وقت من أعلى الصفحة.',
   },
 };
+
+/* Wording the office replaced, published with the rest of the catalogue.
+ * Same keys as STR, one bucket per language, plain strings only: the page writes them with
+ * textContent, so a stray angle bracket shows up as a character and cannot become markup.
+ * Anything missing here falls through to the shipped dictionary. */
+export const OVERRIDES = { en: {}, ar: {} };
+
+export function setOverrides(published) {
+  for (const lang of LANGS) {
+    OVERRIDES[lang] = {};
+    const bucket = published && published[lang];
+    if (!bucket || typeof bucket !== 'object') continue;
+    for (const [key, value] of Object.entries(bucket)) {
+      if (typeof value === 'string' && key in STR[lang]) OVERRIDES[lang][key] = value;
+    }
+  }
+}
+
+export function stringFor(lang, key) {
+  const l = lang === 'ar' ? 'ar' : 'en';
+  return OVERRIDES[l][key] ?? STR[l][key] ?? STR.en[key] ?? key;
+}
 
 export const MONTHS = {
   en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],

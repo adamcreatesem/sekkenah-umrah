@@ -37,6 +37,7 @@ a{color:inherit}
 .gate button{background:var(--brass);color:#161009;padding:12px 14px;border-radius:2px;font-weight:600}
 .gate .err{color:#f0b4a8;font-size:13px;min-height:18px}
 .gate .note{margin-top:22px;font-size:12px;color:rgba(244,239,228,.5);line-height:1.6}
+.who__role{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);border:1px solid rgba(184,147,90,.45);padding:3px 8px;border-radius:2px}
 
 /* shell */
 .shell{display:none}
@@ -113,6 +114,16 @@ td .small{font-size:12.5px;color:var(--muted)}
 .toast.on{transform:translate(-50%,0)}
 .toast.bad{background:var(--bad)}
 .loading{padding:40px 6px;color:var(--muted)}
+/* in place editor */
+.editor-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 0 14px}
+.seg{display:flex;border:1px solid var(--line);background:#fff}
+.seg button{padding:6px 11px;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bone)}
+.dirty{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.dirty.work{color:var(--warn);font-weight:600}
+.hint{font-size:12.5px;color:var(--muted)}
+.editor-actions{margin-inline-start:auto;display:flex;gap:10px}
+#edit-frame{width:100%;height:calc(100vh - 235px);min-height:520px;border:1px solid var(--line);background:#fff}
 @media(max-width:640px){thead{display:none}tbody tr{display:block;border-bottom:1px solid var(--line);padding:8px 0}tbody td{display:flex;gap:10px;border:0;padding:3px 8px}tbody td::before{content:attr(data-l);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);min-width:74px}}
 </style>
 </head>
@@ -123,12 +134,14 @@ td .small{font-size:12.5px;color:var(--muted)}
     <div class="mark">Sekkenah</div>
     <div class="sub">Office</div>
     <form id="gate-form">
-      <label for="key">Staff key</label>
-      <input id="key" name="key" type="password" autocomplete="current-password" spellcheck="false" required>
+      <label for="gate-user">User</label>
+      <input id="gate-user" name="user" autocomplete="username" spellcheck="false" required>
+      <label for="gate-pass">Password</label>
+      <input id="gate-pass" name="password" type="password" autocomplete="current-password" required>
       <div class="err" id="gate-err" role="alert"></div>
       <button type="submit">Open the office</button>
     </form>
-    <p class="note">Booking records hold passport numbers. The key is kept in this browser tab only, and it is the same key the office uses for the spreadsheet export. Do not save it on a shared phone.</p>
+    <p class="note">Two desks sign in here. The manager changes the website, the prices and the settings; staff work the bookings and the enquiries. Booking records hold passport numbers, so a session lasts twelve hours and closes with the tab. Do not sign in on a shared phone.</p>
   </div>
 </div>
 
@@ -138,30 +151,53 @@ td .small{font-size:12.5px;color:var(--muted)}
       <span class="mark">Sekkenah</span>
       <span class="muted" style="font-size:13px">Office</span>
       <div class="who">
+        <span id="who-role" class="who__role"></span>
         <span id="saved-at"></span>
         <a class="btn ghost" href="index.html" target="_blank" rel="noopener">View site</a>
         <button type="button" id="sign-out">Sign out</button>
       </div>
     </div>
     <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="edit" aria-selected="false" data-manager="1">Edit the page</button>
       <button role="tab" data-tab="bookings" aria-selected="true">Bookings<span class="count" id="c-bookings"></span></button>
       <button role="tab" data-tab="enquiries" aria-selected="false">Enquiries<span class="count" id="c-enquiries"></span></button>
-      <button role="tab" data-tab="routes" aria-selected="false">Routes</button>
-      <button role="tab" data-tab="lodges" aria-selected="false">Lodges</button>
-      <button role="tab" data-tab="trips" aria-selected="false">Past trips</button>
-      <button role="tab" data-tab="settings" aria-selected="false">Site settings</button>
-      <button role="tab" data-tab="history" aria-selected="false">History</button>
+      <button role="tab" data-tab="routes" aria-selected="false" data-manager="1">Routes</button>
+      <button role="tab" data-tab="lodges" aria-selected="false" data-manager="1">Lodges</button>
+      <button role="tab" data-tab="trips" aria-selected="false" data-manager="1">Past trips</button>
+      <button role="tab" data-tab="settings" aria-selected="false" data-manager="1">Site settings</button>
+      <button role="tab" data-tab="history" aria-selected="false" data-manager="1">History</button>
     </nav>
   </header>
 
   <main>
+    <section id="tab-edit" hidden>
+      <div class="head">
+        <h2>Edit the page</h2>
+        <p>This is the website itself. Click a line of text to change it, click a photograph to replace it. The picture at the top of the page is replaced from the button above.</p>
+      </div>
+      <div class="editor-bar">
+        <div class="seg" role="group" aria-label="Language">
+          <button type="button" data-edit-lang="en" aria-pressed="true">English</button>
+          <button type="button" data-edit-lang="ar" aria-pressed="false">العربية</button>
+        </div>
+        <button class="btn ghost" type="button" id="edit-hero" title="Replace the large photograph at the top of the page">Replace the top picture</button>
+        <span class="dirty" id="edit-dirty">No changes yet</span>
+        <span class="hint">Click a line of text to change it, or a photograph to replace it. The top picture is replaced with the button above. Dates edit as YYYY-MM-DD. Press Esc to abandon one line.</span>
+        <div class="editor-actions">
+          <button class="btn ghost" type="button" id="edit-discard">Discard</button>
+          <button class="btn primary" type="button" id="edit-save">Save changes</button>
+        </div>
+      </div>
+      <iframe id="edit-frame" title="The website, editable" src="index.html?edit=1&lang=en"></iframe>
+    </section>
+
     <section id="tab-bookings">
       <div class="head">
         <h2>Bookings</h2>
         <p>Every request from the website, newest first.</p>
         <div class="right">
           <button class="btn" type="button" id="refresh">Refresh</button>
-          <button class="btn" type="button" id="csv">Download spreadsheet</button>
+          <button class="btn" type="button" id="csv" data-manager="1">Download spreadsheet</button>
         </div>
       </div>
       <div id="bookings-body"><div class="loading">Loading…</div></div>
